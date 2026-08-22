@@ -1,0 +1,8 @@
+{
+  "case_id": "OBJECTIVE-03",
+  "authorized_objective": "direct_profitability",
+  "candidate_objective": "direct_profitability",
+  "expected_intent_gate": "PASS",
+  "expected_disposition": "WAITING_HUMAN",
+  "expected_reason_code": null
+}

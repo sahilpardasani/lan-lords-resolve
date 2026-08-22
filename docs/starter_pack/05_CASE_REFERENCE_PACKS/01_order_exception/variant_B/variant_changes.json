@@ -1,0 +1,15 @@
+{
+  "description": "Make alternate supplier approval unavailable and change split-delivery term to prohibited.",
+  "changes": [
+    {
+      "evidence_id": "E07",
+      "operation": "remove"
+    },
+    {
+      "evidence_id": "E03",
+      "operation": "replace_fact",
+      "value": "Late exposure USD 180,000/day; split delivery prohibited without VP waiver."
+    }
+  ],
+  "expected_disposition": "INSUFFICIENT_EVIDENCE"
+}

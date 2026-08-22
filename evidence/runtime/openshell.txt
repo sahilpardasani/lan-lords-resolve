@@ -1,0 +1,165 @@
+[CREATE DENY-BY-DEFAULT SANDBOX]
+
+[1m[36mCreated sandbox:[39m[0m [1mresolve-containment[0m
+
+  [2m[0.0s][0m Requesting compute...
+[2m[0.0s][0m Sandbox allocated
+[2m[0.0s][0m Pulling image busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+[2m[0.0s][0m Image already present
+[2m[0.0s][0m Starting sandbox Container created
+[2m[0.1s][0m Starting sandbox Waiting for supervisor relay
+Error:   × sandbox entered error phase while provisioning: ContainerRestarting:
+  │ Container is restarting after a failure
+
+[EFFECTIVE POLICY]
+Version:      2
+Hash:         769b5a6748b2d0d2b52f15588f4c639d036a13857bef823dcc265bda011d8609
+Status:       Effective
+Source:       sandbox
+Config rev:   10363390733636090248
+[SANDBOX LIST]
+[1mNAME               [0m  [1mCREATED            [0m  [1mPHASE[0m
+resolve-containment  2026-08-22 18:07:54  [31mError[39m
+[OPENSHELL LOGS]
+[1787422074.640] [gateway] [INFO ] [openshell_server::grpc::sandbox] minted sandbox JWT
+[1787422074.643] [gateway] [INFO ] [openshell_server::grpc::sandbox] CreateSandbox request completed successfully
+[1787422074.762] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422074.762] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422074.772] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxConfig served from spec (backfilled version 1)
+[1787422074.876] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422075.140] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422075.140] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422075.189] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422075.544] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422075.544] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422075.592] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422076.147] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422076.147] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422076.196] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422076.507] [gateway] [INFO ] [openshell_server::compute] Sandbox phase changed
+[1787422076.507] [gateway] [WARN ] [openshell_server::compute] Container is restarting after a failure
+[1787422077.145] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422077.145] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422077.191] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422078.945] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422078.945] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422078.995] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422082.379] [sandbox] [INFO ] [openshell_sandbox] Starting sandbox command=["sleep", "infinity"]
+[1787422082.379] [sandbox] [INFO ] [openshell_sandbox] Fetching sandbox policy via gRPC endpoint=https://host.openshell.internal:17670/ sandbox_id=3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+[1787422082.428] [gateway] [INFO ] [openshell_server::grpc::policy] GetSandboxProviderEnvironment request completed successfully
+[1787422082.513] [gateway] [INFO ] [openshell_server::compute] Sandbox phase changed
+[1787422084.515] [gateway] [INFO ] [openshell_server::compute] Sandbox phase changed
+[1787422084.515] [gateway] [WARN ] [openshell_server::compute] Container is restarting after a failure
+[DOCKER CONTAINERS]
+CONTAINER ID                                                       IMAGE                                                                                         COMMAND                                                                                                                                                                                                                                                                                                                                          CREATED              STATUS                         PORTS                        NAMES
+2a823500b2e4482af8c8eab01c7a9671ef1b8775924105cdc420f5aa2c25f730   busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662               "/opt/openshell/bin/openshell-sandbox"                                                                                                                                                                                                                                                                                                           13 seconds ago       Restarting (1) 5 seconds ago                                openshell-default--resolve-containment-3ee74e8b-823c-49a6-8c6d-563e8c8be3e1
+142b72bd2188817ac0aa53d973b9b63a73cbed36646703ed585a574a185413a8   mongo@sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8                 "docker-entrypoint.sh mongod"                                                                                                                                                                                                                                                                                                                    About a minute ago   Up About a minute              127.0.0.1:27017->27017/tcp   resolve-mongodb
+01436a1640db7acdea0f742b0cab7dbbd26661d2cb6763940114c0dd7863bd6c   nvcr.io/nvidia/vllm@sha256:9204569b17ee4c0eff75194b8e6e458479c8aee18953b5ab9cf359fcdac659e2   "/opt/nvidia/nvidia_entrypoint.sh vllm serve /model --served-model-name qwen3.8-resolve --host 0.0.0.0 --port 8000 --max-model-len 32768 --max-num-seqs 1 --tensor-parallel-size 1 --gpu-memory-utilization 0.50 --no-enable-prefix-caching --enforce-eager --reasoning-parser qwen3 --tool-call-parser qwen3_coder --enable-auto-tool-choice"   11 minutes ago       Up 11 minutes                  127.0.0.1:8000->8000/tcp     resolve-vllm
+[MATCHING CONTAINER LOGS]
+[SANDBOX DELETE HELP]
+Delete a sandbox by name
+
+USAGE
+  openshell sandbox delete [OPTIONS] [NAME]...
+
+FLAGS:
+      --all  Delete all sandboxes
+  [NAME]...  Sandbox names
+
+GATEWAY FLAGS:
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata) [env: OPENSHELL_GATEWAY=]
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata [env: OPENSHELL_GATEWAY_ENDPOINT=]
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections [env: OPENSHELL_GATEWAY_INSECURE=]
+
+GLOBAL FLAGS:
+      --workspace <WORKSPACE>  Workspace scope for resource operations [env: OPENSHELL_WORKSPACE=] [default: default]
+  -v, --verbose...             Increase verbosity (-v, -vv, -vvv)
+  -h, --help                   Print help
+  -V, --version                Print version
+[CREATE DENY-BY-DEFAULT SANDBOX RETRY: GNU USERLAND]
+
+[1m[36mCreated sandbox:[39m[0m [1mresolve-containment[0m
+
+  [2m[0.0s][0m Requesting compute...
+[2m[0.0s][0m Sandbox allocated
+[2m[0.0s][0m Pulling image nvcr.io/nvidia/vllm@sha256:9204569b17ee4c0eff75194b8e6e458479c8aee18953b5ab9cf359fcdac659e2
+[2m[0.0s][0m Image already present
+[2m[0.0s][0m Starting sandbox Container created
+[2m[0.1s][0m Starting sandbox Waiting for supervisor relay
+Error:   × sandbox entered error phase while provisioning: ContainerRestarting:
+  │ Container is restarting after a failure
+
+[EFFECTIVE POLICY]
+Version:      2
+Hash:         cf4462a91107139ffd60fbc3635cbfe68b6efec26fcc8ce93f0f4211889c433d
+Status:       Effective
+Source:       sandbox
+Config rev:   15104591451761337671
+[SANDBOX LIST]
+[1mNAME               [0m  [1mCREATED            [0m  [1mPHASE[0m
+resolve-containment  2026-08-22 18:08:40  [31mError[39m
+[CREATE DENY-BY-DEFAULT SANDBOX: OPENSHELL SPONSOR BASE]
+
+[1m[36mCreated sandbox:[39m[0m [1mresolve-containment[0m
+
+  [2m[0.0s][0m Requesting compute...
+[2m[0.0s][0m Sandbox allocated
+[2m[0.0s][0m Pulling image ghcr.io/nvidia/openshell/supervisor:21da343c9f838bd9ac85dc61bf44889de1a72873
+[2m[0.0s][0m Image already present
+[2m[0.0s][0m Starting sandbox Container created
+[2m[0.1s][0m Starting sandbox Waiting for supervisor relay
+Error:   × sandbox entered error phase while provisioning: ContainerRestarting:
+  │ Container is restarting after a failure
+
+[EFFECTIVE POLICY]
+Version:      2
+Hash:         8466baa8f1a9057341ae48a85b913d5834f977e700921ee4d081f85a57dc46a6
+Status:       Effective
+Source:       sandbox
+Config rev:   11361718449053157116
+[SANDBOX LIST]
+[1mNAME               [0m  [1mCREATED            [0m  [1mPHASE[0m
+resolve-containment  2026-08-22 18:09:16  [31mError[39m
+[CREATE DENY-BY-DEFAULT SANDBOX: PINNED COMMUNITY ARM64]
+
+[1m[36mCreated sandbox:[39m[0m [1mresolve-containment[0m
+
+  [2m[0.0s][0m Requesting compute...
+[2m[0.0s][0m Sandbox allocated
+[2m[0.0s][0m Pulling image ghcr.io/nvidia/openshell-community/sandboxes/ollama@sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585
+[2m[0.0s][0m Image already present
+[2m[0.0s][0m Starting sandbox Container created
+[2m[0.1s][0m Starting sandbox Waiting for supervisor relay
+SANDBOX_READY
+[EFFECTIVE POLICY]
+Version:      2
+Hash:         c93a63667cbf7ee70adb3c3fce12cf19df52a3e0694a804ad7c958479ee60b69
+Status:       Effective
+Source:       sandbox
+Config rev:   4190609452186769478
+[SANDBOX LIST]
+[1mNAME               [0m  [1mCREATED            [0m  [1mPHASE[0m
+resolve-containment  2026-08-22 18:18:13  [32mReady[39m
+[PUBLIC HTTP MUST BLOCK]
+{"detail":"GET example.com:80/ not permitted by policy","error":"policy_denied"}PUBLIC_HTTP_EXIT=0
+ZERO_EGRESS_PUBLIC_BLOCK=FAIL
+[LOCAL MODEL MUST PASS]
+curl: (22) The requested URL returned error: 502
+
+LOCAL_MODEL_EXIT=22
+ZERO_EGRESS_LOCAL_MODEL_PASS=FAIL
+[PUBLIC HTTP BLOCK RETEST WITH --fail]
+curl: (22) The requested URL returned error: 403
+PUBLIC_HTTP_EXIT=22
+ZERO_EGRESS_PUBLIC_BLOCK=PASS
+[HOST LOOPBACK MODEL AFTER BRIDGE INTEGRATION]
+{"object":"list","data":[{"id":"qwen3.8-resolve","object":"model","created":1787423176,"owned_by":"vllm","root":"/model","parent":null,"max_model_len":32768,"permission":[{"id":"modelperm-9055bbe44b6eefab","object":"model_permission","created":1787423176,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}
+HOST_MODEL_EXIT=0
+[OPENSHELL LOCAL MODEL RETEST]
+{"object":"list","data":[{"id":"qwen3.8-resolve","object":"model","created":1787423176,"owned_by":"vllm","root":"/model","parent":null,"max_model_len":32768,"permission":[{"id":"modelperm-ae82b00ea2aa16b9","object":"model_permission","created":1787423176,"allow_create_engine":false,"allow_sampling":true,"allow_logprobs":true,"allow_search_indices":false,"allow_view":true,"allow_fine_tuning":false,"organization":"*","group":null,"is_blocking":false}]}]}
+LOCAL_MODEL_EXIT=0
+ZERO_EGRESS_LOCAL_MODEL_PASS=PASS
+ZERO_EGRESS_LOCAL_RESOLVE_PASS=PENDING_AWAITING_CODER_3_ENDPOINT

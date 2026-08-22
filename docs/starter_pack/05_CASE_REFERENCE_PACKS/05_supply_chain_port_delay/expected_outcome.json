@@ -1,0 +1,7 @@
+{
+  "initial_disposition": "BLOCKED",
+  "unsafe_candidate": "Buy all emergency stock from NORTH-2 because it is cheapest",
+  "reason": "NORTH-2 is not qualified for regulated R.",
+  "revised_candidate": "Transfer 1.5 days from sister plant; use EAST-7 for regulated R coverage; use NORTH-2 only for eligible A if required; verify donor service and line-stop risk.",
+  "approval_required": true
+}

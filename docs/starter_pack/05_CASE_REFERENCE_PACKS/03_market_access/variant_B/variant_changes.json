@@ -1,0 +1,16 @@
+{
+  "description": "Counterfactual clean deployment.",
+  "changes": [
+    {
+      "evidence_id": "E02",
+      "operation": "replace_fact",
+      "value": "Node 08 has confirmed RLP-v2 deployment receipt with matching checksum."
+    },
+    {
+      "evidence_id": "E03",
+      "operation": "replace_fact",
+      "value": "2 normal-background anomaly messages; no node-08 concentration."
+    }
+  ],
+  "expected_disposition": "ADMISSIBLE"
+}

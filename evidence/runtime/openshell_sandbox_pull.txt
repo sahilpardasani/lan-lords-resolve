@@ -1,0 +1,104 @@
+ghcr.io/nvidia/openshell-community/sandboxes/ollama@sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585: Pulling from nvidia/openshell-community/sandboxes/ollama
+97dd3f0ce510: Pulling fs layer
+cc51efc32dd2: Pulling fs layer
+460c2e586cfc: Pulling fs layer
+1084648de3e3: Pulling fs layer
+b5ab927150a1: Pulling fs layer
+b04e30c0e801: Pulling fs layer
+f8a416aa38af: Pulling fs layer
+8cb3509f1b2b: Pulling fs layer
+5f33ce9b27a4: Pulling fs layer
+d0e83e2840df: Pulling fs layer
+9d6e84f8ac49: Pulling fs layer
+dc25a5661526: Pulling fs layer
+5f143fbf9b17: Pulling fs layer
+15a9b7146700: Pulling fs layer
+a485c814ad65: Pulling fs layer
+479e46bae409: Pulling fs layer
+f8a416aa38af: Waiting
+6a60384b2086: Pulling fs layer
+8cb3509f1b2b: Waiting
+8ebf065c4532: Pulling fs layer
+5f33ce9b27a4: Waiting
+468377864ce8: Pulling fs layer
+d0e83e2840df: Waiting
+59685e1039d4: Pulling fs layer
+c2e70a1fd8ea: Pulling fs layer
+9d6e84f8ac49: Waiting
+dc25a5661526: Waiting
+479e46bae409: Waiting
+6a60384b2086: Waiting
+8ebf065c4532: Waiting
+5f143fbf9b17: Waiting
+468377864ce8: Waiting
+59685e1039d4: Waiting
+c2e70a1fd8ea: Waiting
+15a9b7146700: Waiting
+1084648de3e3: Waiting
+b5ab927150a1: Waiting
+b04e30c0e801: Waiting
+a485c814ad65: Waiting
+cc51efc32dd2: Verifying Checksum
+cc51efc32dd2: Download complete
+1084648de3e3: Verifying Checksum
+1084648de3e3: Download complete
+460c2e586cfc: Verifying Checksum
+460c2e586cfc: Download complete
+97dd3f0ce510: Verifying Checksum
+97dd3f0ce510: Download complete
+97dd3f0ce510: Pull complete
+cc51efc32dd2: Pull complete
+460c2e586cfc: Pull complete
+1084648de3e3: Pull complete
+f8a416aa38af: Verifying Checksum
+f8a416aa38af: Download complete
+8cb3509f1b2b: Verifying Checksum
+8cb3509f1b2b: Download complete
+5f33ce9b27a4: Verifying Checksum
+5f33ce9b27a4: Download complete
+d0e83e2840df: Verifying Checksum
+d0e83e2840df: Download complete
+9d6e84f8ac49: Verifying Checksum
+9d6e84f8ac49: Download complete
+dc25a5661526: Verifying Checksum
+dc25a5661526: Download complete
+b5ab927150a1: Verifying Checksum
+b5ab927150a1: Download complete
+15a9b7146700: Download complete
+b5ab927150a1: Pull complete
+5f143fbf9b17: Verifying Checksum
+5f143fbf9b17: Download complete
+479e46bae409: Verifying Checksum
+479e46bae409: Download complete
+6a60384b2086: Verifying Checksum
+6a60384b2086: Download complete
+8ebf065c4532: Verifying Checksum
+8ebf065c4532: Download complete
+468377864ce8: Download complete
+59685e1039d4: Verifying Checksum
+59685e1039d4: Download complete
+c2e70a1fd8ea: Verifying Checksum
+c2e70a1fd8ea: Download complete
+b04e30c0e801: Verifying Checksum
+b04e30c0e801: Download complete
+b04e30c0e801: Pull complete
+f8a416aa38af: Pull complete
+8cb3509f1b2b: Pull complete
+5f33ce9b27a4: Pull complete
+d0e83e2840df: Pull complete
+9d6e84f8ac49: Pull complete
+dc25a5661526: Pull complete
+5f143fbf9b17: Pull complete
+15a9b7146700: Pull complete
+a485c814ad65: Verifying Checksum
+a485c814ad65: Download complete
+a485c814ad65: Pull complete
+479e46bae409: Pull complete
+6a60384b2086: Pull complete
+8ebf065c4532: Pull complete
+468377864ce8: Pull complete
+59685e1039d4: Pull complete
+c2e70a1fd8ea: Pull complete
+Digest: sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585
+Status: Downloaded newer image for ghcr.io/nvidia/openshell-community/sandboxes/ollama@sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585
+ghcr.io/nvidia/openshell-community/sandboxes/ollama@sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585

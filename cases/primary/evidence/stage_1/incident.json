@@ -1,0 +1,10 @@
+{
+  "evidence_id": "PAY-E-001",
+  "evidence_type": "incident_telemetry",
+  "observed_at": "2026-08-22T13:00:00Z",
+  "baseline_success_rate": 0.986,
+  "incident_success_rate": 0.79,
+  "incident_failures_in_canonical_cohort": 105,
+  "source_classification": "synthetic_demo_telemetry",
+  "contains_actual_customer_data": false
+}

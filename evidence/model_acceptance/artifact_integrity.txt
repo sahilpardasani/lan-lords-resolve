@@ -1,0 +1,6 @@
+A0 ARTIFACT INTEGRITY
+TOKENIZER_TRUNCATION=None
+/home/dell/Desktop/LAN_LORDS_HACKNYC/MODELS/NVFP4/tokenizer.json: OK
+/home/dell/Desktop/LAN_LORDS_HACKNYC/MODELS/NVFP4/model.safetensors: OK
+/home/dell/Desktop/LAN_LORDS_HACKNYC/MODELS/NVFP4/model_mtp.safetensors: OK
+A0=PASS

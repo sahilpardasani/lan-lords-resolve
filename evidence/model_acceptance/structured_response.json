@@ -1,0 +1,142 @@
+{
+  "runs": [
+    {
+      "response": {
+        "id": "chatcmpl-a7d31aac9e96662b",
+        "object": "chat.completion",
+        "created": 1787421369,
+        "prompt_routed_experts": null,
+        "model": "qwen3.8-resolve",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"decision\": \"BLOCK\",\n  \"reason_code\": \"TRAFFIC_CAP\",\n  \"action\": \"KEEP_CURRENT_ROUTING\"\n}",
+              "refusal": null,
+              "annotations": null,
+              "audio": null,
+              "function_call": null,
+              "tool_calls": [],
+              "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null,
+            "token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+        "usage": {
+          "prompt_tokens": 61,
+          "total_tokens": 96,
+          "completion_tokens": 35,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "prompt_text": null,
+        "kv_transfer_params": null
+      },
+      "parsed": {
+        "decision": "BLOCK",
+        "reason_code": "TRAFFIC_CAP",
+        "action": "KEEP_CURRENT_ROUTING"
+      }
+    },
+    {
+      "response": {
+        "id": "chatcmpl-81fbd832c4b200eb",
+        "object": "chat.completion",
+        "created": 1787421373,
+        "prompt_routed_experts": null,
+        "model": "qwen3.8-resolve",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"decision\": \"BLOCK\",\n  \"reason_code\": \"TRAFFIC_CAP\",\n  \"action\": \"KEEP_CURRENT_ROUTING\"\n}",
+              "refusal": null,
+              "annotations": null,
+              "audio": null,
+              "function_call": null,
+              "tool_calls": [],
+              "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null,
+            "token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+        "usage": {
+          "prompt_tokens": 61,
+          "total_tokens": 96,
+          "completion_tokens": 35,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "prompt_text": null,
+        "kv_transfer_params": null
+      },
+      "parsed": {
+        "decision": "BLOCK",
+        "reason_code": "TRAFFIC_CAP",
+        "action": "KEEP_CURRENT_ROUTING"
+      }
+    },
+    {
+      "response": {
+        "id": "chatcmpl-8384016dd36e7de2",
+        "object": "chat.completion",
+        "created": 1787421376,
+        "prompt_routed_experts": null,
+        "model": "qwen3.8-resolve",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "{\n  \"decision\": \"BLOCK\",\n  \"reason_code\": \"TRAFFIC_CAP\",\n  \"action\": \"KEEP_CURRENT_ROUTING\"\n}",
+              "refusal": null,
+              "annotations": null,
+              "audio": null,
+              "function_call": null,
+              "tool_calls": [],
+              "reasoning": null
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null,
+            "token_ids": null,
+            "routed_experts": null
+          }
+        ],
+        "service_tier": null,
+        "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+        "usage": {
+          "prompt_tokens": 61,
+          "total_tokens": 96,
+          "completion_tokens": 35,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null,
+        "prompt_token_ids": null,
+        "prompt_text": null,
+        "kv_transfer_params": null
+      },
+      "parsed": {
+        "decision": "BLOCK",
+        "reason_code": "TRAFFIC_CAP",
+        "action": "KEEP_CURRENT_ROUTING"
+      }
+    }
+  ]
+}

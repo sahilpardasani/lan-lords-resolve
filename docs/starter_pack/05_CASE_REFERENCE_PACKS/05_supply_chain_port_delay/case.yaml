@@ -1,0 +1,18 @@
+# Synthetic reference only; wire into runtime after kickoff.
+name: supply_chain_port_delay
+objective:
+  primary: prevent line stop while respecting regulated supplier qualification
+  protected_outcomes: [regulated_compliance, production_continuity]
+  anti_objectives: [unqualified_regulated_supply]
+evidence_roots: [evidence.jsonl, sops/]
+constraints: [regulated_R_requires_approved_supplier]
+actions:
+  - id: transfer_plus_approved_emergency_source
+    consequence: C2
+    reversible: true
+    authority: supply_chain_manager
+    allowed_parameters: {regulated_supplier: [EAST-7], unregulated_supplier: [NORTH-2]}
+verification:
+  success_conditions: [no_line_stop, regulated_qualification_preserved, donor_service_ok]
+watch:
+  reopen_conditions: [ETA_changes, donor_inventory_changes]

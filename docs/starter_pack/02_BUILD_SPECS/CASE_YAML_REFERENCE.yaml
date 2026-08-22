@@ -1,0 +1,23 @@
+# Reference specification only. Create the functioning case.yaml after kickoff.
+name: example_case
+objective:
+  primary: ""
+  protected_outcomes: []
+  anti_objectives: []
+
+evidence_roots: []
+
+constraints: []
+
+actions:
+  - id: example_action
+    consequence: C1
+    reversible: true
+    authority: operator
+    allowed_parameters: {}
+
+verification:
+  success_conditions: []
+
+watch:
+  reopen_conditions: []

@@ -1,0 +1,12 @@
+{
+  "evidence_id": "PAY-E-007",
+  "evidence_type": "traffic_distribution",
+  "dataset_id": "resolve_payments_canonical_500_v1",
+  "observed_at": "2026-08-22T13:03:45Z",
+  "total_transactions": 500,
+  "proposed_processor_b_transactions": 87,
+  "proposed_processor_b_total_traffic_share": 0.174,
+  "maximum_processor_b_total_traffic_share": 0.2,
+  "source_classification": "derived_synthetic_demo_data",
+  "contains_actual_customer_data": false
+}

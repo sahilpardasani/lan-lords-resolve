@@ -1,0 +1,39 @@
+docker.io/library/mongo@sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8: Pulling from library/mongo
+0b613318ea87: Pulling fs layer
+452956dc2b73: Pulling fs layer
+bc649784f131: Pulling fs layer
+514a79a8bae6: Pulling fs layer
+7297769e75fd: Pulling fs layer
+fe62b6269db6: Pulling fs layer
+d67567d86948: Pulling fs layer
+7c7c2e54b699: Pulling fs layer
+514a79a8bae6: Waiting
+fe62b6269db6: Waiting
+7297769e75fd: Waiting
+d67567d86948: Waiting
+7c7c2e54b699: Waiting
+452956dc2b73: Download complete
+bc649784f131: Verifying Checksum
+bc649784f131: Download complete
+7297769e75fd: Verifying Checksum
+7297769e75fd: Download complete
+514a79a8bae6: Verifying Checksum
+514a79a8bae6: Download complete
+fe62b6269db6: Verifying Checksum
+fe62b6269db6: Download complete
+7c7c2e54b699: Verifying Checksum
+7c7c2e54b699: Download complete
+0b613318ea87: Download complete
+0b613318ea87: Pull complete
+452956dc2b73: Pull complete
+bc649784f131: Pull complete
+514a79a8bae6: Pull complete
+7297769e75fd: Pull complete
+fe62b6269db6: Pull complete
+d67567d86948: Verifying Checksum
+d67567d86948: Download complete
+d67567d86948: Pull complete
+7c7c2e54b699: Pull complete
+Digest: sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8
+Status: Downloaded newer image for mongo@sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8
+docker.io/library/mongo@sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8

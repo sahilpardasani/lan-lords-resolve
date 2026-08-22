@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+
+# Model weights and ML caches
+MODELS/
+models/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+.cache/
+huggingface/
+hf_cache/
+
+# Runtime databases / data
+data/db/
+mongodb-data/
+mongo-data/
+
+# Large evidence / recordings
+*.mp4
+*.mov
+*.mkv
+*.webm
+recordings/
+SURVIVAL/
+survival/
+evidence/runtime/raw/
+
+# Docker exported images
+*.tar
+*.tar.gz
+
+# Logs / temp
+*.log
+logs/
+runs/
+tmp/
+temp/

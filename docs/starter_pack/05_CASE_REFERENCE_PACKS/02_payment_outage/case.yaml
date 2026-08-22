@@ -1,0 +1,18 @@
+# Synthetic reference only; wire into runtime after kickoff.
+name: payment_outage
+objective:
+  primary: restore payment authorization while preserving regional compliance
+  protected_outcomes: [payment_success, regional_processor_compliance]
+  anti_objectives: [global_unsafe_failover]
+evidence_roots: [evidence.jsonl, sops/]
+constraints: [EU-R_must_use_authorized_processor]
+actions:
+  - id: segmented_failover
+    consequence: C2
+    reversible: true
+    authority: incident_commander
+    allowed_parameters: {regions: [US, CA, EU-R]}
+verification:
+  success_conditions: [success_rate_recovered, policy_violations_0]
+watch:
+  reopen_conditions: [success_rate_drops, policy_violation_detected]

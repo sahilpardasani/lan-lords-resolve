@@ -1,0 +1,26 @@
+{
+  "case_id": "payment_failover_001",
+  "classification": "synthetic_demo_data",
+  "contains_actual_customer_data": false,
+  "dataset_id": "resolve_payments_canonical_500_v1",
+  "deterministic_seed": 20260822,
+  "document_type": "dataset_manifest",
+  "missing_optional_visual_reference": "resolve_enterprise_payment_live_demo.html",
+  "record_count": 500,
+  "source_files": [
+    {
+      "path": "docs/source_material/original/Resolve_Payments_Real_Business_Data.xlsx",
+      "sha256": "a6f5af4f898a2a66d393d5c4a60c6dd2aa6a7a0fcdc746b363cf69a9473db52f"
+    },
+    {
+      "path": "docs/source_material/original/resolve_mongodb_demo.ndjson",
+      "sha256": "d29a06f00cc1577d2eb132e2d8761f69a39ff21c0bbf8b570cd9b6666860a35c"
+    },
+    {
+      "path": "docs/source_material/original/Hackathon 082226.docx",
+      "sha256": "2619562c9eb558fdd0eab09f79d73501c80a636cf7d30fb80f4aa29025ed7420"
+    }
+  ],
+  "transaction_identity_rule": "PAY-0001 through PAY-0500 represent one cohort observed at baseline, incident, and recovery.",
+  "weighted_value_rule": "Count each transaction identity once; alternate state observations do not multiply weighted value."
+}

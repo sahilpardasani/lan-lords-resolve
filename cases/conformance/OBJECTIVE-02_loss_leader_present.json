@@ -1,0 +1,8 @@
+{
+  "case_id": "OBJECTIVE-02",
+  "authorized_objective": "preserve_loss_leader_strategy",
+  "candidate_objective": "maximize_sku_margin",
+  "expected_intent_gate": "FAIL",
+  "expected_disposition": "BLOCKED",
+  "expected_reason_code": "OBJECTIVE_CONFLICT"
+}

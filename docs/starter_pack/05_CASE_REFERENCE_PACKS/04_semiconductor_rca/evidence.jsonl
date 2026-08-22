@@ -1,0 +1,6 @@
+{"id": "E01", "source": "yield/daily.csv", "fact": "Baseline yield 94.2%; current yield 81.7%; loss concentrated on chamber C17."}
+{"id": "E02", "source": "maintenance/C17.md", "fact": "C17 mass-flow controller was replaced 6 hours before first low-yield lot."}
+{"id": "E03", "source": "recipes/checksums.csv", "fact": "C17 recipe checksum differs from approved baseline after maintenance window."}
+{"id": "E04", "source": "process/gas_flow.csv", "fact": "Observed gas flow is +6.8% versus recipe setpoint on C17."}
+{"id": "E05", "source": "metrology/thickness.csv", "fact": "Film thickness variation increased on C17; peer chambers remain within control limits."}
+{"id": "E06", "source": "calibration/post_install.md", "fact": "Required post-install zero/span calibration receipt for replacement MFC is missing."}

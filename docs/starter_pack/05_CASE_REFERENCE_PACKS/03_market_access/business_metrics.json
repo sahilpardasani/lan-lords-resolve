@@ -1,0 +1,7 @@
+{
+  "synthetic_hold_cost_usd_per_min": 85000,
+  "hold_duration_min": 15,
+  "synthetic_hold_cost_usd": 1275000,
+  "historical_exposure_anchor_usd_per_min": 10000000,
+  "modeled_exposure_usd": 150000000
+}

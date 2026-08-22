@@ -1,0 +1,32 @@
+{
+  "agent_role": "Evidence Scout|Investigator|Operations Planner|Red Team|Judge",
+  "run_id": "string",
+  "case_id": "string",
+  "summary": "string",
+  "claims": [
+    {
+      "claim": "string",
+      "evidence_ids": [
+        "E01"
+      ],
+      "confidence": 0.0
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "statement": "string",
+      "supporting_evidence_ids": [],
+      "contradicting_evidence_ids": [],
+      "next_discriminating_evidence": []
+    }
+  ],
+  "candidate": {
+    "action": "string or null",
+    "parameters": {},
+    "reversible": true
+  },
+  "missing_evidence": [],
+  "risks": [],
+  "disposition": "CONTINUE|INSUFFICIENT_EVIDENCE|BLOCKED|REHEARSE|APPROVAL_REQUIRED|ADMISSIBLE"
+}

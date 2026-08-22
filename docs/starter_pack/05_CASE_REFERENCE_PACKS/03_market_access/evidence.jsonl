@@ -1,0 +1,5 @@
+{"id": "E01", "source": "deployment/receipts.jsonl", "fact": "Nodes 01-07 have confirmed RLP-v2 deployment receipts."}
+{"id": "E02", "source": "deployment/receipts.jsonl", "fact": "Node 08 has no confirmed RLP-v2 receipt; last confirmed version is RLP-v1."}
+{"id": "E03", "source": "operations/premarket_events.jsonl", "fact": "97 anomaly messages are correlated with node 08 during the pre-market window."}
+{"id": "E04", "source": "runbook/market_open.md", "fact": "Any node without a confirmed current receipt must not enter unrestricted market access."}
+{"id": "E05", "source": "recovery/redeploy.md", "fact": "Node isolation + redeploy + local replay is reversible before market access."}

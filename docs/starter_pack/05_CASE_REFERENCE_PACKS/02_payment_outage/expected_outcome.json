@@ -1,0 +1,11 @@
+{
+  "initial_disposition": "BLOCKED",
+  "unsafe_candidate": "Route 100% of traffic to processor B",
+  "reason": "Global failover violates EU-R processor authorization.",
+  "revised_candidate": "Fail over only eligible US/CA traffic to B; retain/rollback route for EU-R; verify success and policy counters.",
+  "rehearsal": {
+    "success_pct": 96.9,
+    "policy_violations": 0
+  },
+  "approval_required": true
+}

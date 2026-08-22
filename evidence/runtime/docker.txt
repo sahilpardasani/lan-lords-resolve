@@ -1,0 +1,110 @@
+Client: Docker Engine - Community
+ Version:           29.2.1
+ API version:       1.53
+ Go version:        go1.25.6
+ Git commit:        a5c7197
+ Built:             Mon Feb  2 17:16:40 2026
+ OS/Arch:           linux/arm64
+ Context:           default
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          29.2.1
+  API version:      1.53 (minimum version 1.44)
+  Go version:       go1.25.6
+  Git commit:       6bc6209
+  Built:            Mon Feb  2 17:16:40 2026
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          v2.2.1
+  GitCommit:        dea7da592f5d1d2b7755e3a161be07f43fad8f75
+ runc:
+  Version:          1.3.4
+  GitCommit:        v1.3.4-0-gd6d73eb8
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+Client: Docker Engine - Community
+ Version:    29.2.1
+ Context:    default
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.31.1
+    Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v5.0.2
+    Path:     /usr/libexec/docker/cli-plugins/docker-compose
+
+Server:
+ Containers: 3
+  Running: 3
+  Paused: 0
+  Stopped: 0
+ Images: 5
+ Server Version: 29.2.1
+ Storage Driver: overlay2
+  Backing Filesystem: extfs
+  Supports d_type: true
+  Using metacopy: false
+  Native Overlay Diff: true
+  userxattr: false
+ Logging Driver: json-file
+ Cgroup Driver: systemd
+ Cgroup Version: 2
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+ CDI spec directories:
+  /etc/cdi
+  /run/cdi
+ Discovered Devices:
+  cdi: nvidia.com/gpu=0
+  cdi: nvidia.com/gpu=GPU-e1ff700d-c1a3-b532-13cc-83824bf5faa1
+  cdi: nvidia.com/gpu=all
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: dea7da592f5d1d2b7755e3a161be07f43fad8f75
+ runc version: v1.3.4-0-gd6d73eb8
+ init version: de40ad0
+ Security Options:
+  apparmor
+  seccomp
+   Profile: builtin
+  cgroupns
+ Kernel Version: 6.17.0-1021-nvidia
+ Operating System: Ubuntu 24.04.4 LTS
+ OSType: linux
+ Architecture: aarch64
+ CPUs: 20
+ Total Memory: 121.6GiB
+ Name: promaxgb10-84a2
+ ID: b706eeae-51fd-477d-95b2-8b6be93b6ab8
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Experimental: false
+ Insecure Registries:
+  ::1/128
+  127.0.0.0/8
+ Live Restore Enabled: false
+ Firewall Backend: iptables
+
+[CONTAINERS]
+CONTAINER ID                                                       IMAGE                                                                                                                         COMMAND                                                                                                                                                                                                                                                                                                                                          CREATED          STATUS          PORTS                                                 NAMES
+b89bbb2b5536d67d1d834b558c3568c79ef8e0108cae66f9e5c8d72a08f57d2c   nvcr.io/nvidia/vllm@sha256:9204569b17ee4c0eff75194b8e6e458479c8aee18953b5ab9cf359fcdac659e2                                   "/opt/nvidia/nvidia_entrypoint.sh vllm serve /model --served-model-name qwen3.8-resolve --host 0.0.0.0 --port 8000 --max-model-len 32768 --max-num-seqs 1 --tensor-parallel-size 1 --gpu-memory-utilization 0.50 --no-enable-prefix-caching --enforce-eager --reasoning-parser qwen3 --tool-call-parser qwen3_coder --enable-auto-tool-choice"   6 minutes ago    Up 6 minutes    127.0.0.1:8000->8000/tcp, 172.18.0.1:8000->8000/tcp   resolve-vllm
+c82887b85cfdde379c84303b5c6ae4bd6c07b40f11e5860d814fb8c49f113602   ghcr.io/nvidia/openshell-community/sandboxes/ollama@sha256:ddc74aa75ac47793754510b4d75ff6f739ec4dbe4d6fba48e48879826106a585   "/opt/openshell/bin/openshell-sandbox"                                                                                                                                                                                                                                                                                                           8 minutes ago    Up 8 minutes                                                          openshell-default--resolve-containment-e3f493ca-966f-43f0-98ab-73b65230aaf6
+142b72bd2188817ac0aa53d973b9b63a73cbed36646703ed585a574a185413a8   mongo@sha256:d7c8d78b890e2d87ff11b30656a6c991addcc260723c9be723123041763d00a8                                                 "docker-entrypoint.sh mongod"                                                                                                                                                                                                                                                                                                                    19 minutes ago   Up 19 minutes   127.0.0.1:27017->27017/tcp                            resolve-mongodb
+[IMAGES]
+REPOSITORY                            TAG                                        DIGEST                                                                    IMAGE ID                                                                  CREATED       SIZE
+ghcr.io/nvidia/openshell/supervisor   21da343c9f838bd9ac85dc61bf44889de1a72873   sha256:372e9f0b22d134e4ca31e5a8363287c79586f7d07f0cc9749085d20d82d341e0   sha256:1bd504a3d7f8f59a181b0cb1af48709962cd07c4989556c00c1f5285fc00e8c8   4 weeks ago   34.8MB
+[PORTS]
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+LISTEN 0      128       172.18.0.1:17670      0.0.0.0:*    users:(("openshell-gatew",pid=165319,fd=15))
+LISTEN 0      4096      172.18.0.1:8000       0.0.0.0:*
+LISTEN 0      4096       127.0.0.1:8000       0.0.0.0:*
+LISTEN 0      4096       127.0.0.1:27017      0.0.0.0:*
+LISTEN 0      128        127.0.0.1:17670      0.0.0.0:*    users:(("openshell-gatew",pid=165319,fd=14))

@@ -1,0 +1,18 @@
+# Synthetic reference only; wire into runtime after kickoff.
+name: semiconductor_rca
+objective:
+  primary: recover C17 yield without unsafe global recipe changes
+  protected_outcomes: [yield, process_control, chamber_isolation]
+  anti_objectives: [global_unverified_recipe_rollback]
+evidence_roots: [evidence.jsonl, sops/]
+constraints: [authorized_recipe_only, calibration_required_after_MFC_change]
+actions:
+  - id: isolate_recalibrate_control_lot
+    consequence: C2
+    reversible: true
+    authority: process_engineering_lead
+    allowed_parameters: {chamber: [C17]}
+verification:
+  success_conditions: [calibration_valid, control_lot_pass, metrology_recovers]
+watch:
+  reopen_conditions: [yield_drops, metrology_drift]

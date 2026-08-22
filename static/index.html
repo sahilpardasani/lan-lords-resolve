@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolve — governance flow</title>
+<style>
+  :root{
+    --bg:#07090d; --panel:#0f141b; --line:#223041; --text:#f2f6fb;
+    --muted:#8fa2b5; --accent:#4da3ff; --ok:#3ddc84; --bad:#ff5c5c;
+    --warn:#ffcf4d; --mongo:#00c98d;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--mono)}
+  header{padding:22px 34px;border-bottom:2px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center}
+  header h1{margin:0;font-size:26px;font-weight:700;letter-spacing:3px}
+  header .s{color:var(--muted);font-size:13px;letter-spacing:1px}
+  .status{display:flex;gap:14px;padding:18px 34px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:10px 18px;font-size:15px;display:flex;align-items:center;gap:10px}
+  .chip b{font-weight:700;font-size:17px}
+  .dot{width:11px;height:11px;border-radius:50%;background:var(--muted)}
+  .dot.on{background:var(--ok);box-shadow:0 0 10px var(--ok)}
+  .dot.off{background:var(--bad);box-shadow:0 0 10px var(--bad)}
+  .bar{padding:20px 34px;display:flex;gap:14px;flex-wrap:wrap}
+  button{font-family:var(--mono);font-size:16px;font-weight:600;background:var(--panel);
+    color:var(--text);border:2px solid var(--line);border-radius:10px;padding:13px 24px;cursor:pointer;transition:.15s}
+  button:hover{border-color:var(--accent)}
+  button.go{background:var(--accent);color:#04121f;border-color:var(--accent)}
+  button.tamper:hover{border-color:var(--bad)}
+  .stage{padding:0 34px 40px}
+  svg{width:100%;height:auto;max-width:1120px;display:block;margin:0 auto}
+  .node rect{fill:var(--panel);stroke:var(--line);stroke-width:2;transition:fill .3s,stroke .3s,filter .3s}
+  .node text{fill:var(--muted);font-size:15px;font-weight:600;transition:fill .3s}
+  .node .sub{font-size:12px;font-weight:400}
+  .node.active rect{stroke:var(--accent);filter:drop-shadow(0 0 12px var(--accent))}
+  .node.active text{fill:var(--text)}
+  .node.blocked rect{fill:#2a0f12;stroke:var(--bad);filter:drop-shadow(0 0 14px var(--bad))}
+  .node.blocked text{fill:#ffb3b3}
+  .node.pass rect{fill:#0f2a1a;stroke:var(--ok);filter:drop-shadow(0 0 14px var(--ok))}
+  .node.pass text{fill:#b3f5cf}
+  .node.wait rect{fill:#2a2410;stroke:var(--warn);filter:drop-shadow(0 0 12px var(--warn))}
+  .node.wait text{fill:#ffe9a8}
+  .edge{stroke:var(--line);stroke-width:2.5;fill:none;transition:stroke .3s}
+  .edge.lit{stroke:var(--accent)} .edge.bad{stroke:var(--bad)} .edge.good{stroke:var(--ok)}
+  .mongo{fill:#06231b;stroke:var(--mongo);stroke-width:2.5;transition:filter .3s}
+  .mongo.pulse{filter:drop-shadow(0 0 18px var(--mongo))}
+  .mlabel{fill:var(--mongo);font-size:15px;font-weight:700}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:0 34px 40px;max-width:1120px;margin:0 auto}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px}
+  .card h2{margin:0;padding:14px 20px;font-size:13px;letter-spacing:1.5px;color:var(--muted);
+    border-bottom:1px solid var(--line);text-transform:uppercase}
+  .kv{padding:11px 20px;border-bottom:1px solid #172230}
+  .kv:last-child{border:none}
+  .kv .k{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+  .kv .v{margin-top:4px;font-size:15px;word-break:break-word}
+  .v.bad{color:var(--bad)}
+  .log{font-size:13px;color:var(--muted);white-space:pre-wrap;padding:16px 20px;max-height:280px;overflow:auto;line-height:1.7}
+  .empty{color:var(--muted);padding:22px 20px;font-size:14px}
+</style>
+</head>
+<body>
+<header><h1>RESOLVE</h1><div class="s">GOVERNANCE FLOW / LOCAL / GB10</div></header>
+
+<div class="status">
+  <div class="chip"><span class="dot" id="d-mongo"></span>MongoDB <b id="s-mongo">-</b></div>
+  <div class="chip">Journal events <b id="s-events">-</b></div>
+  <div class="chip"><span class="dot on"></span>Contract core <b>OPERATIONAL</b></div>
+  <div class="chip">Replay <b id="s-replay">-</b></div>
+</div>
+
+<div class="bar">
+  <button class="go" onclick="runIncident()">&#9654; Run incident</button>
+  <button onclick="loadAudit()">Audit views</button>
+  <button class="tamper" onclick="doTamper()">Tamper test</button>
+  <button onclick="location.reload()">Reset</button>
+</div>
+
+<div class="stage">
+<svg viewBox="0 0 1120 380" role="img">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+
+  <g class="node" id="n-incident"><rect x="20" y="30" width="180" height="64" rx="10"/>
+    <text x="110" y="58" text-anchor="middle">Incident</text>
+    <text x="110" y="78" text-anchor="middle" class="sub">success 98.6-79%</text></g>
+  <line class="edge" id="e1" x1="200" y1="62" x2="250" y2="62" marker-end="url(#a)"/>
+  <g class="node" id="n-ai1"><rect x="250" y="30" width="190" height="64" rx="10"/>
+    <text x="345" y="58" text-anchor="middle">AI proposes</text>
+    <text x="345" y="78" text-anchor="middle" class="sub">Proc B / GLOBAL / 100%</text></g>
+  <line class="edge" id="e2" x1="440" y1="62" x2="490" y2="62" marker-end="url(#a)"/>
+  <g class="node" id="n-contract1"><rect x="490" y="30" width="180" height="64" rx="10"/>
+    <text x="580" y="58" text-anchor="middle">Contract gates</text>
+    <text x="580" y="78" text-anchor="middle" class="sub">8 gates</text></g>
+  <line class="edge" id="e3" x1="670" y1="62" x2="720" y2="62" marker-end="url(#a)"/>
+  <g class="node" id="n-blocked"><rect x="720" y="30" width="180" height="64" rx="10"/>
+    <text x="810" y="58" text-anchor="middle">BLOCKED</text>
+    <text x="810" y="78" text-anchor="middle" class="sub">hard constraint</text></g>
+
+  <path class="edge" id="e4" d="M810 94 L810 130 L345 130 L345 166" marker-end="url(#a)"/>
+
+  <g class="node" id="n-evidence"><rect x="20" y="166" width="180" height="64" rx="10"/>
+    <text x="110" y="194" text-anchor="middle">Evidence</text>
+    <text x="110" y="214" text-anchor="middle" class="sub">current evidence / 87 rows</text></g>
+  <line class="edge" id="e5" x1="200" y1="198" x2="250" y2="198" marker-end="url(#a)"/>
+  <g class="node" id="n-ai2"><rect x="250" y="166" width="190" height="64" rx="10"/>
+    <text x="345" y="194" text-anchor="middle">AI re-proposes</text>
+    <text x="345" y="214" text-anchor="middle" class="sub">Proc B / US / 17.4% total</text></g>
+  <line class="edge" id="e6" x1="440" y1="198" x2="490" y2="198" marker-end="url(#a)"/>
+  <g class="node" id="n-contract2"><rect x="490" y="166" width="180" height="64" rx="10"/>
+    <text x="580" y="194" text-anchor="middle">Contract gates</text>
+    <text x="580" y="214" text-anchor="middle" class="sub">all pass</text></g>
+  <line class="edge" id="e7" x1="670" y1="198" x2="720" y2="198" marker-end="url(#a)"/>
+  <g class="node" id="n-approval"><rect x="720" y="166" width="180" height="64" rx="10"/>
+    <text x="810" y="194" text-anchor="middle">Human approval</text>
+    <text x="810" y="214" text-anchor="middle" class="sub">bound to candidate</text></g>
+  <path class="edge" id="e8" d="M900 198 L950 198 L950 270 L810 270 L810 306" marker-end="url(#a)"/>
+  <g class="node" id="n-commit"><rect x="720" y="306" width="180" height="60" rx="10"/>
+    <text x="810" y="332" text-anchor="middle">Commit</text>
+    <text x="810" y="352" text-anchor="middle" class="sub">bounded action</text></g>
+  <line class="edge" id="e9" x1="720" y1="336" x2="620" y2="336" marker-end="url(#a)"/>
+  <g class="node" id="n-verify"><rect x="440" y="306" width="180" height="60" rx="10"/>
+    <text x="530" y="332" text-anchor="middle">Verify</text>
+    <text x="530" y="352" text-anchor="middle" class="sub" id="verify-sub">reads real state</text></g>
+
+  <g id="mongo">
+    <ellipse class="mongo" cx="180" cy="300" rx="70" ry="16"/>
+    <path class="mongo" d="M110 300 V346 A70 16 0 0 0 250 346 V300"/>
+    <ellipse class="mongo" cx="180" cy="346" rx="70" ry="16"/>
+    <text class="mlabel" x="180" y="330" text-anchor="middle">MongoDB</text>
+    <text class="mlabel" x="180" y="368" text-anchor="middle" style="font-size:12px;font-weight:400">audit + replay</text>
+  </g>
+  <path class="edge" id="e-mongo" d="M440 336 L250 330" marker-end="url(#a)"/>
+</svg>
+</div>
+
+<div class="cols">
+  <div class="card"><h2>Why was this blocked?</h2>
+    <div id="why"><div class="empty">Run an incident to populate.</div></div></div>
+  <div class="card"><h2>Console</h2><div class="log" id="log">ready.</div></div>
+</div>
+
+<script>
+let RUN=null;
+const $=id=>document.getElementById(id);
+const log=m=>{const l=$("log");l.textContent+="\n"+m;l.scrollTop=l.scrollHeight;};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function api(p,o){const r=await fetch(p,o);if(!r.ok)throw new Error(p+" -> "+r.status);return r.json();}
+function cls(id,c){$(id).classList.add(c);}
+function setNode(id,c){$(id).setAttribute("class","node "+c);}
+function clearAll(){
+  document.querySelectorAll(".node").forEach(n=>n.setAttribute("class","node"));
+  document.querySelectorAll(".edge").forEach(e=>e.classList.remove("lit","bad","good"));
+}
+function pulseMongo(){const m=$("mongo");m.classList.add("pulse");setTimeout(()=>m.classList.remove("pulse"),500);}
+
+async function refreshHealth(){
+  try{const h=await api("/health");
+    $("s-mongo").textContent=h.mongodb;
+    $("d-mongo").className="dot "+(h.mongodb==="ONLINE"?"on":"off");
+    $("s-events").textContent=h.journal_events;
+    $("s-replay").textContent=h.replay;
+  }catch(e){log("health error: "+e.message);}
+}
+
+async function runIncident(){
+  clearAll(); $("why").innerHTML='<div class="empty">running...</div>';
+  log("-- running incident --");
+  try{
+    const r=await api("/run",{method:"POST"}); RUN=r.run_id;
+    const seq=[["n-incident","e1"],["n-ai1","e2"],["n-contract1","e3"]];
+    for(const p of seq){setNode(p[0],"active");if(p[1])cls(p[1],"lit");pulseMongo();await sleep(650);}
+    cls("e3","bad"); setNode("n-blocked","blocked"); pulseMongo(); await sleep(800);
+    cls("e4","bad");
+    const seq2=[["n-evidence","e5"],["n-ai2","e6"],["n-contract2","e7"]];
+    for(const p of seq2){setNode(p[0],"active");if(p[1])cls(p[1],"lit");pulseMongo();await sleep(650);}
+    setNode("n-contract2","pass"); await sleep(400);
+    cls("e7","good"); setNode("n-approval","wait"); pulseMongo(); await sleep(700);
+    cls("e8","good"); setNode("n-commit","pass"); pulseMongo(); await sleep(600);
+    cls("e9","good"); setNode("n-verify","pass"); pulseMongo(); await sleep(500);
+    const rep=await api("/replay/"+RUN);
+    const v=rep.verifications[0];
+    if(v){$("verify-sub").textContent="success -> "+v.observed_state.current_success+"%";}
+    cls("e-mongo","good"); pulseMongo();
+    log("run "+RUN+"  BLOCKED -> WAITING_HUMAN -> committed  events="+r.journal_events);
+    await loadWhy(RUN); await refreshHealth();
+  }catch(e){log("run error: "+e.message);}
+}
+
+async function loadWhy(runId){
+  const w=await api("/why-blocked/"+runId); const el=$("why");
+  if(!w.blocked){el.innerHTML='<div class="empty">no blocked decision.</div>';return;}
+  const c=w.candidate?(w.candidate.target+" / "+w.candidate.parameters.region+" / "+w.candidate.parameters.traffic_pct+"%"):"-";
+  el.innerHTML=
+    '<div class="kv"><div class="k">Candidate</div><div class="v">'+c+'</div></div>'+
+    '<div class="kv"><div class="k">Failed gate</div><div class="v bad">'+w.failed_gates.join(", ")+'</div></div>'+
+    '<div class="kv"><div class="k">Reason</div><div class="v">'+w.reason_codes.join(", ")+'</div></div>'+
+    '<div class="kv"><div class="k">Disposition</div><div class="v bad">'+w.disposition+'</div></div>'+
+    '<div class="kv"><div class="k">Fingerprint</div><div class="v">'+(w.candidate_fingerprint||"").slice(0,40)+'...</div></div>';
+}
+
+async function loadAudit(){
+  try{const a=await api("/audit");
+    log("AUDIT  runs="+a.runs+" blocked="+a.blocked_actions+" approvals="+a.approval_required_actions
+      +" executed="+a.actions_executed+" verif ok/fail="+a.verification_successes+"/"+a.verification_failures);
+  }catch(e){log("audit error: "+e.message);}
+}
+
+async function doTamper(){
+  if(!RUN){log("run an incident first.");return;}
+  try{const r=await api("/tamper/"+RUN,{method:"POST"});
+    log(r.intact?"tamper: intact (unexpected)":"TAMPER DETECTED at seq "+r.broken_at_sequence+" ("+r.reason+")");
+    pulseMongo();
+  }catch(e){log("tamper error: "+e.message);}
+}
+refreshHealth();
+</script>
+</body>
+</html>

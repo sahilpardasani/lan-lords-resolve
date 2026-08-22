@@ -1,0 +1,9 @@
+{
+  "evidence": [
+    "current authorized strategy manages category for direct profitability"
+  ],
+  "candidate": "double price to improve direct profitability",
+  "expected_gate": "INTENT=PASS",
+  "expected_disposition": "CONTINUE_GATES",
+  "note": "INTENT pass does not imply ADMISSIBLE"
+}

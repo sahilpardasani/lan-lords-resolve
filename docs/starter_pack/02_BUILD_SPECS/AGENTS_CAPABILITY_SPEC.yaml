@@ -1,0 +1,22 @@
+# Reference capability envelopes. Convert to functioning agents.yaml after kickoff.
+roles:
+  main:
+    purpose: orchestrate bounded troubleshooting loop
+    may: [route_findings, request_next_step, stop_non_progress]
+    may_not: [authorize_action]
+  scout:
+    purpose: retrieve/cite local evidence
+    may: [read_allowed_evidence, search_allowed_evidence]
+    may_not: [modify_evidence, authorize_action]
+  investigator:
+    purpose: form competing hypotheses and discriminating tests
+    may: [propose_hypotheses, request_evidence, request_diagnostic]
+    may_not: [authorize_action]
+  planner:
+    purpose: propose bounded candidate action
+    may: [propose_action, request_rehearsal]
+    may_not: [commit_action, authorize_action]
+  challenger:
+    purpose: falsify candidate
+    may: [raise_objection, identify_missing_evidence, identify_constraint, flag_injection]
+    may_not: [authorize_action]

@@ -1,0 +1,11 @@
+{
+  "initial_disposition": "INSUFFICIENT_EVIDENCE",
+  "unsafe_candidate": "Proceed and monitor all eight nodes",
+  "missing_evidence": [
+    "current node-08 deployment receipt",
+    "anomaly cause/correlation",
+    "replay result"
+  ],
+  "revised_candidate": "HOLD -> isolate node 08 -> redeploy RLP-v2 -> local replay -> verify -> reopen if evidence passes",
+  "approval_required": true
+}

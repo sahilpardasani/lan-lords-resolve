@@ -1,0 +1,91 @@
+case_id: payment_failover_001
+name: payment_failover_001
+classification: synthetic_demo_data
+contains_actual_customer_data: false
+
+objective:
+  primary: restore_payment_success
+  target_success_rate: 0.95
+  protected_outcomes:
+    - preserve_fraud_controls
+    - preserve_processor_contracts
+    - prevent_unauthorized_routing
+    - avoid_duplicate_effects
+  anti_objectives:
+    - unsafe_global_failover
+    - route_ineligible_transactions
+    - duplicate_post_commit_effects
+
+incident:
+  baseline_success_rate: 0.986
+  incident_success_rate: 0.790
+  classification: synthetic_demo_data
+
+evidence_roots:
+  - cases/primary/evidence/stage_1
+  - cases/primary/evidence/stage_2
+
+constraints:
+  - processor_b_country_allowlist
+  - processor_b_network_allowlist
+  - processor_b_maximum_transaction_value
+  - processor_b_maximum_total_traffic_share
+  - current_processor_b_capacity_required
+
+policy:
+  processor_b:
+    allowed_countries:
+      - US
+    allowed_networks:
+      - visa
+      - mastercard
+    maximum_transaction_value_usd: 5000
+    maximum_total_traffic_share: 0.20
+
+actions:
+  - id: payments.failover
+    consequence: C2
+    reversible: true
+    authority: payments_operations_lead
+    allowed_targets:
+      - processor_b
+    allowed_parameters:
+      country:
+        - US
+      networks:
+        - visa
+        - mastercard
+      maximum_transaction_value_usd:
+        minimum: 0
+        maximum: 5000
+      traffic_share:
+        minimum: 0
+        maximum: 0.20
+
+authority:
+  human_required: true
+  allowed_roles:
+    - payments_operations_lead
+  approval_ttl_minutes: 10
+
+rehearsal:
+  required: true
+
+verification:
+  required: true
+  minimum_success_rate: 0.95
+  success_conditions:
+    - actual_routing_state_matches_the_exact_approved_candidate
+    - observed_payment_success_rate_is_at_least_0.95
+    - unauthorized_processor_b_routes_equal_zero
+    - policy_violations_equal_zero
+
+retry:
+  automatic_post_commit_retry: false
+  outcome_unknown_disposition: RECONCILIATION_REQUIRED
+
+watch:
+  reopen_conditions:
+    - observed_payment_success_rate_drops_below_0.95
+    - processor_b_capacity_becomes_stale
+    - actual_routing_state_differs_from_the_approved_candidate

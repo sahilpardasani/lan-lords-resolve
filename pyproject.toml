@@ -1,0 +1,11 @@
+[project]
+name = "lan-lords-resolve"
+version = "0.1.0"
+description = "Local execution-assurance and verification layer for consequential enterprise AI."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+authors = [{ name = "LAN LORDS" }]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,9 @@
+{
+  "order_value_usd": 2400000,
+  "late_exposure_usd_per_day": 180000,
+  "qualified_fraction": 0.65,
+  "held_fraction": 0.35,
+  "expedite_cost_usd": 42000,
+  "avoided_exposure_usd": 540000,
+  "net_value_preserved_usd": 498000
+}

@@ -1,0 +1,8 @@
+{"id": "E01", "source": "metrics/payment_success.csv", "fact": "30-day baseline payment success 98.6%; last 20 minutes 79.0%."}
+{"id": "E02", "source": "deploy/deploy_214.json", "fact": "Routing service deployment completed 18 minutes before the drop."}
+{"id": "E03", "source": "logs/router.log", "fact": "Processor A timeout rate rose sharply after deploy; malformed region routing appears in errors."}
+{"id": "E04", "source": "processor/status_A.md", "fact": "Processor A public/internal status reports no platform-wide outage."}
+{"id": "E05", "source": "contracts/processor_B.md", "fact": "Processor B is approved for US/CA consumer traffic but not EU regulated merchant class R."}
+{"id": "E06", "source": "traffic/segments.csv", "fact": "US/CA eligible traffic is 74% of volume; EU-R is 11%; remaining segments 15%."}
+{"id": "E07", "source": "replay/eligible_failover.json", "fact": "Local replay of eligible-only failover yields 96.9% success with zero policy violations."}
+{"id": "E08", "source": "replay/global_failover.json", "fact": "Global failover yields 98.1% success but creates 412 unauthorized EU-R authorizations/hour."}

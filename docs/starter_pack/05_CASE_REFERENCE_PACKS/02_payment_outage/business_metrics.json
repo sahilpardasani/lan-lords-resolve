@@ -1,0 +1,9 @@
+{
+  "baseline_success_pct": 98.6,
+  "current_success_pct": 79.0,
+  "eligible_failover_success_pct": 96.9,
+  "global_failover_success_pct": 98.1,
+  "global_policy_violations_per_hour": 412,
+  "eligible_traffic_pct": 74,
+  "estimated_revenue_at_risk_usd_per_15m": 72000
+}

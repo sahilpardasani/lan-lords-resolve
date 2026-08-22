@@ -1,0 +1,283 @@
+openshell 0.0.91
+[1m[36mServer Status[39m[0m
+
+  [2mGateway:[0m openshell
+  [2mServer:[0m https://127.0.0.1:17670
+  [2mStatus:[0m [32mConnected[39m
+  [2mAuthentication:[0m [32mAuthenticated[39m (mTLS transport)
+  [2mVersion:[0m 0.0.91
+[SANDBOX CREATE HELP]
+Create a sandbox
+
+USAGE
+  openshell sandbox create [OPTIONS] [-- <COMMAND>...]
+
+FLAGS:
+      --name <NAME>
+          Optional sandbox name (auto-generated when omitted)
+
+      --from <FROM>
+          Sandbox source: a community sandbox name (e.g., `ollama`), a path to a Dockerfile or directory containing one, or a full container image reference (e.g., `myregistry.com/img:tag`).
+
+          Community names are resolved to `ghcr.io/nvidia/openshell-community/sandboxes/<name>:latest` (override the prefix with `OPENSHELL_COMMUNITY_REGISTRY`).
+
+          When given a Dockerfile or directory, the image is built into the local Docker daemon before creating the sandbox.
+
+      --no-keep
+          Delete the sandbox after the initial command or shell exits
+
+      --editor <EDITOR>
+          Launch a remote editor after the sandbox is ready. Keeps the sandbox alive and installs OpenShell-managed SSH config
+
+          [possible values: vscode, cursor]
+
+      --gpu [<COUNT>]
+          Request GPU resources for the sandbox.
+
+          Omit COUNT for the driver's default GPU selection, or pass COUNT to request a specific number of GPUs.
+
+      --cpu <CPU>
+          CPU limit for the sandbox (for example: 500m, 1, 2.5)
+
+      --memory <MEMORY>
+          Memory limit for the sandbox (for example: 512Mi, 4Gi, 8G)
+
+      --driver-config-json <JSON>
+          Experimental driver-keyed JSON object for driver-specific sandbox settings. Validation behavior is not yet finalized.
+
+          For Kubernetes, pass a value such as `{"kubernetes":{"pod":{"node_selector":{"pool":"gpu"}}}}`.
+
+      --provider <PROVIDERS>
+          Provider names to attach to this sandbox
+
+      --policy <POLICY>
+          Path to a custom sandbox policy YAML file. Overrides the built-in default and the `OPENSHELL_SANDBOX_POLICY` env var
+
+      --forward <FORWARD>
+          Forward a local port to the sandbox before the initial command or shell starts. Accepts [`bind_address`:]port (e.g. 8080, 0.0.0.0:8080). Keeps the sandbox alive
+
+      --tty
+          Allocate a pseudo-terminal for the remote command. Defaults to auto-detection (on when stdin and stdout are terminals). Use --tty to force a PTY even when auto-detection fails, or --no-tty to disable
+
+      --no-tty
+          Disable pseudo-terminal allocation
+
+      --auto-providers
+          Auto-create missing providers from local credentials.
+
+          Without this flag, an interactive prompt asks per-provider; in non-interactive mode the command errors.
+
+      --no-auto-providers
+          Never auto-create providers; error if required providers are missing
+
+      --label <LABELS>
+          Attach labels to the sandbox (key=value format, repeatable)
+
+      --env <KEY=VALUE>
+          Environment variables to inject into the sandbox (KEY=VALUE format, repeatable)
+
+      --approval-mode <APPROVAL_MODE>
+          Approval mode for agent-authored policy proposals.
+
+          `manual` (default): every proposal lands in the draft inbox for human review, regardless of the prover verdict.
+
+          `auto`: proposals whose prover delta is empty are approved automatically; proposals with findings still require human approval. Auto mode is an explicit opt-in — `OpenShell`'s default-deny posture is preserved unless you choose otherwise.
+
+          [default: manual]
+          [possible values: manual, auto]
+
+  [COMMAND]...
+          Command to run after "--" (defaults to an interactive shell)
+
+UPLOAD FLAGS:
+      --upload <UPLOAD>
+          Upload local files into the sandbox before running.
+
+          Format: `<LOCAL_PATH>[:<SANDBOX_PATH>]`. When `SANDBOX_PATH` is omitted, files are uploaded to the container's working directory. `.gitignore` rules are applied by default; use `--no-git-ignore` to upload everything.
+
+      --no-git-ignore
+          Disable `.gitignore` filtering for `--upload`
+
+GATEWAY FLAGS:
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata)
+
+          [env: OPENSHELL_GATEWAY=]
+
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata
+
+          [env: OPENSHELL_GATEWAY_ENDPOINT=]
+
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections
+
+          [env: OPENSHELL_GATEWAY_INSECURE=]
+
+GLOBAL FLAGS:
+      --workspace <WORKSPACE>
+          Workspace scope for resource operations
+
+          [env: OPENSHELL_WORKSPACE=]
+          [default: default]
+
+  -v, --verbose...
+          Increase verbosity (-v, -vv, -vvv)
+
+  -h, --help
+          Print help
+
+  -V, --version
+          Print version
+[POLICY HELP]
+Manage sandbox policy
+
+USAGE
+  openshell policy [OPTIONS] [COMMAND]
+
+COMMANDS
+  set     Update policy on a live sandbox
+  update  Incrementally update policy on a live sandbox
+  get     Show current effective policy for a sandbox or a stored global policy
+  list    List policy history for a sandbox or the global policy
+  delete  Delete the gateway-global policy lock, restoring sandbox-level policy control
+
+FLAGS
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata) [env: OPENSHELL_GATEWAY=]
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata [env: OPENSHELL_GATEWAY_ENDPOINT=]
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections [env: OPENSHELL_GATEWAY_INSECURE=]
+      --workspace <WORKSPACE>
+          Workspace scope for resource operations [env: OPENSHELL_WORKSPACE=] [default: default]
+  -v, --verbose...
+          Increase verbosity (-v, -vv, -vvv)
+  -h, --help
+          Print help
+  -V, --version
+          Print version
+
+
+ALIAS
+  pol
+
+EXAMPLES
+  $ openshell policy get my-sandbox
+  $ openshell policy set my-sandbox --policy policy.yaml
+  $ openshell policy update my-sandbox --add-endpoint api.github.com:443:read-only:rest:enforce
+  $ openshell policy update my-sandbox --add-endpoint realtime.example.com:443:read-write:websocket:enforce:websocket-credential-rewrite,allowed-ip=10.0.0.0/8
+  $ openshell policy update my-sandbox --add-allow 'api.github.com:443:GET:/repos/**'
+  $ openshell policy set --global --policy policy.yaml
+  $ openshell policy delete --global
+  $ openshell policy list my-sandbox
+[POLICY SET HELP]
+Update policy on a live sandbox
+
+USAGE
+  openshell policy set [OPTIONS] --policy <POLICY> [NAME]
+
+FLAGS:
+      --policy <POLICY>    Path to the policy YAML file
+      --global             Apply as a gateway-global policy for all sandboxes
+      --yes                Skip the confirmation prompt for global policy updates
+      --wait               Wait for the sandbox to load the policy
+      --timeout <TIMEOUT>  Timeout for --wait in seconds [default: 60]
+  [NAME]                   Sandbox name (defaults to last-used sandbox when not using --global)
+
+GATEWAY FLAGS:
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata) [env: OPENSHELL_GATEWAY=]
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata [env: OPENSHELL_GATEWAY_ENDPOINT=]
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections [env: OPENSHELL_GATEWAY_INSECURE=]
+
+GLOBAL FLAGS:
+      --workspace <WORKSPACE>  Workspace scope for resource operations [env: OPENSHELL_WORKSPACE=] [default: default]
+  -v, --verbose...             Increase verbosity (-v, -vv, -vvv)
+  -h, --help                   Print help
+  -V, --version                Print version
+[POLICY PROVE HELP]
+error: unrecognized subcommand 'prove'
+
+Usage: openshell policy [OPTIONS] [COMMAND]
+
+For more information, try '--help'.
+[FORWARD HELP]
+Manage port forwarding to a sandbox
+
+USAGE
+  openshell forward [OPTIONS] [COMMAND]
+
+COMMANDS
+  start    Start forwarding a local port to a sandbox
+  stop     Stop a background port forward
+  list     List active port forwards
+  service  Forward a local TCP port to a loopback service inside a sandbox over gRPC
+
+FLAGS
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata) [env: OPENSHELL_GATEWAY=]
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata [env: OPENSHELL_GATEWAY_ENDPOINT=]
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections [env: OPENSHELL_GATEWAY_INSECURE=]
+      --workspace <WORKSPACE>
+          Workspace scope for resource operations [env: OPENSHELL_WORKSPACE=] [default: default]
+  -v, --verbose...
+          Increase verbosity (-v, -vv, -vvv)
+  -h, --help
+          Print help
+  -V, --version
+          Print version
+
+
+ALIAS
+  fwd
+
+EXAMPLES
+  $ openshell forward start 8080
+  $ openshell forward start 3000 my-sandbox
+  $ openshell forward service my-sandbox --target-port 8000 --local 8000
+  $ openshell forward stop 8080
+  $ openshell forward list
+[SERVICE HELP]
+Manage sandbox services
+
+USAGE
+  openshell service [OPTIONS] [COMMAND]
+
+COMMANDS
+  expose  Expose an HTTP service running inside a sandbox
+  list    List exposed sandbox service endpoints
+  get     Show one exposed sandbox service endpoint
+  delete  Delete one exposed sandbox service endpoint
+
+FLAGS
+  -g, --gateway <GATEWAY>
+          Gateway name to operate on (resolved from stored metadata) [env: OPENSHELL_GATEWAY=]
+      --gateway-endpoint <GATEWAY_ENDPOINT>
+          Gateway endpoint URL (e.g. <https://gateway.example.com>). Connects directly without looking up gateway metadata [env: OPENSHELL_GATEWAY_ENDPOINT=]
+      --gateway-insecure
+          Skip TLS certificate verification for gateway connections [env: OPENSHELL_GATEWAY_INSECURE=]
+      --workspace <WORKSPACE>
+          Workspace scope for resource operations [env: OPENSHELL_WORKSPACE=] [default: default]
+  -v, --verbose...
+          Increase verbosity (-v, -vv, -vvv)
+  -h, --help
+          Print help
+  -V, --version
+          Print version
+
+
+ALIAS
+  svc
+
+EXAMPLES
+  $ openshell service expose my-sandbox 8080
+  $ openshell service expose my-sandbox 8080 web
+  $ openshell service list
+  $ openshell service list my-sandbox
+  $ openshell service get my-sandbox web
+  $ openshell service delete my-sandbox web

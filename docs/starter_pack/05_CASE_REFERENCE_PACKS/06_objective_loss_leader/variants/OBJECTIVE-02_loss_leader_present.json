@@ -1,0 +1,11 @@
+{
+  "evidence": [
+    "item reinforces value perception",
+    "drives store visits",
+    "contributes to larger basket value"
+  ],
+  "candidate": "double price to maximize SKU margin",
+  "expected_gate": "INTENT=FAIL",
+  "expected_disposition": "BLOCKED",
+  "reason": "OBJECTIVE_CONFLICT"
+}

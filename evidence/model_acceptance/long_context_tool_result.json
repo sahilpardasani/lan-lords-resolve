@@ -1,0 +1,93 @@
+{
+  "initial_response": {
+    "id": "chatcmpl-a5e15fb0d8816a78",
+    "object": "chat.completion",
+    "created": 1787421716,
+    "prompt_routed_experts": null,
+    "model": "qwen3.8-resolve",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-849651f7fa7673f3",
+              "type": "function",
+              "function": {
+                "name": "lookup_test_fact",
+                "arguments": "{\"fact_id\": \"FACT-742\"}"
+              }
+            }
+          ],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+    "usage": {
+      "prompt_tokens": 18522,
+      "total_tokens": 18555,
+      "completion_tokens": 33,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null
+  },
+  "local_tool_result": {
+    "fact_id": "FACT-742",
+    "value": "CURRENT_AND_VERIFIED"
+  },
+  "final_response": {
+    "id": "chatcmpl-a5eceab86ce517f7",
+    "object": "chat.completion",
+    "created": 1787421731,
+    "prompt_routed_experts": null,
+    "model": "qwen3.8-resolve",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "The relevant fact identifier is **FACT-742**, and the tool returned the value **CURRENT_AND_VERIFIED** for `backup_processor_capacity_status`.",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+    "usage": {
+      "prompt_tokens": 18592,
+      "total_tokens": 18624,
+      "completion_tokens": 32,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null
+  }
+}

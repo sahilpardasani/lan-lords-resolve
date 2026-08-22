@@ -1,0 +1,7 @@
+{"id": "E01", "source": "inventory/component_X.csv", "fact": "Plant has 4.0 days of component X at current burn rate."}
+{"id": "E02", "source": "shipping/port_notice.md", "fact": "Primary inbound shipment ETA delayed by 9 days."}
+{"id": "E03", "source": "production/mix.csv", "fact": "Regulated product R consumes 28% of component X; standard product A consumes the remainder."}
+{"id": "E04", "source": "suppliers/approved.md", "fact": "NORTH-2 is approved for A only. EAST-7 is approved for both A and regulated R."}
+{"id": "E05", "source": "quotes/alternates.csv", "fact": "NORTH-2 can deliver in 2 days at +$18K; EAST-7 in 3 days at +$61K."}
+{"id": "E06", "source": "network/sister_plant.csv", "fact": "Sister plant has 1.5 days of transferable X with no local customer impact."}
+{"id": "E07", "source": "replay/plan_transfer_east.json", "fact": "Transfer sister-plant stock + EAST-7 regulated replenishment avoids R line stop; incremental logistics cost USD 96K."}

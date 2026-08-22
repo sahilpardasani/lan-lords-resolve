@@ -1,0 +1,10 @@
+{
+  "evidence_id": "PAY-E-002",
+  "evidence_type": "processor_health",
+  "processor": "processor_a",
+  "observed_at": "2026-08-22T13:01:00Z",
+  "status": "degraded",
+  "failure_mode": "authorization_processing_errors",
+  "source_classification": "synthetic_demo_telemetry",
+  "contains_actual_customer_data": false
+}

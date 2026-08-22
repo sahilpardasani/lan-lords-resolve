@@ -1,0 +1,18 @@
+# Synthetic reference only; wire into runtime after kickoff.
+name: order_exception
+objective:
+  primary: fulfill strategic customer order without violating quality controls
+  protected_outcomes: [quality_compliance, priority_customer_fulfillment]
+  anti_objectives: [release_unqualified_inventory]
+evidence_roots: [evidence.jsonl, sops/]
+constraints: [quality_hold_must_be_respected, supplier_must_be_approved]
+actions:
+  - id: split_source_expedite
+    consequence: C2
+    reversible: true
+    authority: operations_manager
+    allowed_parameters: {qualified_pct: [0, 100], alternate_supplier: [EAST-4]}
+verification:
+  success_conditions: [fulfillment_100, quality_violations_0, displaced_priority_orders_0]
+watch:
+  reopen_conditions: [supplier_status_changes, quality_hold_changes]

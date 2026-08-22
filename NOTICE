@@ -1,0 +1,17 @@
+LAN LORDS / Resolve
+Copyright 2026 LAN LORDS
+
+This product includes software developed for Dell × NVIDIA HackNYC
+(August 22, 2026).
+
+Licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full text.
+
+This NOTICE covers LAN LORDS-authored source and documentation in this
+repository only. Model weights, NVIDIA NGC images, MongoDB Server,
+OpenShell, CUDA, and host binaries are separate works. See
+THIRD_PARTY_NOTICES.md before any redistribution of those artifacts.
+
+The payment incident, operational rules, and telemetry in this
+repository are synthetic demonstration data. They are not real
+customer records.

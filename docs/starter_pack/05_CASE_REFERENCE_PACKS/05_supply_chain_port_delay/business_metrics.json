@@ -1,0 +1,8 @@
+{
+  "days_stock": 4.0,
+  "primary_delay_days": 9,
+  "regulated_consumption_pct": 28,
+  "north_incremental_cost_usd": 18000,
+  "east_incremental_cost_usd": 61000,
+  "modeled_total_plan_cost_usd": 96000
+}

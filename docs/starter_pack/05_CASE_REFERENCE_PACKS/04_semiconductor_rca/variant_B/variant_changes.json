@@ -1,0 +1,16 @@
+{
+  "description": "Calibration and recipe records are clean, making the initial causal story insufficient.",
+  "changes": [
+    {
+      "evidence_id": "E03",
+      "operation": "replace_fact",
+      "value": "C17 recipe checksum matches approved baseline."
+    },
+    {
+      "evidence_id": "E06",
+      "operation": "replace_fact",
+      "value": "Post-install zero/span calibration passed and is signed."
+    }
+  ],
+  "expected_disposition": "INSUFFICIENT_EVIDENCE"
+}

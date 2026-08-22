@@ -1,0 +1,11 @@
+{
+  "description": "EAST-7 loses available capacity.",
+  "changes": [
+    {
+      "evidence_id": "E05",
+      "operation": "replace_fact",
+      "value": "NORTH-2 can deliver A-only stock in 2 days; EAST-7 has no capacity for 12 days."
+    }
+  ],
+  "expected_disposition": "INSUFFICIENT_EVIDENCE"
+}

@@ -1,0 +1,8 @@
+{
+  "case_id": "OBJECTIVE-01",
+  "authorized_objective": null,
+  "candidate_objective": "maximize_sku_margin",
+  "expected_intent_gate": "UNKNOWN",
+  "expected_disposition": "MORE_EVIDENCE_REQUIRED",
+  "expected_reason_code": "OBJECTIVE_MISSING"
+}

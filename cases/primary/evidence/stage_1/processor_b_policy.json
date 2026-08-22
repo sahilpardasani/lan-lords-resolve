@@ -1,0 +1,14 @@
+{
+  "evidence_id": "PAY-E-003",
+  "evidence_type": "typed_company_policy",
+  "policy_id": "processor_b_bounded_failover_v1",
+  "effective_at": "2026-08-22T00:00:00Z",
+  "processor_b": {
+    "allowed_countries": ["US"],
+    "allowed_networks": ["visa", "mastercard"],
+    "maximum_transaction_value_usd": 5000,
+    "maximum_total_traffic_share": 0.2
+  },
+  "source_classification": "synthetic_company_policy",
+  "contains_actual_customer_data": false
+}

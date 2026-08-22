@@ -1,0 +1,18 @@
+{
+  "case_id": "payment_failover_001",
+  "classification": "synthetic_company_policy",
+  "contains_actual_customer_data": false,
+  "document_type": "routing_policy",
+  "policy_id": "processor_b_bounded_failover_v1",
+  "processor_b": {
+    "allowed_countries": [
+      "US"
+    ],
+    "allowed_networks": [
+      "visa",
+      "mastercard"
+    ],
+    "maximum_total_traffic_share": 0.2,
+    "maximum_transaction_value_usd": 5000
+  }
+}

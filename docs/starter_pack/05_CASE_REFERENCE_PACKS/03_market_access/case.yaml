@@ -1,0 +1,18 @@
+# Synthetic reference only; wire into runtime after kickoff.
+name: market_access
+objective:
+  primary: open market access only for verified deployment state
+  protected_outcomes: [market_integrity, deployment_verification]
+  anti_objectives: [unverified_node_trading]
+evidence_roots: [evidence.jsonl, sops/]
+constraints: [all_active_nodes_require_valid_release_receipt]
+actions:
+  - id: hold_isolate_redeploy
+    consequence: C3
+    reversible: true
+    authority: market_operations_lead
+    allowed_parameters: {node: [08], release: [RLP-v2]}
+verification:
+  success_conditions: [valid_receipt, replay_pass, anomaly_normalized]
+watch:
+  reopen_conditions: [anomaly_reappears, receipt_invalidated]

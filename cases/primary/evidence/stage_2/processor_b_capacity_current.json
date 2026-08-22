@@ -1,0 +1,12 @@
+{
+  "evidence_id": "PAY-E-005",
+  "evidence_type": "processor_capacity",
+  "processor": "processor_b",
+  "measured_at": "2026-08-22T13:03:00Z",
+  "expires_at": "2026-08-22T13:13:00Z",
+  "available_total_traffic_share": 0.2,
+  "status": "current",
+  "sufficient_for_admission": true,
+  "source_classification": "synthetic_demo_telemetry",
+  "contains_actual_customer_data": false
+}

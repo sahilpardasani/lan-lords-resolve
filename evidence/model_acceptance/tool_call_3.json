@@ -1,0 +1,93 @@
+{
+  "initial_response": {
+    "id": "chatcmpl-81bba4097b758301",
+    "object": "chat.completion",
+    "created": 1787421660,
+    "prompt_routed_experts": null,
+    "model": "qwen3.8-resolve",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": null,
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [
+            {
+              "id": "chatcmpl-tool-8dc2ac53ef505d11",
+              "type": "function",
+              "function": {
+                "name": "lookup_test_fact",
+                "arguments": "{\"fact_id\": \"FACT-742\"}"
+              }
+            }
+          ],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+    "usage": {
+      "prompt_tokens": 298,
+      "total_tokens": 331,
+      "completion_tokens": 33,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null
+  },
+  "local_tool_result": {
+    "fact_id": "FACT-742",
+    "value": "CURRENT_AND_VERIFIED"
+  },
+  "final_response": {
+    "id": "chatcmpl-8c39f9e1585cf78e",
+    "object": "chat.completion",
+    "created": 1787421663,
+    "prompt_routed_experts": null,
+    "model": "qwen3.8-resolve",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "FACT-742 has the value: **CURRENT_AND_VERIFIED**",
+          "refusal": null,
+          "annotations": null,
+          "audio": null,
+          "function_call": null,
+          "tool_calls": [],
+          "reasoning": null
+        },
+        "logprobs": null,
+        "finish_reason": "stop",
+        "stop_reason": null,
+        "token_ids": null,
+        "routed_experts": null
+      }
+    ],
+    "service_tier": null,
+    "system_fingerprint": "vllm-0.21.0+2325b6f0.dev-237d1677",
+    "usage": {
+      "prompt_tokens": 368,
+      "total_tokens": 384,
+      "completion_tokens": 16,
+      "prompt_tokens_details": null
+    },
+    "prompt_logprobs": null,
+    "prompt_token_ids": null,
+    "prompt_text": null,
+    "kv_transfer_params": null
+  }
+}

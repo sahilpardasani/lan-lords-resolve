@@ -1,0 +1,10 @@
+asset,type,source_or_origin,version_or_revision,local_path,sha256,license_or_terms,checked
+Qwen3.8-27B selected GGUF,model,Hugging Face unsloth/Qwen3.8-27B-GGUF,RECORD AT DOWNLOAD,MODELS/GGUF/<selected>.gguf,GENERATE LOCALLY,Apache-2.0 / verify model card,
+Qwen3.8-27B NVFP4,model,Hugging Face unsloth/Qwen3.8-27B-NVFP4,RECORD AT DOWNLOAD,MODELS/NVFP4/,GENERATE LOCALLY,Apache-2.0 / verify model card,
+Qwen3.8-27B FP8 fallback,model,Hugging Face Qwen/Qwen3.8-27B-FP8,OPTIONAL / RECORD AT DOWNLOAD,MODELS/FP8_FALLBACK/,GENERATE LOCALLY,verify model card,
+NemoClaw,software,NVIDIA,event-installed,EVENT BOX,,check installed package/docs,
+OpenClaw,software,OpenClaw / event stack,event-installed,EVENT BOX,,check installed package/docs,
+OpenShell,software,NVIDIA / event stack,event-installed,EVENT BOX,,check installed package/docs,
+llama.cpp or selected server,software,upstream or event-installed,RECORD AT EVENT,EVENT BOX,,verify upstream license,
+NemoClaw compatible endpoint docs,docs,NVIDIA,current reference,offline docs cache,,NVIDIA docs,
+Synthetic cases,data,LAN LORDS generated reference,2026-08-21/22,05_CASE_REFERENCE_PACKS,,synthetic internal reference,YES

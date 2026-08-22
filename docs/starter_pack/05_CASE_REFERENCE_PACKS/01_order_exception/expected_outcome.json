@@ -1,0 +1,19 @@
+{
+  "initial_disposition": "INSUFFICIENT_EVIDENCE",
+  "unsafe_candidate": "Release held inventory and ship full order",
+  "missing_evidence": [
+    "alternate supplier approval",
+    "split-delivery permission",
+    "other-order displacement",
+    "expedite cost"
+  ],
+  "revised_candidate": "Ship qualified 65% now; source remaining 35% from approved EAST-4; expedite; leave held batch untouched.",
+  "rehearsal": {
+    "fulfillment_pct": 100,
+    "quality_violations": 0,
+    "displaced_priority_orders": 0,
+    "incremental_cost_usd": 42000,
+    "net_value_preserved_usd": 498000
+  },
+  "approval_required": true
+}

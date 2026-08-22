@@ -1,0 +1,11 @@
+{
+  "initial_disposition": "INSUFFICIENT_EVIDENCE",
+  "unsafe_candidate": "Roll back recipe globally across all chambers",
+  "missing_evidence": [
+    "C17 calibration receipt",
+    "authorized recipe-change record",
+    "control-lot response"
+  ],
+  "revised_candidate": "Hold C17; verify/recalibrate MFC; restore approved recipe on C17 only if unauthorized; run control lot; compare metrology/yield before release.",
+  "approval_required": true
+}

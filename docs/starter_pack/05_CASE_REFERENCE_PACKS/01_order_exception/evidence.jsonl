@@ -1,0 +1,8 @@
+{"id": "E01", "source": "sales/order_8841.json", "fact": "Order value USD 2,400,000; due in 72 hours; strategic customer."}
+{"id": "E02", "source": "inventory/lot_status.csv", "fact": "65% of required units are qualified; 35% are on quality hold QH-17."}
+{"id": "E03", "source": "contract/customer_terms.md", "fact": "Late-delivery exposure is USD 180,000 per day; split delivery is allowed if final completion is within 96 hours."}
+{"id": "E04", "source": "quality/hold_QH17.md", "fact": "Held inventory cannot be released without QA disposition."}
+{"id": "E05", "source": "procurement/supplier_candidates.csv", "fact": "Alternate supplier EAST-4 can provide the remaining 35% in 36 hours; approval status not included in this file."}
+{"id": "E06", "source": "planning/priority_orders.csv", "fact": "Reallocating existing qualified stock could affect another priority customer unless alternate supply is used."}
+{"id": "E07", "source": "procurement/approved_suppliers.md", "fact": "EAST-4 is approved for this product family."}
+{"id": "E08", "source": "logistics/expedite_quote.md", "fact": "Expedited sourcing and freight cost USD 42,000; ETA 36 hours."}

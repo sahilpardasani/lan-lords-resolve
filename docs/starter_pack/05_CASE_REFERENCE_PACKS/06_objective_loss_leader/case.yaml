@@ -1,0 +1,18 @@
+# Synthetic reference only.
+name: hypothetical_loss_leader
+objective:
+  primary: follow the currently authorized category strategy
+  protected_outcomes: [authorized_strategy]
+  anti_objectives: [unauthorized_objective_substitution]
+evidence_roots: [variants/]
+constraints: [candidate_must_align_with_authorized_strategy]
+actions:
+  - id: double_sku_price
+    consequence: C2
+    reversible: true
+    authority: pricing_director
+    allowed_parameters: {price_multiplier: [2.0]}
+verification:
+  success_conditions: [authorized_strategy_not_violated]
+watch:
+  reopen_conditions: [strategy_changes]

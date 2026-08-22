@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    "price",
+    "cost",
+    "sku_margin",
+    "demand"
+  ],
+  "candidate": "double price to maximize SKU margin",
+  "expected_gate": "INTENT=UNKNOWN",
+  "expected_disposition": "MORE_EVIDENCE_REQUIRED",
+  "missing": [
+    "pricing strategy",
+    "strategic role of SKU",
+    "basket economics",
+    "demand elasticity"
+  ]
+}
