@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resolve — Enterprise Payment Incident Demo</title>
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--ink:#111827;--muted:#667085;--line:#e4e7ec;--good:#087443;--warn:#b54708;--bad:#b42318;--blue:#175cd3;--purple:#6941c6}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+.app{min-height:100vh;padding:18px}.topbar{background:#101828;color:white;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.brand{display:flex;gap:12px;align-items:center}.logo{width:36px;height:36px;border-radius:10px;background:white;color:#101828;display:grid;place-items:center;font-weight:900}
+.brand h1{margin:0;font-size:16px}.brand small{color:#cbd5e1}.statusbar{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.pill{font-size:11px;font-weight:800;padding:7px 9px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.06)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#12b76a;margin-right:6px}
+.grid{display:grid;grid-template-columns:1.02fr 1.25fr .95fr;gap:14px;margin-top:14px}.panel{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(16,24,40,.06)}
+.ph{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.ph h2{margin:0;font-size:13px}.sub{font-size:10px;color:var(--muted);margin-top:2px}.pb{padding:14px 15px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{border:1px solid var(--line);border-radius:12px;padding:11px;background:#f8fafc}.metric .k{font-size:10px;color:var(--muted)}.metric .v{font-size:23px;font-weight:900;margin-top:5px}.bad{color:var(--bad)}.good{color:var(--good)}
+.bar{height:8px;background:#eaecf0;border-radius:99px;margin-top:10px;overflow:hidden}.bar span{display:block;height:100%;background:var(--blue);width:79%;transition:.5s}
+.notice{font-size:11px;line-height:1.45;color:#475467;border:1px dashed #d0d5dd;background:#fafafa;border-radius:11px;padding:9px;margin-top:10px}.value{border:1px solid #d1fadf;background:#f6fef9;border-radius:12px;padding:10px;margin-top:10px}.value .big{font-size:17px;font-weight:900;color:var(--good)}.value .small{font-size:9.5px;color:#475467;margin-top:4px}
+.live{font-size:10px;color:var(--good);font-weight:900}.pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#12b76a;margin-right:6px;animation:p 1.5s infinite}@keyframes p{0%{box-shadow:0 0 0 0 rgba(18,183,106,.4)}70%{box-shadow:0 0 0 8px rgba(18,183,106,0)}100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}
+.agents{display:grid;gap:8px}.agent{display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px}.agent.active{border-color:#b3b8ff;background:#f9f8ff}.agent.done{border-color:#abefc6;background:#f6fef9}.avatar{width:32px;height:32px;border-radius:9px;background:#f2f4f7;display:grid;place-items:center;font-weight:900}.name{font-size:11px;font-weight:900}.task{font-size:10px;color:var(--muted);margin-top:2px}.state{font-size:9px;font-weight:900;background:#f2f4f7;padding:4px 6px;border-radius:99px}.agent.active .state{background:#f4f3ff;color:var(--purple)}.agent.done .state{background:#ecfdf3;color:var(--good)}
+.stream{height:300px;overflow:auto;background:#0b1220;color:#d0d5dd;border-radius:12px;padding:10px;font:10.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}.log{margin-bottom:5px}.ts{color:#667085;margin-right:7px}.role{font-weight:900;margin-right:7px}.main{color:#84adff}.scout{color:#6ce9a6}.investigator{color:#fdb022}.planner{color:#c3b5fd}.challenger{color:#f97066}.system{color:#98a2b3}.mongo{color:#75e0a7}
+.badge{font-size:9px;font-weight:900;padding:5px 7px;border-radius:99px;background:#f2f4f7;color:#344054}.badge.bad{background:#fef3f2;color:var(--bad)}.badge.warn{background:#fffaeb;color:var(--warn)}.badge.good{background:#ecfdf3;color:var(--good)}
+.candidate{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.candidate div{font-size:10.5px;background:#f8fafc;border:1px solid #eef2f6;border-radius:9px;padding:7px}.candidate b{display:block;font-size:9px;color:var(--muted);margin-bottom:2px}
+.gates{display:grid;grid-template-columns:1fr 1fr;gap:6px}.gate{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:7px 8px;font-size:10px}.gate strong{font-size:9px}.pass{color:var(--good)}.fail{color:var(--bad)}.unknown{color:var(--warn)}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}button{border:0;border-radius:9px;padding:8px 10px;font-size:10px;font-weight:900;background:#101828;color:white;cursor:pointer}button.secondary{background:white;color:#344054;border:1px solid var(--line)}button.danger{background:#b42318}button:disabled{opacity:.35;cursor:not-allowed}
+.audit{max-height:245px;overflow:auto;border:1px solid var(--line);border-radius:10px}.event{display:grid;grid-template-columns:48px 1fr 55px;gap:7px;padding:7px 8px;border-bottom:1px solid var(--line);font-size:9.5px}.event:last-child{border-bottom:0}.event .t{color:var(--muted)}.event .e{font-weight:800}.event .h{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#98a2b3}
+.foot{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);padding:12px 4px 0}
+@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.right{grid-column:1/-1}}@media(max-width:760px){.grid{grid-template-columns:1fr}.right{grid-column:auto}.statusbar{display:none}.metrics{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="topbar">
+  <div class="brand"><div class="logo">R</div><div><h1>Resolve · Enterprise Incident Assurance</h1><small>Payment authorization incident · interactive browser showcase</small></div></div>
+  <div class="statusbar">
+    <span class="pill"><span class="dot"></span>STATIC SHOWCASE</span>
+    <span class="pill">ARCHITECTURE · GB10</span>
+    <span class="pill">QWEN + OPENSHELL</span>
+    <span class="pill">MONGODB AUDIT</span>
+    <span class="pill">NO HOSTED BACKEND</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div>
+    <div class="panel">
+      <div class="ph"><div><h2>Incident Window</h2><div class="sub">Synthetic 30-minute affected-flow window</div></div><div class="live"><span class="pulse"></span>INTERACTIVE DEMO</div></div>
+      <div class="pb">
+        <div class="metrics">
+          <div class="metric"><div class="k">Normal success</div><div class="v">98.6%</div></div>
+          <div class="metric"><div class="k">Incident</div><div class="v bad">79.0%</div></div>
+          <div class="metric"><div class="k">Verified</div><div class="v good" id="verifiedRate">—</div></div>
+        </div>
+        <div class="bar"><span id="successBar"></span></div>
+        <div class="notice">500 synthetic records represent a modeled <b>$12.5M affected-flow window</b>. Each record carries $25,000 of weighted payment flow.</div>
+        <div class="value"><div class="big" id="flowValue">$0 recovered earlier</div><div class="small">Middle synthetic scenario only. Payment throughput returning to normal processing sooner — not revenue or guaranteed avoided loss.</div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="ph"><div><h2>Agentic Investigation</h2><div class="sub">One local model · five bounded roles</div></div><span class="badge">LOCAL</span></div>
+      <div class="pb">
+        <div class="agents">
+          <div class="agent" data-agent="main"><div class="avatar">M</div><div><div class="name">Main</div><div class="task">Coordinates bounded loop</div></div><div class="state">IDLE</div></div>
+          <div class="agent" data-agent="scout"><div class="avatar">S</div><div><div class="name">Scout</div><div class="task">Finds cited local evidence</div></div><div class="state">IDLE</div></div>
+          <div class="agent" data-agent="investigator"><div class="avatar">I</div><div><div class="name">Investigator</div><div class="task">Tests competing hypotheses</div></div><div class="state">IDLE</div></div>
+          <div class="agent" data-agent="planner"><div class="avatar">P</div><div><div class="name">Planner</div><div class="task">Proposes bounded candidate</div></div><div class="state">IDLE</div></div>
+          <div class="agent" data-agent="challenger"><div class="avatar">C</div><div><div class="name">Challenger</div><div class="task">Searches for disqualifying constraints</div></div><div class="state">IDLE</div></div>
+        </div>
+        <div class="actions"><button id="startBtn">1 · Start investigation</button><button id="evidenceBtn" class="secondary" disabled>2 · Fetch missing evidence</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <div class="ph"><div><h2>Incident Reasoning Stream</h2><div class="sub">Scripted replay of bounded roles; permission is deterministic</div></div><span class="badge">SCRIPTED REPLAY</span></div>
+      <div class="pb"><div class="stream" id="stream"></div></div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="ph"><div><h2>Resolve Contract</h2><div class="sub">Company-declared execution boundary</div></div><span class="badge" id="dispositionBadge">NOT EVALUATED</span></div>
+      <div class="pb">
+        <div class="candidate">
+          <div><b>Candidate</b><span id="candidateTitle">—</span></div>
+          <div><b>Processor</b><span id="processor">—</span></div>
+          <div><b>Traffic share</b><span id="share">—</span></div>
+          <div><b>Country / eligibility</b><span id="eligibility">—</span></div>
+        </div>
+        <div class="gates">
+          <div class="gate"><span>INTENT</span><strong id="g-intent">—</strong></div>
+          <div class="gate"><span>EVIDENCE</span><strong id="g-evidence">—</strong></div>
+          <div class="gate"><span>CONSTRAINTS</span><strong id="g-constraints">—</strong></div>
+          <div class="gate"><span>CONSEQUENCE</span><strong id="g-consequence">—</strong></div>
+          <div class="gate"><span>REVERSIBILITY</span><strong id="g-reversibility">—</strong></div>
+          <div class="gate"><span>REHEARSAL</span><strong id="g-rehearsal">—</strong></div>
+          <div class="gate"><span>AUTHORITY</span><strong id="g-authority">—</strong></div>
+          <div class="gate"><span>VERIFICATION</span><strong id="g-verification">—</strong></div>
+        </div>
+        <div class="actions">
+          <button id="approveBtn" disabled>3 · Approve exact action</button>
+          <button id="mutateBtn" class="secondary" disabled>4 · Mutate 17.4% → 50%</button>
+          <button id="restoreBtn" class="secondary" disabled>Restore approved candidate</button>
+          <button id="executeBtn" disabled>5 · Execute</button>
+          <button id="verifyBtn" class="secondary" disabled>6 · Verify reality</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="panel">
+      <div class="ph"><div><h2>Approval Artifact</h2><div class="sub">Integrity-bound to exact candidate</div></div><span class="badge" id="approvalStatus">NONE</span></div>
+      <div class="pb">
+        <div class="candidate">
+          <div><b>Candidate fingerprint</b><span id="fingerprint">—</span></div>
+          <div><b>Approver role</b><span id="approver">—</span></div>
+          <div><b>TTL</b><span id="ttl">—</span></div>
+          <div><b>Nonce</b><span id="nonce">—</span></div>
+        </div>
+        <div class="notice" id="approvalNote">No approval issued.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="ph"><div><h2>Audit Journal Projection</h2><div class="sub">Demonstrates hash-chain behavior; no hosted database</div></div><span class="badge good">IN-BROWSER</span></div>
+      <div class="pb">
+        <div class="audit" id="audit"></div>
+        <div class="actions"><button id="tamperBtn" class="danger" disabled>Tamper with old event</button><button id="journalVerifyBtn" class="secondary" disabled>Verify journal</button></div>
+        <div class="notice" id="journalNote">Hash chain idle.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:14px">
+      <div class="ph"><div><h2>Declared Company Policy</h2><div class="sub">Typed boundaries, not discovered safety</div></div></div>
+      <div class="pb">
+        <div class="notice" style="margin-top:0"><b>Processor B:</b> US only · Visa/Mastercard · transaction ≤ $5,000 · total traffic share ≤ 20% · current capacity evidence required.</div>
+        <div class="notice"><b>Authority:</b> Payments Operations Lead required for this action class. Approval TTL = 10 minutes.</div>
+        <div class="notice"><b>Post-commit:</b> verification unavailable → outcome UNKNOWN → freeze/reconcile → no blind retry.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="foot"><span>Resolve enterprise demo · static scripted showcase · not a production payment system</span><span id="clock"></span></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id), stream=$('stream'), audit=$('audit');
+let events=[], tampered=false;
+
+function now(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+function hx(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
+function log(role,text){const d=document.createElement('div');d.className='log';d.innerHTML='<span class="ts">'+now()+'</span><span class="role '+role+'">'+role.toUpperCase()+'</span>'+text;stream.appendChild(d);stream.scrollTop=stream.scrollHeight}
+function addEvent(type,detail){const prev=events.length?events[events.length-1].hash:'GENESIS',hash=hx(prev+'|'+type+'|'+detail+'|'+events.length);events.push({time:now(),type,detail,hash});renderAudit()}
+function renderAudit(){audit.innerHTML='';events.forEach(e=>{const r=document.createElement('div');r.className='event';r.innerHTML='<span class="t">'+e.time+'</span><span class="e">'+e.type+'<br><span style="font-weight:400;color:#667085">'+e.detail+'</span></span><span class="h">'+e.hash+'</span>';audit.appendChild(r)});audit.scrollTop=audit.scrollHeight}
+function agent(name,state,task){const e=document.querySelector('[data-agent="'+name+'"]');e.classList.remove('active','done');if(state==='ACTIVE')e.classList.add('active');if(state==='DONE')e.classList.add('done');e.querySelector('.state').textContent=state;if(task)e.querySelector('.task').textContent=task}
+function gate(id,v){const e=$('g-'+id);e.textContent=v;e.className=v==='PASS'?'pass':v==='FAIL'?'fail':v==='UNKNOWN'?'unknown':''}
+function disp(t,k){const e=$('dispositionBadge');e.textContent=t;e.className='badge'+(k?' '+k:'')}
+function cand(title,share,elig){$('candidateTitle').textContent=title;$('processor').textContent='Processor B';$('share').textContent=share;$('eligibility').textContent=elig}
+function after(ms,fn){setTimeout(fn,ms)}
+function contract1(){gate('intent','PASS');gate('evidence','PASS');gate('constraints','FAIL');gate('consequence','FAIL');gate('reversibility','UNKNOWN');gate('rehearsal','UNKNOWN');gate('authority','FAIL');gate('verification','PASS');disp('BLOCKED','bad')}
+function contract2(){gate('intent','PASS');gate('evidence','UNKNOWN');gate('constraints','PASS');gate('consequence','PASS');gate('reversibility','PASS');gate('rehearsal','UNKNOWN');gate('authority','UNKNOWN');gate('verification','PASS');disp('MORE_EVIDENCE_REQUIRED','warn')}
+function contract3(){['intent','evidence','constraints','consequence','reversibility','rehearsal','verification'].forEach(x=>gate(x,'PASS'));gate('authority','UNKNOWN');disp('WAITING_HUMAN','warn')}
+
+$('startBtn').onclick=()=>{
+  $('startBtn').disabled=true;
+  log('system','Incident loaded locally. Payment success = <b>79.0%</b>.');
+  addEvent('CASE_LOADED','payment_failover_001 · 500 synthetic transactions');
+  agent('main','ACTIVE','Dispatching bounded investigation');
+  after(500,()=>{log('main','Dispatching Scout, Investigator, Planner and Challenger against local evidence only.')});
+  after(1100,()=>{agent('scout','ACTIVE','Reading incident + policy evidence');log('scout','Processor A degradation correlates with current authorization failures.');addEvent('EVIDENCE_READ','incident + processor health + typed policy')});
+  after(1750,()=>{agent('scout','DONE','Evidence cited');agent('investigator','ACTIVE','Testing routing hypothesis');log('investigator','Strongest hypothesis: Processor A degradation is driving the authorization drop.')});
+  after(2400,()=>{agent('investigator','DONE','Hypothesis supported');agent('planner','ACTIVE','Generating recovery candidate');log('planner','Candidate: fail over <b>100% GLOBAL traffic</b> to Processor B.');cand('Candidate 1 · Global failover','100%','GLOBAL / ALL');addEvent('CANDIDATE_PROPOSED','Processor B · GLOBAL · 100%')});
+  after(3100,()=>{agent('planner','DONE','Candidate proposed');agent('challenger','ACTIVE','Testing declared boundaries');log('challenger','Conflict found: Processor B is US-only, eligibility constrained, total traffic share ≤20%.')});
+  after(3750,()=>{agent('challenger','DONE','Hard conflict found');contract1();addEvent('CONTRACT_EVALUATED','CONSTRAINTS=FAIL · BLOCKED');log('system','Deterministic contract: <b>BLOCKED</b>. Typed policy enforces this even if the Challenger misses it.')});
+  after(4500,()=>{agent('main','ACTIVE','Seeking bounded alternative');cand('Candidate 2 · Bounded reroute','17.4%','US · Visa/MC · ≤$5K');log('planner','Bounded candidate: 17.4% of total traffic, eligible US Visa/Mastercard, ≤ $5,000.');addEvent('CANDIDATE_PROPOSED','Processor B · US · 17.4%')});
+  after(5200,()=>{contract2();log('system','Current Processor B capacity evidence is stale. <b>EVIDENCE = UNKNOWN → MORE_EVIDENCE_REQUIRED.</b>');addEvent('CONTRACT_EVALUATED','EVIDENCE=UNKNOWN · MORE_EVIDENCE_REQUIRED');agent('main','DONE','Waiting for material evidence');$('evidenceBtn').disabled=false});
+};
+
+$('evidenceBtn').onclick=()=>{
+  $('evidenceBtn').disabled=true;agent('scout','ACTIVE','Fetching current capacity evidence');
+  log('scout','Retrieving local capacity snapshot, policy version and current processor health...');
+  after(700,()=>{log('scout','Retrieved <b>processor_b_capacity_11_47.json</b> + policy v14 + current health.');addEvent('EVIDENCE_ADDED','capacity current · policy v14 · health current');agent('scout','DONE','Current evidence added');agent('planner','ACTIVE','Running rehearsal')});
+  after(1450,()=>{log('planner','Rehearsal: exactly <b>87 of 500</b> incident failures satisfy the declared envelope and reroute successfully.');addEvent('REHEARSAL_PASSED','87 recoveries · 17.4% reroute')});
+  after(2200,()=>{log('planner','395 + 87 = 482 successful transactions. Modeled post-action success = <b>96.4%</b>.');agent('planner','DONE','Rehearsal passed');contract3();addEvent('CONTRACT_EVALUATED','technical gates PASS · human required');log('system','Company policy requires a <b>Payments Operations Lead</b>. Disposition: <b>WAITING_HUMAN</b>.');$('approveBtn').disabled=false});
+};
+
+$('approveBtn').onclick=()=>{
+  $('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;
+  const fp='cand_'+hx('processor_b|US|0.174|visa_mastercard|5000');
+  $('fingerprint').textContent=fp;$('approver').textContent='Payments Operations Lead';$('ttl').textContent='10 min';$('nonce').textContent='n_'+hx(String(Date.now()));
+  $('approvalStatus').textContent='VALID';$('approvalStatus').className='badge good';$('approvalNote').innerHTML='Integrity-bound to exact candidate fingerprint, evidence state, approver role, expiry and one-time nonce.';
+  gate('authority','PASS');disp('ADMISSIBLE','good');log('system','Exact candidate approved. Deterministic authority gate now PASS.');addEvent('APPROVAL_GRANTED',fp+' · TTL 10m · one-time');
+};
+
+$('mutateBtn').onclick=()=>{
+  cand('Candidate 2 · MUTATED','50%','US · Visa/MC · ≤$5K');$('approvalStatus').textContent='INVALID';$('approvalStatus').className='badge bad';$('approvalNote').innerHTML='<b>17.4% → 50%</b> changed the candidate fingerprint and exceeds policy.';
+  gate('constraints','FAIL');gate('authority','FAIL');disp('BLOCKED','bad');$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;
+  log('system','No LLM call required: material mutation invalidates the approval.');addEvent('APPROVAL_INVALIDATED','17.4% -> 50%');
+};
+
+$('restoreBtn').onclick=()=>{
+  cand('Candidate 2 · Approved bounded reroute','17.4%','US · Visa/MC · ≤$5K');['constraints','authority'].forEach(x=>gate(x,'PASS'));disp('ADMISSIBLE','good');
+  $('approvalStatus').textContent='VALID';$('approvalStatus').className='badge good';$('approvalNote').textContent='Exact approved candidate restored. Fingerprint matches.';
+  $('restoreBtn').disabled=true;$('executeBtn').disabled=false;log('system','Approved candidate restored.');addEvent('CANDIDATE_RESTORED','approved fingerprint restored');
+};
+
+$('executeBtn').onclick=()=>{
+  $('executeBtn').disabled=true;$('mutateBtn').disabled=true;$('verifyBtn').disabled=false;$('approvalStatus').textContent='CONSUMED';$('approvalStatus').className='badge';
+  disp('COMMITTED','good');log('system','COMMIT sent to local payment simulator. One-time approval consumed.');addEvent('COMMIT_SENT','Processor B · US · 17.4%');
+};
+
+$('verifyBtn').onclick=()=>{
+  $('verifyBtn').disabled=true;$('verifiedRate').textContent='96.4%';$('successBar').style.width='96.4%';$('flowValue').textContent='$8.33M of modeled payment flow returned to normal processing sooner';
+  disp('VERIFIED','good');gate('verification','PASS');log('system','Verifier read ACTUAL simulator state: <b>482 / 500 = 96.4%</b>.');addEvent('VERIFICATION_PASSED','actual simulator state = 482/500 · 96.4%');addEvent('RUN_CLOSED','VERIFIED · replay ready');
+  $('tamperBtn').disabled=false;$('journalVerifyBtn').disabled=false;
+};
+
+$('tamperBtn').onclick=()=>{if(!events.length)return;tampered=true;const i=Math.min(2,events.length-1);events[i].detail+=' [EDITED]';renderAudit();$('journalNote').textContent='Historical event edited in place. Re-verify the journal.';$('tamperBtn').disabled=true;log('mongo','Historical MongoDB journal document edited for tamper demo.')};
+$('journalVerifyBtn').onclick=()=>{if(tampered){$('journalNote').innerHTML='<b style="color:#b42318">TAMPER DETECTED.</b> Stored contents no longer match the chained event hash.';log('mongo','Journal verification: <b>TAMPER DETECTED</b>. Editing the record did not grant authority.')}else{$('journalNote').innerHTML='<b style="color:#087443">JOURNAL VERIFIED.</b> Hash chain intact.';log('mongo','Journal verification passed.')}};
+
+setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);
+$('clock').textContent=new Date().toLocaleString();
+log('system','Hosted showcase ready. Click “Start investigation” to replay the synthetic incident.');
+addEvent('DEMO_READY','local synthetic incident initialized');
+</script>
+</body>
+</html>
