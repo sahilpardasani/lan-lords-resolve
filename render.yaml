@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: lan-lords-resolve
+    runtime: static
+    buildCommand: echo "Resolve static showcase ready"
+    staticPublishPath: ./site
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
