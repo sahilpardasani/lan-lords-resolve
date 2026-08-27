@@ -123,6 +123,7 @@ section{padding:44px 0;border-top:1px solid var(--line)}
 .btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line2)}
 .btn.ghost:hover{border-color:var(--line2);background:var(--bg2)}
 .btn.danger{background:rgba(255,89,100,.12);color:var(--red);border:1px solid rgba(255,89,100,.3)}
+.btn.success,.btn.success:disabled{opacity:1;background:rgba(118,227,58,.12);color:var(--sig);border:1px solid var(--sig-dim);box-shadow:none}
 .btn:disabled{opacity:.32;cursor:not-allowed;box-shadow:none;filter:none}
 .btn:focus-visible,.bar a:focus-visible{outline:2px solid var(--sig);outline-offset:3px}
 .btn .k{font-family:var(--mono);font-size:10px;opacity:.7}
@@ -235,6 +236,7 @@ section{padding:44px 0;border-top:1px solid var(--line)}
 /* journal */
 .journal{width:100%;max-width:100%;max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:11px;background:rgba(9,13,18,.38)}
 .journal::-webkit-scrollbar{width:8px}.journal::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.journal-empty{min-height:170px;display:grid;place-items:center;padding:28px;text-align:center;color:var(--ink3);font-family:var(--mono);font-size:11px;line-height:1.7}
 .jev{display:grid;grid-template-columns:34px minmax(0,1fr) 82px;gap:12px;min-width:0;padding:11px 12px;border-bottom:1px solid var(--line);align-items:start}
 .jev:nth-child(even){background:rgba(255,255,255,.012)}
 .jev:last-child{border-bottom:0}
@@ -242,19 +244,24 @@ section{padding:44px 0;border-top:1px solid var(--line)}
 .jev .je{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink)}
 .jev .jd{min-width:0;font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.5;overflow-wrap:anywhere;word-break:break-word}
 .jev .jh{font-family:var(--mono);font-size:9.5px;color:var(--sig-dim);justify-self:end;white-space:nowrap}
+.jev.scanning{background:rgba(91,157,255,.08);box-shadow:inset 3px 0 var(--blue)}
+.jev.checked{background:rgba(118,227,58,.045)}
+.jev.checked .jh{color:var(--sig)}
 .jev.tampered{background:rgba(255,89,100,.06)}
 .jev.tampered .jh{color:var(--red)}
 
 /* schema window */
 .schema-wrap{overflow-x:auto;padding:clamp(18px,3vw,34px);background-image:linear-gradient(rgba(95,109,128,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(95,109,128,.045) 1px,transparent 1px);background-size:28px 28px}
-.schema{display:block;width:100%;min-width:720px;max-width:1120px;margin:0 auto}
+.schema{display:block;width:100%;min-width:900px;max-width:1280px;margin:0 auto}
 .node rect{fill:var(--panel2);stroke:var(--line2);stroke-width:1.2;rx:9;transition:.3s}
 .node.hot rect{stroke:var(--sig);fill:rgba(118,227,58,.10);filter:drop-shadow(0 0 6px rgba(118,227,58,.22))}
 .node .lbl{fill:var(--ink);font:600 12px var(--sans)}
 .node .sub{fill:var(--ink3);font:10px var(--mono)}
+.node .num{fill:var(--sig-dim);font:700 8px var(--mono);letter-spacing:.08em}
 .node.det rect{stroke-dasharray:0} .node.llm rect{stroke-dasharray:4 3}
-.edge{stroke:var(--line2);stroke-width:1.5;fill:none;marker-end:url(#arrow)}
-.edge.hot{stroke:var(--sig);stroke-width:2.2}
+.edge{stroke:var(--line2);stroke-width:1.5;stroke-linecap:round;fill:none;marker-end:url(#arrow)}
+.edge.hot{stroke:var(--sig);stroke-width:2.2;stroke-dasharray:6 5;animation:edgeFlow .7s linear infinite}
+@keyframes edgeFlow{to{stroke-dashoffset:-11}}
 .flowdot{fill:var(--sig)}
 .schema-legend{display:flex;gap:20px;flex-wrap:wrap;max-width:1120px;margin:16px auto 0;font-family:var(--mono);font-size:10.5px;color:var(--ink3)}
 .schema-legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--line2);vertical-align:middle;margin-right:7px}
@@ -307,6 +314,9 @@ footer .mono{font-size:11px}
 .loop-step b{grid-row:1/3;color:var(--sig);font-family:var(--mono);font-size:10px;letter-spacing:.05em;padding-top:2px}
 .loop-step span{font-size:12px;font-weight:700;color:var(--ink)}
 .loop-step small{font-family:var(--mono);font-size:9px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loop-step.active{background:rgba(118,227,58,.08);box-shadow:inset 0 0 0 1px var(--sig-dim)}
+.loop-step.done{background:rgba(255,255,255,.025)}
+.loop-step.done b::after{content:' ✓'}
 
 .overview-grid{grid-template-columns:minmax(245px,.9fr) minmax(360px,1.35fr) minmax(245px,.9fr)}
 .overview-grid .win.span{grid-column:auto}
@@ -436,21 +446,21 @@ footer .mono{font-size:11px}
         <div class="runrow">
           <button class="btn primary" id="runBtn">▶ Run diagnostics <span class="k">↵</span></button>
           <button class="btn ghost" id="resetBtn">Reset</button>
-          <span class="runhint" id="runHint">Ready. One local model, five bounded roles, one typed contract.</span>
+          <span class="runhint" id="runHint" aria-live="polite">Ready. One local model, five bounded roles, one typed contract.</span>
         </div>
       </div>
     </div>
 
     <div class="loop-strip" aria-label="Resolve workflow">
-      <div class="loop-step"><b>01</b><span>Reason</span><small>Five bounded roles</small></div>
+      <div class="loop-step" data-stage="1"><b>01</b><span>Reason</span><small>Five bounded roles</small></div>
       <i>→</i>
-      <div class="loop-step"><b>02</b><span>Contract</span><small>Eight deterministic gates</small></div>
+      <div class="loop-step" data-stage="2"><b>02</b><span>Contract</span><small>Eight deterministic gates</small></div>
       <i>→</i>
-      <div class="loop-step"><b>03</b><span>Approve</span><small>Exact human authority</small></div>
+      <div class="loop-step" data-stage="3"><b>03</b><span>Approve</span><small>Exact human authority</small></div>
       <i>→</i>
-      <div class="loop-step"><b>04</b><span>Execute</span><small>Bounded, one-use action</small></div>
+      <div class="loop-step" data-stage="4"><b>04</b><span>Execute</span><small>Bounded, one-use action</small></div>
       <i>→</i>
-      <div class="loop-step"><b>05</b><span>Verify</span><small>Independent reality check</small></div>
+      <div class="loop-step" data-stage="5"><b>05</b><span>Verify</span><small>Independent reality check</small></div>
     </div>
 
     <!-- ============ LIVE WINDOWS ============ -->
@@ -558,12 +568,12 @@ footer .mono{font-size:11px}
             <span class="tag local" id="mongoTag">● IN-BROWSER</span>
           </div>
           <div class="wb">
-            <div class="journal" id="journal"></div>
+            <div class="journal" id="journal"><div class="journal-empty">Complete the bounded action and independent verification to unlock the audit replay.</div></div>
             <div class="act-grid">
-              <button class="btn danger" id="tamperBtn" disabled>Load audit replay</button>
+              <button class="btn primary" id="tamperBtn" disabled>Load audit replay</button>
               <button class="btn ghost" id="jVerifyBtn" disabled>Verify hash chain</button>
             </div>
-            <div class="anote" id="jNote">Hash chain idle. <b>same DecisionInput → same verdict</b>, even with MongoDB offline.</div>
+            <div class="anote" id="jNote" aria-live="polite">Audit replay locked until the independent verification step completes.</div>
           </div>
       </div>
     </div>
@@ -582,56 +592,46 @@ footer .mono{font-size:11px}
     </div>
 
     <div class="win">
-      <div class="wh"><div><h3>Data-flow schema</h3><div class="sub">CASE → REASON → CONTRACT → AUTHORITY → ACTION → VERIFY → JOURNAL</div></div><span class="tag local">GB10 ARCHITECTURE</span></div>
+      <div class="wh"><div><h3>Data-flow schema</h3><div class="sub">CASE → REASON → CANDIDATE → CONTRACT → ACTION → VERIFY → JOURNAL · AUTHORITY → CONTRACT</div></div><span class="tag local">GB10 ARCHITECTURE</span></div>
       <div class="wb schema-wrap">
-        <svg class="schema" viewBox="0 0 940 300" xmlns="http://www.w3.org/2000/svg">
+        <svg class="schema" viewBox="0 0 1280 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Resolve data flow from evidence through bounded action and verification to the audit journal">
           <defs>
             <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
-              <path d="M0,0 L7,3 L0,6 Z" fill="#2a3543"/>
+              <path d="M0,0 L7,3 L0,6 Z" fill="context-stroke"/>
             </marker>
           </defs>
-          <!-- edges (drawn first) -->
-          <path class="edge" id="e1" d="M118,70 L118,118"/>
-          <path class="edge" id="e2" d="M200,150 L262,150"/>
-          <path class="edge" id="e3" d="M430,150 L492,150"/>
-          <path class="edge" id="e4" d="M660,124 L660,96"/>
-          <path class="edge" id="e5" d="M660,178 L660,210"/>
-          <path class="edge" id="e6" d="M600,236 L520,236"/>
-          <path class="edge" id="e7" d="M660,210 L780,210 L780,150 L742,150"/>
-          <path class="edge" id="e8" d="M118,178 L118,236 L360,236"/>
+          <!-- One directed spine. Human authority enters the contract from above. -->
+          <path class="edge" id="e1" d="M170,165 H190"/>
+          <path class="edge" id="e2" d="M350,165 H370"/>
+          <path class="edge" id="e3" d="M520,165 H540"/>
+          <path class="edge" id="e4" d="M630,90 V130"/>
+          <path class="edge" id="e5" d="M720,165 H740"/>
+          <path class="edge" id="e6" d="M890,165 H910"/>
+          <path class="edge" id="e7" d="M1070,165 H1090"/>
 
-          <!-- CASE -->
-          <g class="node det" id="nCase" transform="translate(60,30)">
-            <rect width="116" height="40"/><text class="lbl" x="14" y="18">Case + Evidence</text><text class="sub" x="14" y="32">validated · hashed</text>
+          <g class="node det" id="nCase" transform="translate(20,130)">
+            <rect width="150" height="70"/><text class="num" x="14" y="17">01 · INPUT</text><text class="lbl" x="14" y="39">Case + Evidence</text><text class="sub" x="14" y="57">validated · hashed</text>
           </g>
-          <!-- REASONING (LLM) -->
-          <g class="node llm" id="nReason" transform="translate(60,118)">
-            <rect width="140" height="64"/><text class="lbl" x="14" y="22">Local Reasoning</text><text class="sub" x="14" y="39">Qwen3 · 5 bounded roles</text><text class="sub" x="14" y="53">advisory only</text>
+          <g class="node llm" id="nReason" transform="translate(190,130)">
+            <rect width="160" height="70"/><text class="num" x="14" y="17">02 · ADVISORY</text><text class="lbl" x="14" y="39">Local Reasoning</text><text class="sub" x="14" y="57">Qwen3 · 5 roles</text>
           </g>
-          <!-- CANDIDATE (det) -->
-          <g class="node det" id="nCand" transform="translate(262,120)">
-            <rect width="168" height="60"/><text class="lbl" x="14" y="24">Candidate</text><text class="sub" x="14" y="42">exact fingerprint</text>
+          <g class="node det" id="nCand" transform="translate(370,130)">
+            <rect width="150" height="70"/><text class="num" x="14" y="17">03 · PROPOSAL</text><text class="lbl" x="14" y="39">Candidate</text><text class="sub" x="14" y="57">exact fingerprint</text>
           </g>
-          <!-- CONTRACT (det) -->
-          <g class="node det" id="nContract" transform="translate(492,110)">
-            <rect width="168" height="80"/><text class="lbl" x="14" y="26">Resolve Contract</text><text class="sub" x="14" y="44">8 gates · disposition</text><text class="sub" x="14" y="60">deterministic math</text>
+          <g class="node det" id="nContract" transform="translate(540,130)">
+            <rect width="180" height="70"/><text class="num" x="14" y="17">04 · PERMISSION</text><text class="lbl" x="14" y="39">Resolve Contract</text><text class="sub" x="14" y="57">8 deterministic gates</text>
           </g>
-          <!-- AUTHORITY -->
-          <g class="node det" id="nAuth" transform="translate(596,40)">
-            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Human Authority</text><text class="sub" x="14" y="38">if policy requires</text>
+          <g class="node det" id="nAuth" transform="translate(540,20)">
+            <rect width="180" height="70"/><text class="num" x="14" y="17">HUMAN INPUT</text><text class="lbl" x="14" y="39">Exact Authority</text><text class="sub" x="14" y="57">only when required</text>
           </g>
-          <!-- ACTION -->
-          <g class="node det" id="nAction" transform="translate(596,210)">
-            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Bounded Action</text><text class="sub" x="14" y="38">OpenShell runtime</text>
+          <g class="node det" id="nAction" transform="translate(740,130)">
+            <rect width="150" height="70"/><text class="num" x="14" y="17">05 · EXECUTE</text><text class="lbl" x="14" y="39">Bounded Action</text><text class="sub" x="14" y="57">OpenShell runtime</text>
           </g>
-          <!-- VERIFY -->
-          <g class="node det" id="nVerify" transform="translate(392,210)">
-            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Verify Reality</text><text class="sub" x="14" y="38">independent read</text>
+          <g class="node det" id="nVerify" transform="translate(910,130)">
+            <rect width="160" height="70"/><text class="num" x="14" y="17">06 · OBSERVE</text><text class="lbl" x="14" y="39">Verify Reality</text><text class="sub" x="14" y="57">independent read</text>
           </g>
-          <!-- JOURNAL -->
-          <g class="node det" id="nJournal" transform="translate(360,216)" opacity="0"><rect width="0" height="0"/></g>
-          <g class="node det" id="nMongo" transform="translate(196,216)">
-            <rect width="164" height="40"/><text class="lbl" x="14" y="18">MongoDB Journal</text><text class="sub" x="14" y="32">hash-chained audit</text>
+          <g class="node det" id="nMongo" transform="translate(1090,130)">
+            <rect width="170" height="70"/><text class="num" x="14" y="17">07 · RECORD</text><text class="lbl" x="14" y="39">Audit Journal</text><text class="sub" x="14" y="57">hash-chained</text>
           </g>
         </svg>
         <div class="schema-legend">
@@ -740,9 +740,11 @@ footer .mono{font-size:11px}
 const $=id=>document.getElementById(id);
 const q=s=>document.querySelector(s);
 const G=['intent','evidence','constraints','consequence','reversibility','rehearsal','authority','verification'];
-let runId=null, current=null, approvalNonce=null, commitId=null, commitAttempts=0;
+let runId=null, current=null, approvalNonce=null, commitId=null, commitAttempts=0, lastReplay=null, actionBusy=false;
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 function now(){return new Date().toLocaleTimeString([], {hour12:false})}
 function setStep(n){$('streamStep').textContent='STEP '+n}
+function setWorkflow(stage){document.querySelectorAll('.loop-step').forEach(el=>{const n=Number(el.dataset.stage);el.classList.toggle('done',n<stage||stage>5);el.classList.toggle('active',n===stage)})}
 function hotWin(id){document.querySelectorAll('.win').forEach(w=>w.classList.remove('hot'));if(id)$(id).classList.add('hot')}
 function flow(nodeIds,edgeIds){document.querySelectorAll('.node,.edge').forEach(n=>n.classList.remove('hot'));(nodeIds||[]).forEach(id=>$(id)?.classList.add('hot'));(edgeIds||[]).forEach(id=>$(id)?.classList.add('hot'))}
 function log(role,text){const s=$('stream');s.querySelector('.empty')?.remove();const d=document.createElement('div');d.className='ln';const ts=document.createElement('span');ts.className='ts';ts.textContent=now();const rl=document.createElement('span');rl.className='rl '+role;rl.textContent=role.toUpperCase();const tx=document.createElement('span');tx.className='tx';tx.textContent=text;d.append(ts,rl,tx);s.appendChild(d);s.scrollTop=s.scrollHeight}
@@ -753,21 +755,21 @@ function cand(candidate,title='C2 · Bounded reroute'){const p=candidate.paramet
 function renderContract(evaluation){const result=evaluation.contract_result;G.forEach(name=>gate(name,result.gates[name]));const kind=result.disposition==='BLOCKED'?'bad':result.disposition==='WAITING_HUMAN'||result.disposition==='MORE_EVIDENCE_REQUIRED'?'warn':'good';disp(result.disposition,kind)}
 function addAnom(sev,title,detail,evidence){const c=$('anoms');c.querySelector('.anom-empty')?.remove();const a=document.createElement('div');a.className='anom show';const badge=document.createElement('span');badge.className='sev '+sev;badge.textContent=sev.toUpperCase();const body=document.createElement('div');body.className='body';for(const [cls,text] of [['t',title],['d',detail],['ev',evidence]]){const x=document.createElement('div');x.className=cls;x.textContent=text;body.appendChild(x)}a.append(badge,body);c.appendChild(a);$('anomCount').textContent=c.querySelectorAll('.anom').length}
 async function api(method,path,body){const options={method,headers:{}};if(body!==undefined){options.headers['Content-Type']='application/json';options.body=JSON.stringify(body)}const response=await fetch(path,options);let payload;try{payload=await response.json()}catch{payload={detail:'non-JSON backend response'}}if(!response.ok)throw new Error(payload.detail||`${method} ${path} failed (${response.status})`);return payload}
-async function guarded(label,fn){try{$('runHint').innerHTML='<span class="live"></span>'+label;await fn()}catch(error){disp('UNKNOWN','bad');$('runHint').textContent='FAILED CLOSED: '+error.message;log('system','FAILED CLOSED: '+error.message);throw error}}
-async function refreshJournal(){if(!runId)return;const replay=await api('GET',`/runs/${runId}/replay`);const j=$('journal');j.innerHTML='';for(const event of replay.events){const row=document.createElement('div');row.className='jev';const jt=document.createElement('span');jt.className='jt';jt.textContent=String(event.sequence);const mid=document.createElement('span');const typ=document.createElement('span');typ.className='je';typ.textContent=event.event_type;const det=document.createElement('div');det.className='jd';det.textContent=JSON.stringify(event.payload);mid.append(typ,det);const hash=document.createElement('span');hash.className='jh';hash.textContent=event.event_hash_or_mac.slice(0,12);row.append(jt,mid,hash);j.appendChild(row)}j.scrollTop=j.scrollHeight;$('jNote').textContent=`Audit replay ${replay.integrity.status}; ${replay.events.length} events; run ${replay.run_id}`;$('mongoTag').textContent=replay.integrity.valid?'● VERIFIED':'● INVALID';$('mongoTag').style.color=replay.integrity.valid?'var(--sig)':'var(--red)';return replay}
-async function run(){reset(false);$('runBtn').disabled=true;await guarded('Replaying five verified local Qwen roles…',async()=>{setStep(1);hotWin('winAgents');flow(['nCase','nReason'],['e1']);['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'ACTIVE','Recorded structured inference'));current=await api('POST','/run');runId=current.run_id;setStep(5);for(const role of current.roles){agent(role.role,'DONE','Structured response validated');log(role.role,role.summary)}cand({parameters:{country:'GLOBAL',networks:['ALL'],maximum_transaction_value_usd:Infinity,traffic_share:1}},'C1 · Global failover');renderContract(current.blocked_evaluation);log('contract','GLOBAL / 100% blocked: '+current.blocked_evaluation.contract_result.policy_reason_codes.join(', '));addAnom('crit','Global candidate blocked',current.blocked_evaluation.contract_result.policy_reason_codes.join(', '),'deterministic contract');cand(current.current_candidate);renderContract(current.current_evaluation);log('contract','Bounded 17.4% candidate paused: '+current.phase);addAnom('warn','Capacity evidence stale','Current evidence is insufficient for admission.','EVIDENCE=UNKNOWN');$('evidenceBtn').disabled=false;$('runHint').textContent=`Run ${runId} paused at MORE_EVIDENCE_REQUIRED`;await refreshJournal();hotWin('winContract')})}
-async function fetchEvidence(){await guarded('Fetching canonical stage-2 evidence…',async()=>{current=await api('POST',`/runs/${runId}/evidence`);renderContract(current.current_evaluation);log('scout','Current local Processor B capacity evidence added.');log('contract','Deterministic contract stopped at '+current.phase);$('evidenceBtn').disabled=true;$('approveBtn').disabled=false;setStep(6);flow(['nContract','nAuth'],['e4']);hotWin('winApproval');await refreshJournal();$('runHint').textContent='WAITING_HUMAN — operator approval required'})}
-async function approve(){await guarded('Submitting exact human approval…',async()=>{approvalNonce='ui-'+crypto.randomUUID();current=await api('POST',`/runs/${runId}/approve`,{approver:'payments_operations_lead',nonce:approvalNonce});const approval=current.approval;$('aFp').textContent=approval.candidate_fingerprint;$('aWho').textContent=approval.approver;$('aTtl').textContent='10-minute policy';$('aNonce').textContent=approvalNonce;$('aStatus').textContent=approval.status;$('aStatus').className='astatus valid';$('aNote').textContent='Approval is integrity-bound to this exact candidate.';$('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;disp('APPROVED','good');gate('authority','PASS');await refreshJournal();$('runHint').textContent='Exact 17.4% candidate approved by human operator'})}
-async function mutate(){await guarded('Validating 50% mutation without Qwen…',async()=>{const before=current.qwen_call_count;current=await api('POST',`/runs/${runId}/mutate`,{traffic_share:0.5});cand(current.current_candidate,'C2 · MUTATED');disp(current.phase,'bad');gate('constraints','FAIL');gate('authority','FAIL');$('aStatus').textContent='INVALID';$('aStatus').className='astatus invalid';$('aNote').textContent=`Deterministic validation rejected the candidate mismatch; Qwen calls ${before} → ${current.qwen_call_count}.`;$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;addAnom('crit','Approval invalidated by mutation','17.4% → 50% changed the approved fingerprint.','deterministic approval validation');await refreshJournal();$('runHint').textContent='Approval invalidated; no LLM call made'})}
-async function restore(){await guarded('Restoring exact approved candidate…',async()=>{current=await api('POST',`/runs/${runId}/restore`);cand(current.current_candidate,'C2 · Approved bounded reroute');renderContract(current.current_evaluation);disp(current.phase,'good');$('aStatus').textContent='VALID';$('aStatus').className='astatus valid';$('aNote').textContent='The exact approved fingerprint was restored.';$('restoreBtn').disabled=true;$('executeBtn').disabled=false;await refreshJournal();$('runHint').textContent='Exact approved candidate restored'})}
-async function execute(){await guarded('Sending idempotent commit…',async()=>{if(!commitId)commitId='ui-commit-'+crypto.randomUUID();const receipt=await api('POST',`/runs/${runId}/execute`,{commit_id:commitId});commitAttempts++;log('system',`Commit ${commitId}: effect_count=${receipt.effect_count}, idempotent_replay=${receipt.idempotent_replay}`);disp('COMMITTED','good');$('aStatus').textContent='CONSUMED';$('aStatus').className='astatus consumed';$('verifyBtn').disabled=false;flow(['nAction','nContract'],['e5']);if(commitAttempts===1){$('executeBtn').textContent='Repeat same commit';$('runHint').textContent='Commit admitted; repeat once to prove idempotency, then verify'}else{$('executeBtn').disabled=true;$('runHint').textContent='Duplicate commit produced no second effect; verify reality next'}await refreshJournal()})}
-async function verify(){await guarded('Reading simulator state independently…',async()=>{const receipt=await api('POST',`/runs/${runId}/verify`,{unavailable:false});const o=receipt.observed;requireObserved(o);$('verifyBtn').disabled=true;$('heroVerified').textContent=(o.success_rate*100).toFixed(1)+'%';disp(receipt.status,'good');flow(['nVerify','nMongo'],['e6','e8']);log('contract',`Separate state read: ${o.successful}/${o.total}; ${o.processor_b_routed} B-routed; ${o.unauthorized_processor_b_routes} unauthorized.`);$('impactBig').textContent='$8.33M';$('impactRecover').textContent='Modeled payment flow returned to normal processing sooner.';$('impactSpark').style.width=(o.success_rate*100)+'%';$('tamperBtn').disabled=false;$('jVerifyBtn').disabled=false;await refreshJournal();hotWin('winJournal');$('runHint').textContent=`${receipt.status} from independent backend state read`})}
+async function guarded(label,fn){if(actionBusy)return;actionBusy=true;try{$('runHint').innerHTML='<span class="live"></span>'+label;await fn()}catch(error){disp('UNKNOWN','bad');$('runHint').textContent='FAILED CLOSED: '+error.message;log('system','FAILED CLOSED: '+error.message);throw error}finally{actionBusy=false}}
+async function refreshJournal(){if(!runId)return;const replay=await api('GET',`/runs/${runId}/replay`);lastReplay=replay;const j=$('journal');j.innerHTML='';for(const event of replay.events){const row=document.createElement('div');row.className='jev';const jt=document.createElement('span');jt.className='jt';jt.textContent=String(event.sequence);const mid=document.createElement('span');const typ=document.createElement('span');typ.className='je';typ.textContent=event.event_type;const det=document.createElement('div');det.className='jd';det.textContent=JSON.stringify(event.payload);mid.append(typ,det);const hash=document.createElement('span');hash.className='jh';hash.textContent=event.event_hash_or_mac.slice(0,12);row.append(jt,mid,hash);j.appendChild(row)}return replay}
+async function run(){reset(false);$('runBtn').disabled=true;await guarded('Starting staged diagnostic replay…',async()=>{setWorkflow(1);hotWin('winAgents');flow(['nCase','nReason'],['e1']);current=await api('POST','/run');runId=current.run_id;for(let i=0;i<current.roles.length;i++){const role=current.roles[i];setStep(i+1);$('runBtn').textContent=`Running ${i+1}/7`;$('runHint').innerHTML=`<span class="live"></span>Step ${i+1}/7 · ${role.role.toUpperCase()} is producing a bounded finding`;agent(role.role,'ACTIVE','Analyzing recorded evidence…');await sleep(520);agent(role.role,'DONE','Structured response validated');log(role.role,role.summary)}setStep(6);$('runBtn').textContent='Running 6/7';$('runHint').innerHTML='<span class="live"></span>Step 6/7 · Challenger proposal enters the deterministic contract';flow(['nCand','nContract'],['e2','e3']);hotWin('winContract');cand({parameters:{country:'GLOBAL',networks:['ALL'],maximum_transaction_value_usd:Infinity,traffic_share:1}},'C1 · Global failover');await sleep(620);renderContract(current.blocked_evaluation);log('contract','GLOBAL / 100% blocked: '+current.blocked_evaluation.contract_result.policy_reason_codes.join(', '));addAnom('crit','Global candidate blocked',current.blocked_evaluation.contract_result.policy_reason_codes.join(', '),'deterministic contract');setStep(7);$('runBtn').textContent='Running 7/7';$('runHint').innerHTML='<span class="live"></span>Step 7/7 · Bounded candidate evaluated against current evidence';await sleep(620);cand(current.current_candidate);renderContract(current.current_evaluation);log('contract','Bounded 17.4% candidate paused: '+current.phase);addAnom('warn','Capacity evidence stale','Current evidence is insufficient for admission.','EVIDENCE=UNKNOWN');$('evidenceBtn').disabled=false;$('runBtn').textContent='Diagnostics complete ✓';setWorkflow(2);$('runHint').textContent=`Run ${runId} paused at MORE_EVIDENCE_REQUIRED`;hotWin('winContract')})}
+async function fetchEvidence(){await guarded('Fetching canonical stage-2 evidence…',async()=>{current=await api('POST',`/runs/${runId}/evidence`);renderContract(current.current_evaluation);log('scout','Current local Processor B capacity evidence added.');log('contract','Deterministic contract stopped at '+current.phase);$('evidenceBtn').disabled=true;$('approveBtn').disabled=false;setWorkflow(3);flow(['nContract','nAuth'],['e4']);hotWin('winApproval');$('runHint').textContent='WAITING_HUMAN — operator approval required'})}
+async function approve(){await guarded('Submitting exact human approval…',async()=>{approvalNonce='ui-'+crypto.randomUUID();current=await api('POST',`/runs/${runId}/approve`,{approver:'payments_operations_lead',nonce:approvalNonce});const approval=current.approval;$('aFp').textContent=approval.candidate_fingerprint;$('aWho').textContent=approval.approver;$('aTtl').textContent='10-minute policy';$('aNonce').textContent=approvalNonce;$('aStatus').textContent=approval.status;$('aStatus').className='astatus valid';$('aNote').textContent='Approval is integrity-bound to this exact candidate.';$('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;disp('APPROVED','good');gate('authority','PASS');setWorkflow(4);$('runHint').textContent='Exact 17.4% candidate approved by human operator'})}
+async function mutate(){await guarded('Validating 50% mutation without Qwen…',async()=>{const before=current.qwen_call_count;current=await api('POST',`/runs/${runId}/mutate`,{traffic_share:0.5});cand(current.current_candidate,'C2 · MUTATED');disp(current.phase,'bad');gate('constraints','FAIL');gate('authority','FAIL');$('aStatus').textContent='INVALID';$('aStatus').className='astatus invalid';$('aNote').textContent=`Deterministic validation rejected the candidate mismatch; Qwen calls ${before} → ${current.qwen_call_count}.`;$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;addAnom('crit','Approval invalidated by mutation','17.4% → 50% changed the approved fingerprint.','deterministic approval validation');setWorkflow(3);$('runHint').textContent='Approval invalidated; no LLM call made'})}
+async function restore(){await guarded('Restoring exact approved candidate…',async()=>{current=await api('POST',`/runs/${runId}/restore`);cand(current.current_candidate,'C2 · Approved bounded reroute');renderContract(current.current_evaluation);disp(current.phase,'good');$('aStatus').textContent='VALID';$('aStatus').className='astatus valid';$('aNote').textContent='The exact approved fingerprint was restored.';$('restoreBtn').disabled=true;$('executeBtn').disabled=false;setWorkflow(4);$('runHint').textContent='Exact approved candidate restored'})}
+async function execute(){await guarded('Sending idempotent commit…',async()=>{if(!commitId)commitId='ui-commit-'+crypto.randomUUID();const receipt=await api('POST',`/runs/${runId}/execute`,{commit_id:commitId});commitAttempts++;log('system',`Commit ${commitId}: effect_count=${receipt.effect_count}, idempotent_replay=${receipt.idempotent_replay}`);disp('COMMITTED','good');$('aStatus').textContent='CONSUMED';$('aStatus').className='astatus consumed';$('verifyBtn').disabled=false;flow(['nContract','nAction'],['e5']);setWorkflow(5);if(commitAttempts===1){$('executeBtn').textContent='Repeat same commit';$('runHint').textContent='Commit admitted; repeat once to prove idempotency, then verify'}else{$('executeBtn').disabled=true;$('runHint').textContent='Duplicate commit produced no second effect; verify reality next'}})}
+async function verify(){await guarded('Reading simulator state independently…',async()=>{$('verifyBtn').disabled=true;const receipt=await api('POST',`/runs/${runId}/verify`,{unavailable:false});const o=receipt.observed;requireObserved(o);$('heroVerified').textContent=(o.success_rate*100).toFixed(1)+'%';disp(receipt.status,'good');flow(['nAction','nVerify','nMongo'],['e6','e7']);log('contract',`Separate state read: ${o.successful}/${o.total}; ${o.processor_b_routed} B-routed; ${o.unauthorized_processor_b_routes} unauthorized.`);$('impactBig').textContent='$8.33M';$('impactRecover').textContent='Modeled payment flow returned to normal processing sooner.';$('impactSpark').style.width=(o.success_rate*100)+'%';$('tamperBtn').disabled=false;$('jVerifyBtn').disabled=true;$('journal').innerHTML='<div class="journal-empty">Verification receipt recorded. Select <b>Load audit replay</b> to inspect the run-scoped event chain.</div>';$('jNote').textContent='Verification complete. Audit replay is ready to load.';$('mongoTag').textContent='● REPLAY READY';setWorkflow(6);hotWin('winJournal');$('runHint').textContent=`${receipt.status} from independent backend state read`})}
 function requireObserved(o){if(o.total!==500||o.successful!==482||o.processor_b_routed!==87||o.unauthorized_processor_b_routes!==0||o.policy_violations!==0)throw new Error('verification metrics violate canonical invariants')}
-async function loadReplay(){await guarded('Loading recorded audit replay…',async()=>{await refreshJournal();$('runHint').textContent='Recorded run-scoped audit replay loaded'})}
-async function verifyJournal(){await guarded('Verifying replayed journal chain…',async()=>{const replay=await refreshJournal();if(!replay.integrity.valid)throw new Error('journal hash chain invalid');log('mongo','Recorded journal hash chain verified end-to-end.');$('runHint').textContent='Journal hash chain VALID'})}
+async function loadReplay(){await guarded('Loading recorded audit replay…',async()=>{const button=$('tamperBtn');button.disabled=true;button.textContent='Loading replay…';$('mongoTag').textContent='● LOADING';const replay=await refreshJournal();$('journal').scrollTop=0;$('jVerifyBtn').disabled=false;button.disabled=false;button.classList.add('success');button.textContent='Replay loaded ✓';$('mongoTag').textContent='● REPLAY LOADED';$('jNote').textContent=`Loaded ${replay.events.length} run-scoped events. Next: verify every hash link in order.`;$('runHint').textContent='Recorded run-scoped audit replay loaded'})}
+async function verifyJournal(){await guarded('Verifying replayed journal chain…',async()=>{const button=$('jVerifyBtn');const journal=$('journal');button.disabled=true;const replay=lastReplay||await refreshJournal();const rows=[...document.querySelectorAll('.jev')];$('mongoTag').textContent='● VERIFYING 0/'+rows.length;for(let i=0;i<rows.length;i++){if(i)rows[i-1].classList.replace('scanning','checked');rows[i].classList.add('scanning');button.textContent=`Verifying ${i+1}/${rows.length}`;$('mongoTag').textContent=`● VERIFYING ${i+1}/${rows.length}`;journal.scrollTop=Math.max(0,rows[i].offsetTop-journal.offsetTop-journal.clientHeight/2);await sleep(42)}if(rows.length)rows.at(-1).classList.replace('scanning','checked');if(!replay.integrity.valid)throw new Error('journal hash chain invalid');log('mongo','Recorded journal hash chain verified end-to-end.');button.classList.add('success');button.textContent='Hash chain valid ✓';$('mongoTag').textContent='● HASH VALID';$('jNote').textContent=`Hash chain VALID — all ${rows.length} events link to the preceding hash; run ${replay.run_id}.`;$('runHint').textContent='Journal hash chain VALID'})}
 async function egress(){await guarded('Loading verified OpenShell containment receipt…',async()=>{const result=await api('GET','/containment');$('eg1').querySelector('.res').textContent=result.public_external_http;$('eg2').querySelector('.res').textContent=result.local_qwen;$('eg3').querySelector('.res').textContent=result.local_resolve;$('egressTag').textContent=result.status;$('egressTag').classList.toggle('local',result.status==='PASS')})}
-function reset(clearBackend=true){runId=null;current=null;approvalNonce=null;commitId=null;commitAttempts=0;setStep(0);$('stream').innerHTML='<div class="empty">Awaiting Run diagnostics…</div>';$('anoms').innerHTML='<div class="anom-empty">No anomalies yet.</div>';$('anomCount').textContent='0';$('journal').innerHTML='';['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'IDLE'));G.forEach(name=>{const el=q(`[data-gate="${name}"]`);el.removeAttribute('data-v');el.querySelector('.gv').textContent='—'});disp('—',null);$('contractTag').textContent='NOT EVALUATED';$('cCand').textContent='—';$('cProc').textContent='—';$('cShare').textContent='—';$('cElig').textContent='—';['aFp','aWho','aTtl','aNonce'].forEach(id=>$(id).textContent='—');$('aStatus').textContent='NONE';$('aStatus').className='astatus';$('aNote').textContent='No approval issued. Technical gates can pass on their own; authority cannot.';$('jNote').textContent='No showcase run loaded.';$('mongoTag').textContent='● IN-BROWSER';$('heroVerified').textContent='—';$('impactBig').textContent='$0';$('impactRecover').textContent='Run the diagnostics above to model the recovered flow.';$('impactSpark').style.width='79%';['evidenceBtn','approveBtn','mutateBtn','restoreBtn','executeBtn','verifyBtn','tamperBtn','jVerifyBtn'].forEach(id=>$(id).disabled=true);$('executeBtn').textContent='Execute';$('runBtn').disabled=false;$('runHint').textContent=clearBackend?'Reset showcase. Start creates a fresh browser replay.':'Loading verified workflow replay…';flow([],[]);hotWin(null)}
-$('runBtn').onclick=run;$('resetBtn').onclick=()=>reset(true);$('evidenceBtn').onclick=fetchEvidence;$('approveBtn').onclick=approve;$('mutateBtn').onclick=mutate;$('restoreBtn').onclick=restore;$('executeBtn').onclick=execute;$('verifyBtn').onclick=verify;$('tamperBtn').onclick=loadReplay;$('jVerifyBtn').onclick=verifyJournal;$('egressBtn').onclick=egress;document.querySelectorAll('.chip').forEach(c=>{c.style.opacity='.45';c.title='Canonical trial is frozen; alternate prompts are disabled.'});setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);$('clock').textContent=new Date().toLocaleString();reset(true);
+function reset(clearBackend=true){runId=null;current=null;approvalNonce=null;commitId=null;commitAttempts=0;lastReplay=null;setStep(0);setWorkflow(0);$('stream').innerHTML='<div class="empty">Awaiting Run diagnostics…</div>';$('anoms').innerHTML='<div class="anom-empty">No anomalies yet.</div>';$('anomCount').textContent='0';$('journal').innerHTML='<div class="journal-empty">Complete the bounded action and independent verification to unlock the audit replay.</div>';['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'IDLE'));G.forEach(name=>{const el=q(`[data-gate="${name}"]`);el.removeAttribute('data-v');el.querySelector('.gv').textContent='—'});disp('—',null);$('contractTag').textContent='NOT EVALUATED';$('cCand').textContent='—';$('cProc').textContent='—';$('cShare').textContent='—';$('cElig').textContent='—';['aFp','aWho','aTtl','aNonce'].forEach(id=>$(id).textContent='—');$('aStatus').textContent='NONE';$('aStatus').className='astatus';$('aNote').textContent='No approval issued. Technical gates can pass on their own; authority cannot.';$('jNote').textContent='Audit replay locked until the independent verification step completes.';$('mongoTag').textContent='● IN-BROWSER';$('mongoTag').style.color='';$('heroVerified').textContent='—';$('impactBig').textContent='$0';$('impactRecover').textContent='Run the diagnostics above to model the recovered flow.';$('impactSpark').style.width='79%';['evidenceBtn','approveBtn','mutateBtn','restoreBtn','executeBtn','verifyBtn','tamperBtn','jVerifyBtn'].forEach(id=>$(id).disabled=true);$('tamperBtn').classList.remove('success');$('jVerifyBtn').classList.remove('success');$('executeBtn').textContent='Execute';$('tamperBtn').textContent='Load audit replay';$('jVerifyBtn').textContent='Verify hash chain';$('runBtn').textContent='▶ Run diagnostics ↵';$('runBtn').disabled=false;$('runHint').textContent=clearBackend?'Reset showcase. Start creates a fresh browser replay.':'Preparing staged workflow replay…';flow([],[]);hotWin(null)}
+$('runBtn').onclick=run;$('resetBtn').onclick=()=>{if(!actionBusy)reset(true)};$('evidenceBtn').onclick=fetchEvidence;$('approveBtn').onclick=approve;$('mutateBtn').onclick=mutate;$('restoreBtn').onclick=restore;$('executeBtn').onclick=execute;$('verifyBtn').onclick=verify;$('tamperBtn').onclick=loadReplay;$('jVerifyBtn').onclick=verifyJournal;$('egressBtn').onclick=egress;document.querySelectorAll('.chip').forEach(c=>{c.style.opacity='.45';c.title='Canonical trial is frozen; alternate prompts are disabled.'});setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);$('clock').textContent=new Date().toLocaleString();reset(true);
 </script>
 </body>
 </html>
