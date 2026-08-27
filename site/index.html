@@ -3,227 +3,687 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Resolve — Enterprise Payment Incident Demo</title>
+<title>Resolve — Deterministic Permission for Local Agents</title>
 <style>
-:root{--bg:#f4f6f8;--panel:#fff;--ink:#111827;--muted:#667085;--line:#e4e7ec;--good:#087443;--warn:#b54708;--bad:#b42318;--blue:#175cd3;--purple:#6941c6}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
-.app{min-height:100vh;padding:18px}.topbar{background:#101828;color:white;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
-.brand{display:flex;gap:12px;align-items:center}.logo{width:36px;height:36px;border-radius:10px;background:white;color:#101828;display:grid;place-items:center;font-weight:900}
-.brand h1{margin:0;font-size:16px}.brand small{color:#cbd5e1}.statusbar{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.pill{font-size:11px;font-weight:800;padding:7px 9px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.06)}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#12b76a;margin-right:6px}
-.grid{display:grid;grid-template-columns:1.02fr 1.25fr .95fr;gap:14px;margin-top:14px}.panel{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(16,24,40,.06)}
-.ph{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.ph h2{margin:0;font-size:13px}.sub{font-size:10px;color:var(--muted);margin-top:2px}.pb{padding:14px 15px}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.metric{border:1px solid var(--line);border-radius:12px;padding:11px;background:#f8fafc}.metric .k{font-size:10px;color:var(--muted)}.metric .v{font-size:23px;font-weight:900;margin-top:5px}.bad{color:var(--bad)}.good{color:var(--good)}
-.bar{height:8px;background:#eaecf0;border-radius:99px;margin-top:10px;overflow:hidden}.bar span{display:block;height:100%;background:var(--blue);width:79%;transition:.5s}
-.notice{font-size:11px;line-height:1.45;color:#475467;border:1px dashed #d0d5dd;background:#fafafa;border-radius:11px;padding:9px;margin-top:10px}.value{border:1px solid #d1fadf;background:#f6fef9;border-radius:12px;padding:10px;margin-top:10px}.value .big{font-size:17px;font-weight:900;color:var(--good)}.value .small{font-size:9.5px;color:#475467;margin-top:4px}
-.live{font-size:10px;color:var(--good);font-weight:900}.pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:#12b76a;margin-right:6px;animation:p 1.5s infinite}@keyframes p{0%{box-shadow:0 0 0 0 rgba(18,183,106,.4)}70%{box-shadow:0 0 0 8px rgba(18,183,106,0)}100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}
-.agents{display:grid;gap:8px}.agent{display:grid;grid-template-columns:32px 1fr auto;gap:9px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:9px}.agent.active{border-color:#b3b8ff;background:#f9f8ff}.agent.done{border-color:#abefc6;background:#f6fef9}.avatar{width:32px;height:32px;border-radius:9px;background:#f2f4f7;display:grid;place-items:center;font-weight:900}.name{font-size:11px;font-weight:900}.task{font-size:10px;color:var(--muted);margin-top:2px}.state{font-size:9px;font-weight:900;background:#f2f4f7;padding:4px 6px;border-radius:99px}.agent.active .state{background:#f4f3ff;color:var(--purple)}.agent.done .state{background:#ecfdf3;color:var(--good)}
-.stream{height:300px;overflow:auto;background:#0b1220;color:#d0d5dd;border-radius:12px;padding:10px;font:10.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}.log{margin-bottom:5px}.ts{color:#667085;margin-right:7px}.role{font-weight:900;margin-right:7px}.main{color:#84adff}.scout{color:#6ce9a6}.investigator{color:#fdb022}.planner{color:#c3b5fd}.challenger{color:#f97066}.system{color:#98a2b3}.mongo{color:#75e0a7}
-.badge{font-size:9px;font-weight:900;padding:5px 7px;border-radius:99px;background:#f2f4f7;color:#344054}.badge.bad{background:#fef3f2;color:var(--bad)}.badge.warn{background:#fffaeb;color:var(--warn)}.badge.good{background:#ecfdf3;color:var(--good)}
-.candidate{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0}.candidate div{font-size:10.5px;background:#f8fafc;border:1px solid #eef2f6;border-radius:9px;padding:7px}.candidate b{display:block;font-size:9px;color:var(--muted);margin-bottom:2px}
-.gates{display:grid;grid-template-columns:1fr 1fr;gap:6px}.gate{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:9px;padding:7px 8px;font-size:10px}.gate strong{font-size:9px}.pass{color:var(--good)}.fail{color:var(--bad)}.unknown{color:var(--warn)}
-.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}button{border:0;border-radius:9px;padding:8px 10px;font-size:10px;font-weight:900;background:#101828;color:white;cursor:pointer}button.secondary{background:white;color:#344054;border:1px solid var(--line)}button.danger{background:#b42318}button:disabled{opacity:.35;cursor:not-allowed}
-.audit{max-height:245px;overflow:auto;border:1px solid var(--line);border-radius:10px}.event{display:grid;grid-template-columns:48px 1fr 55px;gap:7px;padding:7px 8px;border-bottom:1px solid var(--line);font-size:9.5px}.event:last-child{border-bottom:0}.event .t{color:var(--muted)}.event .e{font-weight:800}.event .h{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#98a2b3}
-.foot{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);padding:12px 4px 0}
-@media(max-width:1100px){.grid{grid-template-columns:1fr 1fr}.right{grid-column:1/-1}}@media(max-width:760px){.grid{grid-template-columns:1fr}.right{grid-column:auto}.statusbar{display:none}.metrics{grid-template-columns:1fr}}
+/* ============================================================
+   RESOLVE · design tokens
+   Direction: an operator's control room, not a marketing page.
+   Cool graphite canvas, one electric NVIDIA-green signal color,
+   amber for "human required", red for hard blocks. Mono for all
+   machine truth (hashes, gates, ids); a clean grotesk for prose.
+   ============================================================ */
+:root{
+  --bg:#0c0f14;          /* deep graphite */
+  --bg2:#11151c;         /* raised surface */
+  --panel:#141a22;       /* window body */
+  --panel2:#0f141b;      /* inset / consoles */
+  --line:#1f2733;        /* hairlines */
+  --line2:#2a3543;       /* stronger hairline */
+  --ink:#e8edf4;         /* primary text */
+  --ink2:#9aa7b8;        /* secondary text */
+  --ink3:#5f6d80;        /* tertiary / captions */
+  --sig:#76e33a;         /* the one signal color — NVIDIA green */
+  --sig-dim:#3f7d24;
+  --amber:#ffb020;       /* human authority */
+  --red:#ff5964;         /* hard block */
+  --blue:#5b9dff;        /* main role */
+  --violet:#b794ff;      /* planner role */
+  --cyan:#5be0d6;        /* scout role */
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,"JetBrains Mono",Menlo,monospace;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --r:14px;
+  --glow:0 0 0 1px rgba(118,227,58,.35),0 0 22px -6px rgba(118,227,58,.55);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:
+    radial-gradient(1200px 600px at 78% -10%,rgba(118,227,58,.07),transparent 60%),
+    radial-gradient(900px 500px at 0% 0%,rgba(91,157,255,.05),transparent 55%),
+    var(--bg);
+  color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(118,227,58,.28)}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 22px}
+
+/* ---------- top command bar ---------- */
+.bar{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+  background:rgba(12,15,20,.78);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:18px;height:60px}
+.mark{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.01em}
+.mark .glyph{width:30px;height:30px;border-radius:8px;position:relative;
+  background:linear-gradient(145deg,#1a2230,#0e131a);border:1px solid var(--line2);
+  display:grid;place-items:center;overflow:hidden}
+.mark .glyph::before{content:"";position:absolute;inset:0;
+  background:conic-gradient(from 210deg,transparent,rgba(118,227,58,.9),transparent 55%);
+  animation:spin 6s linear infinite;opacity:.55}
+.mark .glyph::after{content:"";position:absolute;inset:2px;border-radius:6px;background:#0e131a}
+.mark .glyph b{position:relative;z-index:2;color:var(--sig);font-family:var(--mono);font-size:15px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mark small{display:block;font-weight:500;color:var(--ink3);font-size:11px;letter-spacing:.02em}
+.bar nav{margin-left:auto;display:flex;gap:4px}
+.bar nav a{font-size:12.5px;color:var(--ink2);text-decoration:none;padding:8px 12px;border-radius:8px}
+.bar nav a:hover{color:var(--ink);background:var(--bg2)}
+.envpill{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  color:var(--sig);border:1px solid var(--sig-dim);background:rgba(118,227,58,.06);
+  padding:6px 10px;border-radius:999px}
+.envpill .live{width:7px;height:7px;border-radius:50%;background:var(--sig);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(118,227,58,.5)}70%{box-shadow:0 0 0 7px rgba(118,227,58,0)}100%{box-shadow:0 0 0 0 rgba(118,227,58,0)}}
+@media(max-width:900px){.bar nav{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 40px;position:relative}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--sig);margin:0 0 20px}
+.hero h1{font-size:clamp(34px,5.4vw,62px);line-height:1.02;letter-spacing:-.03em;margin:0;font-weight:700;max-width:16ch}
+.hero h1 .g{color:var(--sig)}
+.hero .lede{margin:22px 0 0;max-width:60ch;color:var(--ink2);font-size:17px;line-height:1.6}
+.hero .lede b{color:var(--ink);font-weight:600}
+.thesis{display:inline-flex;align-items:center;gap:14px;margin-top:26px;padding:12px 16px;
+  border:1px solid var(--line2);border-radius:12px;background:var(--panel);font-family:var(--mono);font-size:13px}
+.thesis .n{color:var(--ink3)}.thesis .y{color:var(--sig)}.thesis .arrow{color:var(--ink3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:48px;
+  background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stat{background:var(--panel);padding:20px 22px}
+.stat .v{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.02em}
+.stat .v.sig{color:var(--sig)} .stat .v.red{color:var(--red)} .stat .v.amber{color:var(--amber)}
+.stat .k{font-size:12px;color:var(--ink3);margin-top:6px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}}
+
+/* ---------- section frame ---------- */
+section{padding:44px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:26px}
+.sec-head .idx{font-family:var(--mono);font-size:12px;color:var(--sig);letter-spacing:.12em}
+.sec-head h2{font-size:26px;letter-spacing:-.02em;margin:8px 0 0;font-weight:650}
+.sec-head p{margin:8px 0 0;color:var(--ink2);max-width:64ch}
+
+/* ---------- console / prompt ---------- */
+.console{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r);overflow:hidden}
+.console .titlebar{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.tl{display:flex;gap:6px}.tl i{width:11px;height:11px;border-radius:50%;display:block}
+.tl i:nth-child(1){background:#ff5f57}.tl i:nth-child(2){background:#febc2e}.tl i:nth-child(3){background:#28c840}
+.titlebar .name{font-family:var(--mono);font-size:12px;color:var(--ink2);margin-left:6px}
+.titlebar .right{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink3)}
+.prompt-body{padding:18px}
+.prompt-label{font-size:12px;color:var(--ink3);margin-bottom:9px;font-family:var(--mono);letter-spacing:.04em}
+.prompt-input{width:100%;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;
+  color:var(--ink);font-family:var(--mono);font-size:13.5px;padding:13px 14px;resize:vertical;min-height:70px;line-height:1.55}
+.prompt-input:focus{outline:none;border-color:var(--sig-dim);box-shadow:0 0 0 3px rgba(118,227,58,.12)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-family:var(--mono);font-size:11.5px;color:var(--ink2);border:1px solid var(--line2);
+  background:var(--panel2);padding:7px 11px;border-radius:999px;cursor:pointer;transition:.15s}
+.chip:hover{border-color:var(--sig-dim);color:var(--ink)}
+.runrow{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.btn{font-family:var(--sans);font-weight:600;font-size:13.5px;border:0;border-radius:10px;
+  padding:12px 20px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:9px}
+.btn.primary{background:var(--sig);color:#08240a;box-shadow:var(--glow)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--line2);background:var(--bg2)}
+.btn.danger{background:rgba(255,89,100,.12);color:var(--red);border:1px solid rgba(255,89,100,.3)}
+.btn:disabled{opacity:.32;cursor:not-allowed;box-shadow:none;filter:none}
+.btn .k{font-family:var(--mono);font-size:10px;opacity:.7}
+.runhint{font-size:12px;color:var(--ink3)}
+.runhint .live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--sig);margin-right:6px;animation:pulse 1.6s infinite}
+
+/* ---------- windows grid ---------- */
+.windows{display:grid;grid-template-columns:1.05fr 1.3fr 1fr;gap:16px;margin-top:20px;align-items:start}
+@media(max-width:1150px){.windows{grid-template-columns:1fr 1fr}.win.span{grid-column:1/-1}}
+@media(max-width:820px){.windows{grid-template-columns:1fr}.win.span{grid-column:auto}}
+.win{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .3s,box-shadow .3s}
+.win.hot{border-color:var(--sig-dim);box-shadow:0 0 26px -12px rgba(118,227,58,.4)}
+.win .wh{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.win .wh h3{font-size:13px;margin:0;font-weight:600;letter-spacing:-.01em}
+.win .wh .sub{font-size:10.5px;color:var(--ink3);margin-top:2px;font-family:var(--mono)}
+.win .wh .tag{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--ink3);
+  border:1px solid var(--line2);padding:4px 8px;border-radius:6px}
+.win .wh .tag.local{color:var(--sig);border-color:var(--sig-dim)}
+.wb{padding:14px}
+
+/* agents */
+.agent-list{display:flex;flex-direction:column;gap:9px}
+.agent{display:grid;grid-template-columns:34px 1fr auto;gap:11px;align-items:center;
+  border:1px solid var(--line);border-radius:11px;padding:10px;background:var(--panel2);transition:.25s}
+.agent.active{border-color:var(--sig-dim);background:rgba(118,227,58,.05)}
+.agent.done{border-color:var(--line2)}
+.agent .av{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:14px;background:var(--bg2);border:1px solid var(--line2)}
+.agent[data-agent=main] .av{color:var(--blue)} .agent[data-agent=scout] .av{color:var(--cyan)}
+.agent[data-agent=investigator] .av{color:var(--amber)} .agent[data-agent=planner] .av{color:var(--violet)}
+.agent[data-agent=challenger] .av{color:var(--red)}
+.agent .nm{font-size:13px;font-weight:600} .agent .tk{font-size:11px;color:var(--ink3);margin-top:2px}
+.agent .st{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.06em;
+  padding:5px 8px;border-radius:6px;background:var(--bg2);color:var(--ink3);white-space:nowrap}
+.agent.active .st{background:rgba(118,227,58,.14);color:var(--sig)}
+.agent.done .st{color:var(--ink2)}
+.agent .spin{display:none;width:11px;height:11px;border:2px solid rgba(118,227,58,.25);border-top-color:var(--sig);border-radius:50%;animation:sp .7s linear infinite}
+.agent.active .spin{display:inline-block}@keyframes sp{to{transform:rotate(360deg)}}
+.selfnote{margin-top:12px;font-size:11px;color:var(--ink3);font-family:var(--mono);
+  border:1px dashed var(--line2);border-radius:9px;padding:9px;line-height:1.5}
+.selfnote b{color:var(--amber)}
+
+/* reasoning stream */
+.stream{height:340px;overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+  padding:12px;font-family:var(--mono);font-size:11.5px;line-height:1.65}
+.stream::-webkit-scrollbar{width:8px}.stream::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.ln{margin-bottom:7px;display:flex;gap:8px}
+.ln .ts{color:var(--ink3);flex-shrink:0}
+.ln .rl{font-weight:700;flex-shrink:0;width:96px}
+.ln .tx{color:var(--ink2)}.ln .tx b{color:var(--ink);font-weight:600}
+.rl.main{color:var(--blue)}.rl.scout{color:var(--cyan)}.rl.investigator{color:var(--amber)}
+.rl.planner{color:var(--violet)}.rl.challenger{color:var(--red)}.rl.system{color:var(--ink3)}
+.rl.contract{color:var(--sig)}.rl.mongo{color:var(--sig)}
+.stream .empty{color:var(--ink3);text-align:center;padding-top:130px}
+
+/* contract gates */
+.cand{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.cand .f{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 10px}
+.cand .f b{display:block;font-family:var(--mono);font-size:9.5px;color:var(--ink3);letter-spacing:.05em;margin-bottom:4px;text-transform:uppercase}
+.cand .f span{font-size:12.5px;font-family:var(--mono)}
+.disp{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;
+  padding:10px 12px;border-radius:9px;border:1px solid var(--line2);background:var(--panel2);font-family:var(--mono)}
+.disp .lbl{font-size:10px;color:var(--ink3);letter-spacing:.08em}
+.disp .val{font-size:13px;font-weight:700;color:var(--ink3)}
+.disp.good .val{color:var(--sig)}.disp.bad .val{color:var(--red)}.disp.warn .val{color:var(--amber)}
+.disp.good{border-color:var(--sig-dim);background:rgba(118,227,58,.06)}
+.disp.bad{border-color:rgba(255,89,100,.3);background:rgba(255,89,100,.06)}
+.disp.warn{border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.06)}
+.gates{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.gate{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);
+  border-radius:8px;padding:8px 10px;background:var(--panel2)}
+.gate .gn{font-family:var(--mono);font-size:10px;color:var(--ink2);letter-spacing:.04em}
+.gate .gv{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--ink3)}
+.gate[data-v=PASS]{border-color:var(--sig-dim)} .gate[data-v=PASS] .gv{color:var(--sig)}
+.gate[data-v=FAIL]{border-color:rgba(255,89,100,.3)} .gate[data-v=FAIL] .gv{color:var(--red)}
+.gate[data-v=UNKNOWN]{border-color:rgba(255,176,32,.25)} .gate[data-v=UNKNOWN] .gv{color:var(--amber)}
+
+/* anomalies */
+.anoms{display:flex;flex-direction:column;gap:9px}
+.anom{border:1px solid var(--line);border-radius:10px;padding:11px;background:var(--panel2);
+  display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;opacity:0;transform:translateY(6px);
+  transition:.4s}
+.anom.show{opacity:1;transform:none}
+.anom .sev{font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 7px;border-radius:6px;letter-spacing:.05em;white-space:nowrap}
+.anom .sev.crit{background:rgba(255,89,100,.14);color:var(--red)}
+.anom .sev.warn{background:rgba(255,176,32,.14);color:var(--amber)}
+.anom .sev.info{background:rgba(91,157,255,.14);color:var(--blue)}
+.anom .body .t{font-size:12.5px;font-weight:600}
+.anom .body .d{font-size:11.5px;color:var(--ink2);margin-top:3px;line-height:1.5}
+.anom .body .ev{font-family:var(--mono);font-size:10px;color:var(--ink3);margin-top:6px}
+.anom-empty{color:var(--ink3);font-size:12px;font-family:var(--mono);text-align:center;padding:24px 0}
+
+/* actions row inside contract window */
+.act-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+/* approval artifact */
+.artifact{font-family:var(--mono)}
+.artifact .row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.artifact .row:last-child{border-bottom:0}
+.artifact .row .k{font-size:11px;color:var(--ink3)} .artifact .row .v{font-size:11.5px;color:var(--ink);text-align:right;word-break:break-all}
+.astatus{font-family:var(--mono);font-size:10px;font-weight:700;padding:5px 9px;border-radius:6px;background:var(--bg2);color:var(--ink3)}
+.astatus.valid{background:rgba(118,227,58,.14);color:var(--sig)}
+.astatus.invalid{background:rgba(255,89,100,.14);color:var(--red)}
+.astatus.consumed{background:var(--bg2);color:var(--ink2)}
+.anote{font-size:11px;color:var(--ink2);margin-top:11px;line-height:1.55;border:1px dashed var(--line2);border-radius:9px;padding:10px}
+
+/* journal */
+.journal{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.journal::-webkit-scrollbar{width:8px}.journal::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.jev{display:grid;grid-template-columns:52px 1fr auto;gap:10px;padding:9px 11px;border-bottom:1px solid var(--line);align-items:center}
+.jev:last-child{border-bottom:0}
+.jev .jt{font-family:var(--mono);font-size:9.5px;color:var(--ink3)}
+.jev .je{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--ink)}
+.jev .jd{font-size:10px;color:var(--ink3);margin-top:2px}
+.jev .jh{font-family:var(--mono);font-size:9.5px;color:var(--sig-dim)}
+.jev.tampered{background:rgba(255,89,100,.06)}
+.jev.tampered .jh{color:var(--red)}
+
+/* schema window */
+.schema-wrap{overflow-x:auto}
+.schema{width:100%;min-width:640px}
+.node rect{fill:var(--panel2);stroke:var(--line2);stroke-width:1.2;rx:9;transition:.3s}
+.node.hot rect{stroke:var(--sig);fill:rgba(118,227,58,.07)}
+.node .lbl{fill:var(--ink);font:600 12px var(--sans)}
+.node .sub{fill:var(--ink3);font:10px var(--mono)}
+.node.det rect{stroke-dasharray:0} .node.llm rect{stroke-dasharray:4 3}
+.edge{stroke:var(--line2);stroke-width:1.5;fill:none;marker-end:url(#arrow)}
+.edge.hot{stroke:var(--sig);stroke-width:2.2}
+.flowdot{fill:var(--sig)}
+.schema-legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-family:var(--mono);font-size:10.5px;color:var(--ink3)}
+.schema-legend i{display:inline-block;width:22px;height:0;border-top:2px solid var(--line2);vertical-align:middle;margin-right:7px}
+.schema-legend i.det{border-top-style:solid} .schema-legend i.llm{border-top-style:dashed}
+.schema-legend i.sig{border-top-color:var(--sig)}
+
+/* stack checklist */
+.stack{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:760px){.stack{grid-template-columns:1fr}}
+.stk{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel);display:grid;grid-template-columns:auto 1fr;gap:13px;align-items:start}
+.stk .ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--line2);font-family:var(--mono);font-size:15px;color:var(--sig)}
+.stk .t{font-size:14px;font-weight:600}
+.stk .d{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.5}
+.stk .req{margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--sig);display:inline-flex;align-items:center;gap:6px}
+.stk .req::before{content:"✓";color:var(--sig)}
+.stk .req.opt{color:var(--ink3)}.stk .req.opt::before{content:"○";color:var(--ink3)}
+
+/* egress proof */
+.egress{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:6px}
+@media(max-width:760px){.egress{grid-template-columns:1fr}}
+.eg{border:1px solid var(--line);border-radius:11px;padding:14px;background:var(--panel2);text-align:center}
+.eg .call{font-family:var(--mono);font-size:12px;color:var(--ink2)}
+.eg .res{font-family:var(--mono);font-size:15px;font-weight:700;margin-top:8px}
+.eg.blocked{border-color:rgba(255,89,100,.3)} .eg.blocked .res{color:var(--red)}
+.eg.pass{border-color:var(--sig-dim)} .eg.pass .res{color:var(--sig)}
+
+/* value / impact */
+.impact{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+@media(max-width:820px){.impact{grid-template-columns:1fr}}
+.impact-card{border:1px solid var(--line);border-radius:var(--r);padding:20px;background:var(--panel)}
+.impact-card .big{font-family:var(--mono);font-size:34px;font-weight:600;color:var(--sig);letter-spacing:-.02em}
+.impact-card .cap{font-size:12px;color:var(--ink3);margin-top:8px;line-height:1.55}
+.spark{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin:16px 0 4px}
+.spark span{display:block;height:100%;width:79%;background:var(--sig);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.recover{font-size:12px;color:var(--ink2)}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink3);font-size:12px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+footer .mono{font-size:11px}
+
+/* reduced motion */
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="topbar">
-  <div class="brand"><div class="logo">R</div><div><h1>Resolve · Enterprise Incident Assurance</h1><small>Payment authorization incident · interactive browser showcase</small></div></div>
-  <div class="statusbar">
-    <span class="pill"><span class="dot"></span>STATIC SHOWCASE</span>
-    <span class="pill">ARCHITECTURE · GB10</span>
-    <span class="pill">QWEN + OPENSHELL</span>
-    <span class="pill">MONGODB AUDIT</span>
-    <span class="pill">NO HOSTED BACKEND</span>
+
+<!-- ====================== TOP BAR ====================== -->
+<header class="bar">
+  <div class="wrap">
+    <div class="mark">
+      <div class="glyph"><b>R</b></div>
+      <div>Resolve<small>deterministic permission · local agents</small></div>
+    </div>
+    <nav>
+      <a href="#run">Run</a>
+      <a href="#schema">Architecture</a>
+      <a href="#stack">Stack</a>
+      <a href="#impact">Impact</a>
+    </nav>
+    <div class="envpill"><span class="live"></span>STATIC SHOWCASE · VERIFIED RECEIPTS</div>
   </div>
+</header>
+
+<!-- ====================== HERO ====================== -->
+<div class="wrap">
+  <section class="hero" style="border-top:0">
+    <p class="eyebrow">NVIDIA GB10 Architecture · Interactive Showcase</p>
+    <h1>Let agents <span class="g">reason</span>.<br>Never let them <span class="g">authorize</span> themselves.</h1>
+    <p class="lede">Resolve wraps a nondeterministic five-role agent loop inside a <b>deterministic permission core</b>. This hosted page replays the verified HackNYC workflow in your browser; the original GB10 runtime used local Qwen, OpenShell, and MongoDB with zero remote LLM calls.</p>
+    <div class="thesis mono">
+      <span class="y">deterministic permission</span>
+      <span class="arrow">·around·</span>
+      <span class="n">nondeterministic cognition</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v red">79.0%</div><div class="k">Payment success during incident</div></div>
+      <div class="stat"><div class="v amber">1 / 8</div><div class="k">Gates requiring human authority</div></div>
+      <div class="stat"><div class="v sig" id="heroVerified">—</div><div class="k">Verified success after bounded action</div></div>
+      <div class="stat"><div class="v sig">100%</div><div class="k">Decisions reproducible offline</div></div>
+    </div>
+  </section>
 </div>
 
-<div class="grid">
-  <div>
-    <div class="panel">
-      <div class="ph"><div><h2>Incident Window</h2><div class="sub">Synthetic 30-minute affected-flow window</div></div><div class="live"><span class="pulse"></span>INTERACTIVE DEMO</div></div>
-      <div class="pb">
-        <div class="metrics">
-          <div class="metric"><div class="k">Normal success</div><div class="v">98.6%</div></div>
-          <div class="metric"><div class="k">Incident</div><div class="v bad">79.0%</div></div>
-          <div class="metric"><div class="k">Verified</div><div class="v good" id="verifiedRate">—</div></div>
-        </div>
-        <div class="bar"><span id="successBar"></span></div>
-        <div class="notice">500 synthetic records represent a modeled <b>$12.5M affected-flow window</b>. Each record carries $25,000 of weighted payment flow.</div>
-        <div class="value"><div class="big" id="flowValue">$0 recovered earlier</div><div class="small">Middle synthetic scenario only. Payment throughput returning to normal processing sooner — not revenue or guaranteed avoided loss.</div></div>
+<!-- ====================== RUN / PROMPT ====================== -->
+<div class="wrap">
+  <section id="run">
+    <div class="sec-head">
+      <div>
+        <div class="idx">01 — OPERATOR</div>
+        <h2>Describe the incident. Run diagnostics.</h2>
+        <p>The operator states a case in plain language. Local reasoning runs; the deterministic core decides what — if anything — is admissible.</p>
       </div>
     </div>
 
-    <div class="panel" style="margin-top:14px">
-      <div class="ph"><div><h2>Agentic Investigation</h2><div class="sub">One local model · five bounded roles</div></div><span class="badge">LOCAL</span></div>
-      <div class="pb">
-        <div class="agents">
-          <div class="agent" data-agent="main"><div class="avatar">M</div><div><div class="name">Main</div><div class="task">Coordinates bounded loop</div></div><div class="state">IDLE</div></div>
-          <div class="agent" data-agent="scout"><div class="avatar">S</div><div><div class="name">Scout</div><div class="task">Finds cited local evidence</div></div><div class="state">IDLE</div></div>
-          <div class="agent" data-agent="investigator"><div class="avatar">I</div><div><div class="name">Investigator</div><div class="task">Tests competing hypotheses</div></div><div class="state">IDLE</div></div>
-          <div class="agent" data-agent="planner"><div class="avatar">P</div><div><div class="name">Planner</div><div class="task">Proposes bounded candidate</div></div><div class="state">IDLE</div></div>
-          <div class="agent" data-agent="challenger"><div class="avatar">C</div><div><div class="name">Challenger</div><div class="task">Searches for disqualifying constraints</div></div><div class="state">IDLE</div></div>
-        </div>
-        <div class="actions"><button id="startBtn">1 · Start investigation</button><button id="evidenceBtn" class="secondary" disabled>2 · Fetch missing evidence</button></div>
+    <div class="console">
+      <div class="titlebar">
+        <div class="tl"><i></i><i></i><i></i></div>
+        <span class="name">resolve://case/new</span>
+        <span class="right" id="endpoint">IN-BROWSER REPLAY · ORIGINAL: Qwen3.8-27B · NVFP4/vLLM</span>
       </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="panel">
-      <div class="ph"><div><h2>Incident Reasoning Stream</h2><div class="sub">Scripted replay of bounded roles; permission is deterministic</div></div><span class="badge">SCRIPTED REPLAY</span></div>
-      <div class="pb"><div class="stream" id="stream"></div></div>
-    </div>
-
-    <div class="panel" style="margin-top:14px">
-      <div class="ph"><div><h2>Resolve Contract</h2><div class="sub">Company-declared execution boundary</div></div><span class="badge" id="dispositionBadge">NOT EVALUATED</span></div>
-      <div class="pb">
-        <div class="candidate">
-          <div><b>Candidate</b><span id="candidateTitle">—</span></div>
-          <div><b>Processor</b><span id="processor">—</span></div>
-          <div><b>Traffic share</b><span id="share">—</span></div>
-          <div><b>Country / eligibility</b><span id="eligibility">—</span></div>
+      <div class="prompt-body">
+        <div class="prompt-label">CASE PROMPT</div>
+        <textarea id="prompt" class="prompt-input" spellcheck="false" readonly>Payment authorization success dropped from 98.6% to 79.0% over the last 30 minutes. Processor A looks degraded. Recover throughput safely and stay inside company policy.</textarea>
+        <div class="chips">
+          <span class="chip" data-fill="Payment authorization success dropped from 98.6% to 79.0% over the last 30 minutes. Processor A looks degraded. Recover throughput safely and stay inside company policy.">payment failover</span>
+          <span class="chip" data-fill="Checkout latency p99 spiked 4x after the 14:10 deploy. Roll back or scale — but do not touch the payment path without authority.">latency spike</span>
+          <span class="chip" data-fill="Fraud decline rate tripled in EU region. Investigate cause and propose a bounded mitigation within policy limits.">fraud anomaly</span>
         </div>
-        <div class="gates">
-          <div class="gate"><span>INTENT</span><strong id="g-intent">—</strong></div>
-          <div class="gate"><span>EVIDENCE</span><strong id="g-evidence">—</strong></div>
-          <div class="gate"><span>CONSTRAINTS</span><strong id="g-constraints">—</strong></div>
-          <div class="gate"><span>CONSEQUENCE</span><strong id="g-consequence">—</strong></div>
-          <div class="gate"><span>REVERSIBILITY</span><strong id="g-reversibility">—</strong></div>
-          <div class="gate"><span>REHEARSAL</span><strong id="g-rehearsal">—</strong></div>
-          <div class="gate"><span>AUTHORITY</span><strong id="g-authority">—</strong></div>
-          <div class="gate"><span>VERIFICATION</span><strong id="g-verification">—</strong></div>
-        </div>
-        <div class="actions">
-          <button id="approveBtn" disabled>3 · Approve exact action</button>
-          <button id="mutateBtn" class="secondary" disabled>4 · Mutate 17.4% → 50%</button>
-          <button id="restoreBtn" class="secondary" disabled>Restore approved candidate</button>
-          <button id="executeBtn" disabled>5 · Execute</button>
-          <button id="verifyBtn" class="secondary" disabled>6 · Verify reality</button>
+        <div class="runrow">
+          <button class="btn primary" id="runBtn">▶ Run diagnostics <span class="k">↵</span></button>
+          <button class="btn ghost" id="resetBtn">Reset</button>
+          <span class="runhint" id="runHint">Ready. One local model, five bounded roles, one typed contract.</span>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="right">
-    <div class="panel">
-      <div class="ph"><div><h2>Approval Artifact</h2><div class="sub">Integrity-bound to exact candidate</div></div><span class="badge" id="approvalStatus">NONE</span></div>
-      <div class="pb">
-        <div class="candidate">
-          <div><b>Candidate fingerprint</b><span id="fingerprint">—</span></div>
-          <div><b>Approver role</b><span id="approver">—</span></div>
-          <div><b>TTL</b><span id="ttl">—</span></div>
-          <div><b>Nonce</b><span id="nonce">—</span></div>
+    <!-- ============ LIVE WINDOWS ============ -->
+    <div class="windows">
+
+      <!-- WINDOW A: agents -->
+      <div class="win" id="winAgents">
+        <div class="wh">
+          <div><h3>Agent Orchestration</h3><div class="sub">1 model · 5 bounded roles</div></div>
+          <span class="tag local">SHOWCASE</span>
         </div>
-        <div class="notice" id="approvalNote">No approval issued.</div>
+        <div class="wb">
+          <div class="agent-list">
+            <div class="agent" data-agent="main"><div class="av">M</div><div><div class="nm">Main</div><div class="tk">Bounded loop control</div></div><div class="st"><span class="spin"></span> IDLE</div></div>
+            <div class="agent" data-agent="scout"><div class="av">S</div><div><div class="nm">Scout</div><div class="tk">Cited local evidence</div></div><div class="st"><span class="spin"></span> IDLE</div></div>
+            <div class="agent" data-agent="investigator"><div class="av">I</div><div><div class="nm">Investigator</div><div class="tk">Competing hypotheses</div></div><div class="st"><span class="spin"></span> IDLE</div></div>
+            <div class="agent" data-agent="planner"><div class="av">P</div><div><div class="nm">Planner</div><div class="tk">Bounded candidates</div></div><div class="st"><span class="spin"></span> IDLE</div></div>
+            <div class="agent" data-agent="challenger"><div class="av">C</div><div><div class="nm">Challenger</div><div class="tk">Adversarial falsification</div></div><div class="st"><span class="spin"></span> IDLE</div></div>
+          </div>
+          <div class="selfnote">Agents exchange <b>structured findings</b>, not open chat. <b>No LLM may authorize itself</b> — permission belongs to the deterministic core alone.</div>
+        </div>
+      </div>
+
+      <!-- WINDOW B: reasoning stream + contract -->
+      <div class="win span" id="winStream">
+        <div class="wh">
+          <div><h3>Incident Reasoning Replay</h3><div class="sub">recorded advisory output · permission is deterministic</div></div>
+          <span class="tag" id="streamStep">STEP 0</span>
+        </div>
+        <div class="wb">
+          <div class="stream" id="stream"><div class="empty">Awaiting Run diagnostics…</div></div>
+        </div>
+      </div>
+
+      <!-- WINDOW C: anomalies -->
+      <div class="win" id="winAnom">
+        <div class="wh">
+          <div><h3>Detected Anomalies</h3><div class="sub">evidence-cited findings</div></div>
+          <span class="tag" id="anomCount">0</span>
+        </div>
+        <div class="wb">
+          <div class="anoms" id="anoms"><div class="anom-empty">No anomalies yet.</div></div>
+        </div>
       </div>
     </div>
 
-    <div class="panel" style="margin-top:14px">
-      <div class="ph"><div><h2>Audit Journal Projection</h2><div class="sub">Demonstrates hash-chain behavior; no hosted database</div></div><span class="badge good">IN-BROWSER</span></div>
-      <div class="pb">
-        <div class="audit" id="audit"></div>
-        <div class="actions"><button id="tamperBtn" class="danger" disabled>Tamper with old event</button><button id="journalVerifyBtn" class="secondary" disabled>Verify journal</button></div>
-        <div class="notice" id="journalNote">Hash chain idle.</div>
+    <!-- ============ CONTRACT + ARTIFACT + JOURNAL ============ -->
+    <div class="windows" style="grid-template-columns:1.3fr 1fr;">
+      <!-- Resolve Contract -->
+      <div class="win span" id="winContract" style="grid-column:auto">
+        <div class="wh">
+          <div><h3>Resolve Contract</h3><div class="sub">eight-gate typed execution boundary</div></div>
+          <span class="tag" id="contractTag">NOT EVALUATED</span>
+        </div>
+        <div class="wb">
+          <div class="disp" id="disp"><span class="lbl">DISPOSITION</span><span class="val" id="dispVal">—</span></div>
+          <div class="cand">
+            <div class="f"><b>Candidate</b><span id="cCand">—</span></div>
+            <div class="f"><b>Processor</b><span id="cProc">—</span></div>
+            <div class="f"><b>Traffic share</b><span id="cShare">—</span></div>
+            <div class="f"><b>Eligibility</b><span id="cElig">—</span></div>
+          </div>
+          <div class="gates">
+            <div class="gate" data-gate="intent"><span class="gn">INTENT</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="evidence"><span class="gn">EVIDENCE</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="constraints"><span class="gn">CONSTRAINTS</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="consequence"><span class="gn">CONSEQUENCE</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="reversibility"><span class="gn">REVERSIBILITY</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="rehearsal"><span class="gn">REHEARSAL</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="authority"><span class="gn">AUTHORITY</span><span class="gv">—</span></div>
+            <div class="gate" data-gate="verification"><span class="gn">VERIFICATION</span><span class="gv">—</span></div>
+          </div>
+          <div class="act-grid">
+            <button class="btn ghost" id="evidenceBtn" disabled>Fetch missing evidence</button>
+            <button class="btn primary" id="approveBtn" disabled>Approve exact action</button>
+            <button class="btn ghost" id="mutateBtn" disabled>Mutate 17.4% → 50%</button>
+            <button class="btn ghost" id="restoreBtn" disabled>Restore approved</button>
+            <button class="btn primary" id="executeBtn" disabled>Execute</button>
+            <button class="btn ghost" id="verifyBtn" disabled>Verify reality</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="panel" style="margin-top:14px">
-      <div class="ph"><div><h2>Declared Company Policy</h2><div class="sub">Typed boundaries, not discovered safety</div></div></div>
-      <div class="pb">
-        <div class="notice" style="margin-top:0"><b>Processor B:</b> US only · Visa/Mastercard · transaction ≤ $5,000 · total traffic share ≤ 20% · current capacity evidence required.</div>
-        <div class="notice"><b>Authority:</b> Payments Operations Lead required for this action class. Approval TTL = 10 minutes.</div>
-        <div class="notice"><b>Post-commit:</b> verification unavailable → outcome UNKNOWN → freeze/reconcile → no blind retry.</div>
+      <!-- Approval + Journal stacked -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="win" id="winApproval">
+          <div class="wh">
+            <div><h3>Approval Artifact</h3><div class="sub">integrity-bound to exact candidate</div></div>
+            <span class="astatus" id="aStatus">NONE</span>
+          </div>
+          <div class="wb">
+            <div class="artifact">
+              <div class="row"><span class="k">fingerprint</span><span class="v" id="aFp">—</span></div>
+              <div class="row"><span class="k">approver</span><span class="v" id="aWho">—</span></div>
+              <div class="row"><span class="k">ttl</span><span class="v" id="aTtl">—</span></div>
+              <div class="row"><span class="k">nonce</span><span class="v" id="aNonce">—</span></div>
+            </div>
+            <div class="anote" id="aNote">No approval issued. Technical gates can pass on their own; authority cannot.</div>
+          </div>
+        </div>
+
+        <div class="win" id="winJournal">
+          <div class="wh">
+            <div><h3>Audit Journal Replay</h3><div class="sub">projects the original MongoDB records · does not grant permission</div></div>
+            <span class="tag local" id="mongoTag">● IN-BROWSER</span>
+          </div>
+          <div class="wb">
+            <div class="journal" id="journal"></div>
+            <div class="act-grid">
+              <button class="btn danger" id="tamperBtn" disabled>Load audit replay</button>
+              <button class="btn ghost" id="jVerifyBtn" disabled>Verify hash chain</button>
+            </div>
+            <div class="anote" id="jNote">Hash chain idle. <b>same DecisionInput → same verdict</b>, even with MongoDB offline.</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 
-<div class="foot"><span>Resolve enterprise demo · static scripted showcase · not a production payment system</span><span id="clock"></span></div>
+<!-- ====================== ARCHITECTURE SCHEMA ====================== -->
+<div class="wrap">
+  <section id="schema">
+    <div class="sec-head">
+      <div>
+        <div class="idx">02 — ARCHITECTURE</div>
+        <h2>The whole loop, one diagram</h2>
+        <p>Solid nodes are deterministic and reproducible. Dashed nodes represent the local model. The green pulse follows the replay above — watch cognition flow <em>through</em> the permission core, never around it.</p>
+      </div>
+    </div>
+
+    <div class="win">
+      <div class="wh"><div><h3>Data-flow schema</h3><div class="sub">CASE → REASON → CONTRACT → AUTHORITY → ACTION → VERIFY → JOURNAL</div></div><span class="tag local">on-device</span></div>
+      <div class="wb schema-wrap">
+        <svg class="schema" viewBox="0 0 940 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#2a3543"/>
+            </marker>
+          </defs>
+          <!-- edges (drawn first) -->
+          <path class="edge" id="e1" d="M118,70 L118,118"/>
+          <path class="edge" id="e2" d="M200,150 L262,150"/>
+          <path class="edge" id="e3" d="M430,150 L492,150"/>
+          <path class="edge" id="e4" d="M660,124 L660,96"/>
+          <path class="edge" id="e5" d="M660,178 L660,210"/>
+          <path class="edge" id="e6" d="M600,236 L520,236"/>
+          <path class="edge" id="e7" d="M660,210 L780,210 L780,150 L742,150"/>
+          <path class="edge" id="e8" d="M118,178 L118,236 L360,236"/>
+
+          <!-- CASE -->
+          <g class="node det" id="nCase" transform="translate(60,30)">
+            <rect width="116" height="40"/><text class="lbl" x="14" y="18">Case + Evidence</text><text class="sub" x="14" y="32">validated · hashed</text>
+          </g>
+          <!-- REASONING (LLM) -->
+          <g class="node llm" id="nReason" transform="translate(60,118)">
+            <rect width="140" height="64"/><text class="lbl" x="14" y="22">Local Reasoning</text><text class="sub" x="14" y="38">Qwen3 · 5 roles</text><text class="sub" x="14" y="52">scout·inv·plan·chal</text>
+          </g>
+          <!-- CANDIDATE (det) -->
+          <g class="node det" id="nCand" transform="translate(262,120)">
+            <rect width="168" height="60"/><text class="lbl" x="14" y="24">Candidate</text><text class="sub" x="14" y="42">exact fingerprint</text>
+          </g>
+          <!-- CONTRACT (det) -->
+          <g class="node det" id="nContract" transform="translate(492,110)">
+            <rect width="168" height="80"/><text class="lbl" x="14" y="26">Resolve Contract</text><text class="sub" x="14" y="44">8 gates · disposition</text><text class="sub" x="14" y="60">deterministic math</text>
+          </g>
+          <!-- AUTHORITY -->
+          <g class="node det" id="nAuth" transform="translate(596,40)">
+            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Human Authority</text><text class="sub" x="14" y="38">if policy requires</text>
+          </g>
+          <!-- ACTION -->
+          <g class="node det" id="nAction" transform="translate(596,210)">
+            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Bounded Action</text><text class="sub" x="14" y="38">OpenShell runtime</text>
+          </g>
+          <!-- VERIFY -->
+          <g class="node det" id="nVerify" transform="translate(392,210)">
+            <rect width="128" height="52"/><text class="lbl" x="14" y="22">Verify Reality</text><text class="sub" x="14" y="38">independent read</text>
+          </g>
+          <!-- JOURNAL -->
+          <g class="node det" id="nJournal" transform="translate(360,216)" opacity="0"><rect width="0" height="0"/></g>
+          <g class="node det" id="nMongo" transform="translate(196,216)">
+            <rect width="164" height="40"/><text class="lbl" x="14" y="18">MongoDB Journal</text><text class="sub" x="14" y="32">hash-chained audit</text>
+          </g>
+        </svg>
+        <div class="schema-legend">
+          <span><i class="det"></i>deterministic core</span>
+          <span><i class="llm"></i>local model</span>
+          <span><i class="det sig"></i>active data flow</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
+<!-- ====================== STACK / REQUIREMENTS ====================== -->
+<div class="wrap">
+  <section id="stack">
+    <div class="sec-head">
+      <div>
+        <div class="idx">03 — STACK COMPLIANCE</div>
+        <h2>Every required component, accounted for</h2>
+        <p>The original GB10 trial used local model serving, OpenShell, and MongoDB. This zero-cost hosted page preserves that verified workflow as an interactive browser replay.</p>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="stk">
+        <div class="ic">◈</div>
+        <div><div class="t">NVIDIA GB10 · Grace Blackwell</div><div class="d">Unified-memory on-device compute ran the original multi-role trial with no cloud video/data transmission.</div><div class="req">verified trial architecture</div></div>
+      </div>
+      <div class="stk">
+        <div class="ic">⌘</div>
+        <div><div class="t">Local Qwen3-27B via vLLM</div><div class="d">The original runtime used one <span class="mono">LOCAL_OPENAI_COMPATIBLE_ENDPOINT</span>. This hosted page replays the recorded role outputs without a hosted model.</div><div class="req">verified · replayed here</div></div>
+      </div>
+      <div class="stk">
+        <div class="ic">⧉</div>
+        <div><div class="t">OpenShell controlled runtime</div><div class="d">The verified receipt shows external HTTP blocked while the local Qwen and Resolve endpoints passed.</div><div class="req">verified receipt</div></div>
+      </div>
+      <div class="stk">
+        <div class="ic">⛁</div>
+        <div><div class="t">MongoDB audit substrate</div><div class="d">The original runtime stored cases, evidence, events, candidates, approvals, and verification. The hosted replay keeps the same projected event sequence in-browser.</div><div class="req">verified · projected here</div></div>
+      </div>
+      <div class="stk">
+        <div class="ic">◇</div>
+        <div><div class="t">NemoClaw / OpenClaw</div><div class="d">Optional additional sponsor runtimes, available after the first working OpenShell demo.</div><div class="req opt">optional · deferred</div></div>
+      </div>
+      <div class="stk">
+        <div class="ic">≡</div>
+        <div><div class="t">FastAPI + Pydantic + static JS</div><div class="d">Minimal-bias core. No Redis, Postgres, Celery, Kubernetes, vector DB, or cloud calls.</div><div class="req">core · minimal</div></div>
+      </div>
+    </div>
+
+    <div class="win" style="margin-top:16px">
+      <div class="wh"><div><h3>OpenShell containment receipt</h3><div class="sub">verified trial result · replayed in-browser</div></div><span class="tag" id="egressTag">idle</span></div>
+      <div class="wb">
+        <div class="egress">
+          <div class="eg blocked" id="eg1"><div class="call">external HTTP →</div><div class="res">— </div></div>
+          <div class="eg pass" id="eg2"><div class="call">local Qwen →</div><div class="res">— </div></div>
+          <div class="eg pass" id="eg3"><div class="call">local Resolve tool →</div><div class="res">— </div></div>
+        </div>
+        <button class="btn ghost" id="egressBtn" style="margin-top:14px">Replay egress receipt</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ====================== IMPACT ====================== -->
+<div class="wrap">
+  <section id="impact">
+    <div class="sec-head">
+      <div>
+        <div class="idx">04 — IMPACT</div>
+        <h2>Why we built it</h2>
+        <p>Enterprises can't ship autonomous agents into payment, infra, or safety paths without a guarantee that the agent cannot act outside declared bounds. Resolve is that guarantee — a portable permission layer any local agent can sit behind.</p>
+      </div>
+    </div>
+    <div class="impact">
+      <div class="impact-card">
+        <div class="big" id="impactBig">$0</div>
+        <div class="recover" id="impactRecover">Run the diagnostics above to model the recovered flow.</div>
+        <div class="spark"><span id="impactSpark" style="width:79%"></span></div>
+        <div class="cap">Synthetic 30-minute window: 500 records × $25,000 weighted flow = a modeled <b>$12.5M affected-flow window</b>. This shows throughput returning to normal sooner — not guaranteed avoided loss.</div>
+      </div>
+      <div class="impact-card">
+        <div style="font-weight:600;font-size:15px;margin-bottom:12px">What judges can verify live</div>
+        <div style="font-size:12.5px;color:var(--ink2);line-height:1.85">
+          → A bad candidate is <b style="color:var(--red)">BLOCKED</b> by typed policy, not by luck.<br>
+          → Stale evidence forces <b style="color:var(--amber)">MORE_EVIDENCE</b>, not a guess.<br>
+          → Mutating an approved action <b style="color:var(--red)">invalidates</b> it with zero LLM calls.<br>
+          → The hash chain makes edited journal events <b style="color:var(--red)">detectable</b>.<br>
+          → The same input always yields the <b style="color:var(--sig)">same verdict</b>.
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Resolve · deterministic permission around nondeterministic cognition · synthetic local demo, not a production payment system</span>
+    <span class="mono" id="clock"></span>
+  </div>
+</footer>
+
+<script src="showcase-adapter.js"></script>
 <script>
-const $=id=>document.getElementById(id), stream=$('stream'), audit=$('audit');
-let events=[], tampered=false;
-
-function now(){return new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})}
-function hx(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16).padStart(8,'0')}
-function log(role,text){const d=document.createElement('div');d.className='log';d.innerHTML='<span class="ts">'+now()+'</span><span class="role '+role+'">'+role.toUpperCase()+'</span>'+text;stream.appendChild(d);stream.scrollTop=stream.scrollHeight}
-function addEvent(type,detail){const prev=events.length?events[events.length-1].hash:'GENESIS',hash=hx(prev+'|'+type+'|'+detail+'|'+events.length);events.push({time:now(),type,detail,hash});renderAudit()}
-function renderAudit(){audit.innerHTML='';events.forEach(e=>{const r=document.createElement('div');r.className='event';r.innerHTML='<span class="t">'+e.time+'</span><span class="e">'+e.type+'<br><span style="font-weight:400;color:#667085">'+e.detail+'</span></span><span class="h">'+e.hash+'</span>';audit.appendChild(r)});audit.scrollTop=audit.scrollHeight}
-function agent(name,state,task){const e=document.querySelector('[data-agent="'+name+'"]');e.classList.remove('active','done');if(state==='ACTIVE')e.classList.add('active');if(state==='DONE')e.classList.add('done');e.querySelector('.state').textContent=state;if(task)e.querySelector('.task').textContent=task}
-function gate(id,v){const e=$('g-'+id);e.textContent=v;e.className=v==='PASS'?'pass':v==='FAIL'?'fail':v==='UNKNOWN'?'unknown':''}
-function disp(t,k){const e=$('dispositionBadge');e.textContent=t;e.className='badge'+(k?' '+k:'')}
-function cand(title,share,elig){$('candidateTitle').textContent=title;$('processor').textContent='Processor B';$('share').textContent=share;$('eligibility').textContent=elig}
-function after(ms,fn){setTimeout(fn,ms)}
-function contract1(){gate('intent','PASS');gate('evidence','PASS');gate('constraints','FAIL');gate('consequence','FAIL');gate('reversibility','UNKNOWN');gate('rehearsal','UNKNOWN');gate('authority','FAIL');gate('verification','PASS');disp('BLOCKED','bad')}
-function contract2(){gate('intent','PASS');gate('evidence','UNKNOWN');gate('constraints','PASS');gate('consequence','PASS');gate('reversibility','PASS');gate('rehearsal','UNKNOWN');gate('authority','UNKNOWN');gate('verification','PASS');disp('MORE_EVIDENCE_REQUIRED','warn')}
-function contract3(){['intent','evidence','constraints','consequence','reversibility','rehearsal','verification'].forEach(x=>gate(x,'PASS'));gate('authority','UNKNOWN');disp('WAITING_HUMAN','warn')}
-
-$('startBtn').onclick=()=>{
-  $('startBtn').disabled=true;
-  log('system','Incident loaded locally. Payment success = <b>79.0%</b>.');
-  addEvent('CASE_LOADED','payment_failover_001 · 500 synthetic transactions');
-  agent('main','ACTIVE','Dispatching bounded investigation');
-  after(500,()=>{log('main','Dispatching Scout, Investigator, Planner and Challenger against local evidence only.')});
-  after(1100,()=>{agent('scout','ACTIVE','Reading incident + policy evidence');log('scout','Processor A degradation correlates with current authorization failures.');addEvent('EVIDENCE_READ','incident + processor health + typed policy')});
-  after(1750,()=>{agent('scout','DONE','Evidence cited');agent('investigator','ACTIVE','Testing routing hypothesis');log('investigator','Strongest hypothesis: Processor A degradation is driving the authorization drop.')});
-  after(2400,()=>{agent('investigator','DONE','Hypothesis supported');agent('planner','ACTIVE','Generating recovery candidate');log('planner','Candidate: fail over <b>100% GLOBAL traffic</b> to Processor B.');cand('Candidate 1 · Global failover','100%','GLOBAL / ALL');addEvent('CANDIDATE_PROPOSED','Processor B · GLOBAL · 100%')});
-  after(3100,()=>{agent('planner','DONE','Candidate proposed');agent('challenger','ACTIVE','Testing declared boundaries');log('challenger','Conflict found: Processor B is US-only, eligibility constrained, total traffic share ≤20%.')});
-  after(3750,()=>{agent('challenger','DONE','Hard conflict found');contract1();addEvent('CONTRACT_EVALUATED','CONSTRAINTS=FAIL · BLOCKED');log('system','Deterministic contract: <b>BLOCKED</b>. Typed policy enforces this even if the Challenger misses it.')});
-  after(4500,()=>{agent('main','ACTIVE','Seeking bounded alternative');cand('Candidate 2 · Bounded reroute','17.4%','US · Visa/MC · ≤$5K');log('planner','Bounded candidate: 17.4% of total traffic, eligible US Visa/Mastercard, ≤ $5,000.');addEvent('CANDIDATE_PROPOSED','Processor B · US · 17.4%')});
-  after(5200,()=>{contract2();log('system','Current Processor B capacity evidence is stale. <b>EVIDENCE = UNKNOWN → MORE_EVIDENCE_REQUIRED.</b>');addEvent('CONTRACT_EVALUATED','EVIDENCE=UNKNOWN · MORE_EVIDENCE_REQUIRED');agent('main','DONE','Waiting for material evidence');$('evidenceBtn').disabled=false});
-};
-
-$('evidenceBtn').onclick=()=>{
-  $('evidenceBtn').disabled=true;agent('scout','ACTIVE','Fetching current capacity evidence');
-  log('scout','Retrieving local capacity snapshot, policy version and current processor health...');
-  after(700,()=>{log('scout','Retrieved <b>processor_b_capacity_11_47.json</b> + policy v14 + current health.');addEvent('EVIDENCE_ADDED','capacity current · policy v14 · health current');agent('scout','DONE','Current evidence added');agent('planner','ACTIVE','Running rehearsal')});
-  after(1450,()=>{log('planner','Rehearsal: exactly <b>87 of 500</b> incident failures satisfy the declared envelope and reroute successfully.');addEvent('REHEARSAL_PASSED','87 recoveries · 17.4% reroute')});
-  after(2200,()=>{log('planner','395 + 87 = 482 successful transactions. Modeled post-action success = <b>96.4%</b>.');agent('planner','DONE','Rehearsal passed');contract3();addEvent('CONTRACT_EVALUATED','technical gates PASS · human required');log('system','Company policy requires a <b>Payments Operations Lead</b>. Disposition: <b>WAITING_HUMAN</b>.');$('approveBtn').disabled=false});
-};
-
-$('approveBtn').onclick=()=>{
-  $('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;
-  const fp='cand_'+hx('processor_b|US|0.174|visa_mastercard|5000');
-  $('fingerprint').textContent=fp;$('approver').textContent='Payments Operations Lead';$('ttl').textContent='10 min';$('nonce').textContent='n_'+hx(String(Date.now()));
-  $('approvalStatus').textContent='VALID';$('approvalStatus').className='badge good';$('approvalNote').innerHTML='Integrity-bound to exact candidate fingerprint, evidence state, approver role, expiry and one-time nonce.';
-  gate('authority','PASS');disp('ADMISSIBLE','good');log('system','Exact candidate approved. Deterministic authority gate now PASS.');addEvent('APPROVAL_GRANTED',fp+' · TTL 10m · one-time');
-};
-
-$('mutateBtn').onclick=()=>{
-  cand('Candidate 2 · MUTATED','50%','US · Visa/MC · ≤$5K');$('approvalStatus').textContent='INVALID';$('approvalStatus').className='badge bad';$('approvalNote').innerHTML='<b>17.4% → 50%</b> changed the candidate fingerprint and exceeds policy.';
-  gate('constraints','FAIL');gate('authority','FAIL');disp('BLOCKED','bad');$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;
-  log('system','No LLM call required: material mutation invalidates the approval.');addEvent('APPROVAL_INVALIDATED','17.4% -> 50%');
-};
-
-$('restoreBtn').onclick=()=>{
-  cand('Candidate 2 · Approved bounded reroute','17.4%','US · Visa/MC · ≤$5K');['constraints','authority'].forEach(x=>gate(x,'PASS'));disp('ADMISSIBLE','good');
-  $('approvalStatus').textContent='VALID';$('approvalStatus').className='badge good';$('approvalNote').textContent='Exact approved candidate restored. Fingerprint matches.';
-  $('restoreBtn').disabled=true;$('executeBtn').disabled=false;log('system','Approved candidate restored.');addEvent('CANDIDATE_RESTORED','approved fingerprint restored');
-};
-
-$('executeBtn').onclick=()=>{
-  $('executeBtn').disabled=true;$('mutateBtn').disabled=true;$('verifyBtn').disabled=false;$('approvalStatus').textContent='CONSUMED';$('approvalStatus').className='badge';
-  disp('COMMITTED','good');log('system','COMMIT sent to local payment simulator. One-time approval consumed.');addEvent('COMMIT_SENT','Processor B · US · 17.4%');
-};
-
-$('verifyBtn').onclick=()=>{
-  $('verifyBtn').disabled=true;$('verifiedRate').textContent='96.4%';$('successBar').style.width='96.4%';$('flowValue').textContent='$8.33M of modeled payment flow returned to normal processing sooner';
-  disp('VERIFIED','good');gate('verification','PASS');log('system','Verifier read ACTUAL simulator state: <b>482 / 500 = 96.4%</b>.');addEvent('VERIFICATION_PASSED','actual simulator state = 482/500 · 96.4%');addEvent('RUN_CLOSED','VERIFIED · replay ready');
-  $('tamperBtn').disabled=false;$('journalVerifyBtn').disabled=false;
-};
-
-$('tamperBtn').onclick=()=>{if(!events.length)return;tampered=true;const i=Math.min(2,events.length-1);events[i].detail+=' [EDITED]';renderAudit();$('journalNote').textContent='Historical event edited in place. Re-verify the journal.';$('tamperBtn').disabled=true;log('mongo','Historical MongoDB journal document edited for tamper demo.')};
-$('journalVerifyBtn').onclick=()=>{if(tampered){$('journalNote').innerHTML='<b style="color:#b42318">TAMPER DETECTED.</b> Stored contents no longer match the chained event hash.';log('mongo','Journal verification: <b>TAMPER DETECTED</b>. Editing the record did not grant authority.')}else{$('journalNote').innerHTML='<b style="color:#087443">JOURNAL VERIFIED.</b> Hash chain intact.';log('mongo','Journal verification passed.')}};
-
-setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);
-$('clock').textContent=new Date().toLocaleString();
-log('system','Hosted showcase ready. Click “Start investigation” to replay the synthetic incident.');
-addEvent('DEMO_READY','local synthetic incident initialized');
+/* Original Resolve UI driven by the static showcase adapter on this hosted build. */
+const $=id=>document.getElementById(id);
+const q=s=>document.querySelector(s);
+const G=['intent','evidence','constraints','consequence','reversibility','rehearsal','authority','verification'];
+let runId=null, current=null, approvalNonce=null, commitId=null, commitAttempts=0;
+function now(){return new Date().toLocaleTimeString([], {hour12:false})}
+function setStep(n){$('streamStep').textContent='STEP '+n}
+function hotWin(id){document.querySelectorAll('.win').forEach(w=>w.classList.remove('hot'));if(id)$(id).classList.add('hot')}
+function flow(nodeIds,edgeIds){document.querySelectorAll('.node,.edge').forEach(n=>n.classList.remove('hot'));(nodeIds||[]).forEach(id=>$(id)?.classList.add('hot'));(edgeIds||[]).forEach(id=>$(id)?.classList.add('hot'))}
+function log(role,text){const s=$('stream');s.querySelector('.empty')?.remove();const d=document.createElement('div');d.className='ln';const ts=document.createElement('span');ts.className='ts';ts.textContent=now();const rl=document.createElement('span');rl.className='rl '+role;rl.textContent=role.toUpperCase();const tx=document.createElement('span');tx.className='tx';tx.textContent=text;d.append(ts,rl,tx);s.appendChild(d);s.scrollTop=s.scrollHeight}
+function agent(name,state,task){const el=q(`[data-agent="${name}"]`);el.classList.remove('active','done');if(state==='ACTIVE')el.classList.add('active');if(state==='DONE')el.classList.add('done');el.querySelector('.st').textContent=state;if(task)el.querySelector('.tk').textContent=task}
+function gate(id,value){const el=q(`[data-gate="${id}"]`);el.setAttribute('data-v',value);el.querySelector('.gv').textContent=value}
+function disp(text,kind){const el=$('disp');el.className='disp'+(kind?' '+kind:'');$('dispVal').textContent=text;const tag=$('contractTag');tag.textContent=text;tag.style.color=kind==='good'?'var(--sig)':kind==='bad'?'var(--red)':kind==='warn'?'var(--amber)':''}
+function cand(candidate,title='C2 · Bounded reroute'){const p=candidate.parameters;$('cCand').textContent=title;$('cProc').textContent='Processor B';$('cShare').textContent=(p.traffic_share*100).toFixed(1)+'%';$('cElig').textContent=p.country+' · '+p.networks.join('/')+' · ≤$'+Number(p.maximum_transaction_value_usd).toLocaleString()}
+function renderContract(evaluation){const result=evaluation.contract_result;G.forEach(name=>gate(name,result.gates[name]));const kind=result.disposition==='BLOCKED'?'bad':result.disposition==='WAITING_HUMAN'||result.disposition==='MORE_EVIDENCE_REQUIRED'?'warn':'good';disp(result.disposition,kind)}
+function addAnom(sev,title,detail,evidence){const c=$('anoms');c.querySelector('.anom-empty')?.remove();const a=document.createElement('div');a.className='anom show';const badge=document.createElement('span');badge.className='sev '+sev;badge.textContent=sev.toUpperCase();const body=document.createElement('div');body.className='body';for(const [cls,text] of [['t',title],['d',detail],['ev',evidence]]){const x=document.createElement('div');x.className=cls;x.textContent=text;body.appendChild(x)}a.append(badge,body);c.appendChild(a);$('anomCount').textContent=c.querySelectorAll('.anom').length}
+async function api(method,path,body){const options={method,headers:{}};if(body!==undefined){options.headers['Content-Type']='application/json';options.body=JSON.stringify(body)}const response=await fetch(path,options);let payload;try{payload=await response.json()}catch{payload={detail:'non-JSON backend response'}}if(!response.ok)throw new Error(payload.detail||`${method} ${path} failed (${response.status})`);return payload}
+async function guarded(label,fn){try{$('runHint').innerHTML='<span class="live"></span>'+label;await fn()}catch(error){disp('UNKNOWN','bad');$('runHint').textContent='FAILED CLOSED: '+error.message;log('system','FAILED CLOSED: '+error.message);throw error}}
+async function refreshJournal(){if(!runId)return;const replay=await api('GET',`/runs/${runId}/replay`);const j=$('journal');j.innerHTML='';for(const event of replay.events){const row=document.createElement('div');row.className='jev';const jt=document.createElement('span');jt.className='jt';jt.textContent=String(event.sequence);const mid=document.createElement('span');const typ=document.createElement('span');typ.className='je';typ.textContent=event.event_type;const det=document.createElement('div');det.className='jd';det.textContent=JSON.stringify(event.payload);mid.append(typ,det);const hash=document.createElement('span');hash.className='jh';hash.textContent=event.event_hash_or_mac.slice(0,12);row.append(jt,mid,hash);j.appendChild(row)}j.scrollTop=j.scrollHeight;$('jNote').textContent=`Audit replay ${replay.integrity.status}; ${replay.events.length} events; run ${replay.run_id}`;$('mongoTag').textContent=replay.integrity.valid?'● VERIFIED':'● INVALID';$('mongoTag').style.color=replay.integrity.valid?'var(--sig)':'var(--red)';return replay}
+async function run(){reset(false);$('runBtn').disabled=true;await guarded('Replaying five verified local Qwen roles…',async()=>{setStep(1);hotWin('winAgents');flow(['nCase','nReason'],['e1']);['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'ACTIVE','Recorded structured inference'));current=await api('POST','/run');runId=current.run_id;setStep(5);for(const role of current.roles){agent(role.role,'DONE','Structured response validated');log(role.role,role.summary)}cand({parameters:{country:'GLOBAL',networks:['ALL'],maximum_transaction_value_usd:Infinity,traffic_share:1}},'C1 · Global failover');renderContract(current.blocked_evaluation);log('contract','GLOBAL / 100% blocked: '+current.blocked_evaluation.contract_result.policy_reason_codes.join(', '));addAnom('crit','Global candidate blocked',current.blocked_evaluation.contract_result.policy_reason_codes.join(', '),'deterministic contract');cand(current.current_candidate);renderContract(current.current_evaluation);log('contract','Bounded 17.4% candidate paused: '+current.phase);addAnom('warn','Capacity evidence stale','Current evidence is insufficient for admission.','EVIDENCE=UNKNOWN');$('evidenceBtn').disabled=false;$('runHint').textContent=`Run ${runId} paused at MORE_EVIDENCE_REQUIRED`;await refreshJournal();hotWin('winContract')})}
+async function fetchEvidence(){await guarded('Fetching canonical stage-2 evidence…',async()=>{current=await api('POST',`/runs/${runId}/evidence`);renderContract(current.current_evaluation);log('scout','Current local Processor B capacity evidence added.');log('contract','Deterministic contract stopped at '+current.phase);$('evidenceBtn').disabled=true;$('approveBtn').disabled=false;setStep(6);flow(['nContract','nAuth'],['e4']);hotWin('winApproval');await refreshJournal();$('runHint').textContent='WAITING_HUMAN — operator approval required'})}
+async function approve(){await guarded('Submitting exact human approval…',async()=>{approvalNonce='ui-'+crypto.randomUUID();current=await api('POST',`/runs/${runId}/approve`,{approver:'payments_operations_lead',nonce:approvalNonce});const approval=current.approval;$('aFp').textContent=approval.candidate_fingerprint;$('aWho').textContent=approval.approver;$('aTtl').textContent='10-minute policy';$('aNonce').textContent=approvalNonce;$('aStatus').textContent=approval.status;$('aStatus').className='astatus valid';$('aNote').textContent='Approval is integrity-bound to this exact candidate.';$('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;disp('APPROVED','good');gate('authority','PASS');await refreshJournal();$('runHint').textContent='Exact 17.4% candidate approved by human operator'})}
+async function mutate(){await guarded('Validating 50% mutation without Qwen…',async()=>{const before=current.qwen_call_count;current=await api('POST',`/runs/${runId}/mutate`,{traffic_share:0.5});cand(current.current_candidate,'C2 · MUTATED');disp(current.phase,'bad');gate('constraints','FAIL');gate('authority','FAIL');$('aStatus').textContent='INVALID';$('aStatus').className='astatus invalid';$('aNote').textContent=`Deterministic validation rejected the candidate mismatch; Qwen calls ${before} → ${current.qwen_call_count}.`;$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;addAnom('crit','Approval invalidated by mutation','17.4% → 50% changed the approved fingerprint.','deterministic approval validation');await refreshJournal();$('runHint').textContent='Approval invalidated; no LLM call made'})}
+async function restore(){await guarded('Restoring exact approved candidate…',async()=>{current=await api('POST',`/runs/${runId}/restore`);cand(current.current_candidate,'C2 · Approved bounded reroute');renderContract(current.current_evaluation);disp(current.phase,'good');$('aStatus').textContent='VALID';$('aStatus').className='astatus valid';$('aNote').textContent='The exact approved fingerprint was restored.';$('restoreBtn').disabled=true;$('executeBtn').disabled=false;await refreshJournal();$('runHint').textContent='Exact approved candidate restored'})}
+async function execute(){await guarded('Sending idempotent commit…',async()=>{if(!commitId)commitId='ui-commit-'+crypto.randomUUID();const receipt=await api('POST',`/runs/${runId}/execute`,{commit_id:commitId});commitAttempts++;log('system',`Commit ${commitId}: effect_count=${receipt.effect_count}, idempotent_replay=${receipt.idempotent_replay}`);disp('COMMITTED','good');$('aStatus').textContent='CONSUMED';$('aStatus').className='astatus consumed';$('verifyBtn').disabled=false;flow(['nAction','nContract'],['e5']);if(commitAttempts===1){$('executeBtn').textContent='Repeat same commit';$('runHint').textContent='Commit admitted; repeat once to prove idempotency, then verify'}else{$('executeBtn').disabled=true;$('runHint').textContent='Duplicate commit produced no second effect; verify reality next'}await refreshJournal()})}
+async function verify(){await guarded('Reading simulator state independently…',async()=>{const receipt=await api('POST',`/runs/${runId}/verify`,{unavailable:false});const o=receipt.observed;requireObserved(o);$('verifyBtn').disabled=true;$('heroVerified').textContent=(o.success_rate*100).toFixed(1)+'%';disp(receipt.status,'good');flow(['nVerify','nMongo'],['e6','e8']);log('contract',`Separate state read: ${o.successful}/${o.total}; ${o.processor_b_routed} B-routed; ${o.unauthorized_processor_b_routes} unauthorized.`);$('impactBig').textContent='$8.33M';$('impactRecover').textContent='Modeled payment flow returned to normal processing sooner.';$('impactSpark').style.width=(o.success_rate*100)+'%';$('tamperBtn').disabled=false;$('jVerifyBtn').disabled=false;await refreshJournal();hotWin('winJournal');$('runHint').textContent=`${receipt.status} from independent backend state read`})}
+function requireObserved(o){if(o.total!==500||o.successful!==482||o.processor_b_routed!==87||o.unauthorized_processor_b_routes!==0||o.policy_violations!==0)throw new Error('verification metrics violate canonical invariants')}
+async function loadReplay(){await guarded('Loading recorded audit replay…',async()=>{await refreshJournal();$('runHint').textContent='Recorded run-scoped audit replay loaded'})}
+async function verifyJournal(){await guarded('Verifying replayed journal chain…',async()=>{const replay=await refreshJournal();if(!replay.integrity.valid)throw new Error('journal hash chain invalid');log('mongo','Recorded journal hash chain verified end-to-end.');$('runHint').textContent='Journal hash chain VALID'})}
+async function egress(){await guarded('Loading verified OpenShell containment receipt…',async()=>{const result=await api('GET','/containment');$('eg1').querySelector('.res').textContent=result.public_external_http;$('eg2').querySelector('.res').textContent=result.local_qwen;$('eg3').querySelector('.res').textContent=result.local_resolve;$('egressTag').textContent=result.status;$('egressTag').classList.toggle('local',result.status==='PASS')})}
+function reset(clearBackend=true){runId=null;current=null;approvalNonce=null;commitId=null;commitAttempts=0;setStep(0);$('stream').innerHTML='<div class="empty">Awaiting Run diagnostics…</div>';$('anoms').innerHTML='<div class="anom-empty">No anomalies yet.</div>';$('anomCount').textContent='0';$('journal').innerHTML='';['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'IDLE'));G.forEach(name=>{const el=q(`[data-gate="${name}"]`);el.removeAttribute('data-v');el.querySelector('.gv').textContent='—'});disp('—',null);$('contractTag').textContent='NOT EVALUATED';$('cCand').textContent='—';$('cProc').textContent='—';$('cShare').textContent='—';$('cElig').textContent='—';['aFp','aWho','aTtl','aNonce'].forEach(id=>$(id).textContent='—');$('aStatus').textContent='NONE';$('aStatus').className='astatus';$('aNote').textContent='No approval issued. Technical gates can pass on their own; authority cannot.';$('jNote').textContent='No showcase run loaded.';$('mongoTag').textContent='● IN-BROWSER';$('heroVerified').textContent='—';$('impactBig').textContent='$0';$('impactRecover').textContent='Run the diagnostics above to model the recovered flow.';$('impactSpark').style.width='79%';['evidenceBtn','approveBtn','mutateBtn','restoreBtn','executeBtn','verifyBtn','tamperBtn','jVerifyBtn'].forEach(id=>$(id).disabled=true);$('executeBtn').textContent='Execute';$('runBtn').disabled=false;$('runHint').textContent=clearBackend?'Reset showcase. Start creates a fresh browser replay.':'Loading verified workflow replay…';flow([],[]);hotWin(null)}
+$('runBtn').onclick=run;$('resetBtn').onclick=()=>reset(true);$('evidenceBtn').onclick=fetchEvidence;$('approveBtn').onclick=approve;$('mutateBtn').onclick=mutate;$('restoreBtn').onclick=restore;$('executeBtn').onclick=execute;$('verifyBtn').onclick=verify;$('tamperBtn').onclick=loadReplay;$('jVerifyBtn').onclick=verifyJournal;$('egressBtn').onclick=egress;document.querySelectorAll('.chip').forEach(c=>{c.style.opacity='.45';c.title='Canonical trial is frozen; alternate prompts are disabled.'});setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);$('clock').textContent=new Date().toLocaleString();reset(true);
 </script>
 </body>
 </html>
