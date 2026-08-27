@@ -394,16 +394,16 @@ footer .mono{font-size:11px}
       <a href="#stack">Stack</a>
       <a href="#impact">Impact</a>
     </nav>
-    <div class="envpill"><span class="live"></span>STATIC SHOWCASE · VERIFIED RECEIPTS</div>
+    <div class="envpill"><span class="live"></span>INTERACTIVE DEMO · VERIFIED RECEIPTS</div>
   </div>
 </header>
 
 <!-- ====================== HERO ====================== -->
 <div class="wrap">
   <section class="hero" style="border-top:0">
-    <p class="eyebrow">NVIDIA GB10 Architecture · Interactive Showcase</p>
+    <p class="eyebrow">NVIDIA GB10 · Deterministic Agent Control</p>
     <h1>Let agents <span class="g">reason</span>.<br>Never let them <span class="g">authorize</span> themselves.</h1>
-    <p class="lede">Resolve wraps a nondeterministic five-role agent loop inside a <b>deterministic permission core</b>. This hosted page replays the verified HackNYC workflow in your browser; the original GB10 runtime used local Qwen, OpenShell, and MongoDB with zero remote LLM calls.</p>
+    <p class="lede">Resolve is the permission layer between autonomous agents and real-world action. Five specialized agents investigate and propose; a deterministic contract decides what can execute, what needs human approval, and what must be blocked.</p>
     <div class="thesis mono">
       <span class="y">deterministic permission</span>
       <span class="arrow">·around·</span>
@@ -433,7 +433,7 @@ footer .mono{font-size:11px}
       <div class="titlebar">
         <div class="tl"><i></i><i></i><i></i></div>
         <span class="name">resolve://case/new</span>
-        <span class="right" id="endpoint">IN-BROWSER REPLAY · ORIGINAL: Qwen3.8-27B · NVFP4/vLLM</span>
+        <span class="right" id="endpoint">LOCAL-FIRST STACK · QWEN3 · OPENSHELL · MONGODB</span>
       </div>
       <div class="prompt-body">
         <div class="prompt-label">CASE PROMPT</div>
@@ -446,7 +446,7 @@ footer .mono{font-size:11px}
         <div class="runrow">
           <button class="btn primary" id="runBtn">▶ Run diagnostics <span class="k">↵</span></button>
           <button class="btn ghost" id="resetBtn">Reset</button>
-          <span class="runhint" id="runHint" aria-live="polite">Ready. One local model, five bounded roles, one typed contract.</span>
+          <span class="runhint" id="runHint" aria-live="polite">Ready. Five bounded roles, one typed contract, zero self-authorization.</span>
         </div>
       </div>
     </div>
@@ -470,7 +470,7 @@ footer .mono{font-size:11px}
       <div class="win" id="winAgents">
         <div class="wh">
           <div><h3>Agent Orchestration</h3><div class="sub">1 model · 5 bounded roles</div></div>
-          <span class="tag local">SHOWCASE</span>
+          <span class="tag local">5 ROLES</span>
         </div>
         <div class="wb">
           <div class="agent-list">
@@ -487,7 +487,7 @@ footer .mono{font-size:11px}
       <!-- WINDOW B: reasoning stream + contract -->
       <div class="win span" id="winStream">
         <div class="wh">
-          <div><h3>Incident Reasoning Replay</h3><div class="sub">recorded advisory output · permission is deterministic</div></div>
+          <div><h3>Agent Reasoning</h3><div class="sub">structured findings · advisory, never authoritative</div></div>
           <span class="tag" id="streamStep">STEP 0</span>
         </div>
         <div class="wb">
@@ -564,16 +564,16 @@ footer .mono{font-size:11px}
       <!-- Full-width audit trail -->
       <div class="win" id="winJournal">
           <div class="wh">
-            <div><h3>Audit Journal Replay</h3><div class="sub">projects the original MongoDB records · does not grant permission</div></div>
-            <span class="tag local" id="mongoTag">● IN-BROWSER</span>
+            <div><h3>Tamper-Evident Audit Journal</h3><div class="sub">run-scoped evidence chain · independently verifiable</div></div>
+            <span class="tag local" id="mongoTag">● LOCKED</span>
           </div>
           <div class="wb">
-            <div class="journal" id="journal"><div class="journal-empty">Complete the bounded action and independent verification to unlock the audit replay.</div></div>
+            <div class="journal" id="journal"><div class="journal-empty">Complete the bounded action and independent verification to unlock its audit trail.</div></div>
             <div class="act-grid">
-              <button class="btn primary" id="tamperBtn" disabled>Load audit replay</button>
+              <button class="btn primary" id="tamperBtn" disabled>Load audit trail</button>
               <button class="btn ghost" id="jVerifyBtn" disabled>Verify hash chain</button>
             </div>
-            <div class="anote" id="jNote" aria-live="polite">Audit replay locked until the independent verification step completes.</div>
+            <div class="anote" id="jNote" aria-live="polite">Audit trail locked until the independent verification step completes.</div>
           </div>
       </div>
     </div>
@@ -587,7 +587,7 @@ footer .mono{font-size:11px}
       <div>
         <div class="idx">02 — ARCHITECTURE</div>
         <h2>The whole loop, one diagram</h2>
-        <p>Solid nodes are deterministic and reproducible. Dashed nodes represent the local model. The green pulse follows the replay above — watch cognition flow <em>through</em> the permission core, never around it.</p>
+        <p>The dashed node is probabilistic; every solid node is deterministic and reproducible. Follow the green path: every proposed action must cross policy, authority, and independent verification before it reaches the audit record.</p>
       </div>
     </div>
 
@@ -650,19 +650,19 @@ footer .mono{font-size:11px}
     <div class="sec-head">
       <div>
         <div class="idx">03 — STACK COMPLIANCE</div>
-        <h2>Every required component, accounted for</h2>
-        <p>The original GB10 trial used local model serving, OpenShell, and MongoDB. This zero-cost hosted page preserves that verified workflow as an interactive browser replay.</p>
+        <h2>Local-first by design</h2>
+        <p>Resolve combines on-device reasoning with deterministic policy, contained execution, and a tamper-evident system of record.</p>
       </div>
     </div>
 
     <div class="stack">
       <div class="stk">
         <div class="ic">◈</div>
-        <div><div class="t">NVIDIA GB10 · Grace Blackwell</div><div class="d">Unified-memory on-device compute ran the original multi-role trial with no cloud video/data transmission.</div><div class="req">verified trial architecture</div></div>
+        <div><div class="t">NVIDIA GB10 · Grace Blackwell</div><div class="d">Unified-memory compute keeps agent reasoning and sensitive operational context on-device.</div><div class="req">on-device compute</div></div>
       </div>
       <div class="stk">
         <div class="ic">⌘</div>
-        <div><div class="t">Local Qwen3-27B via vLLM</div><div class="d">The original runtime used one <span class="mono">LOCAL_OPENAI_COMPATIBLE_ENDPOINT</span>. This hosted page replays the recorded role outputs without a hosted model.</div><div class="req">verified · replayed here</div></div>
+        <div><div class="t">Local Qwen3-27B via vLLM</div><div class="d">One OpenAI-compatible local endpoint serves five specialized roles with strict, structured outputs.</div><div class="req">local reasoning</div></div>
       </div>
       <div class="stk">
         <div class="ic">⧉</div>
@@ -670,7 +670,7 @@ footer .mono{font-size:11px}
       </div>
       <div class="stk">
         <div class="ic">⛁</div>
-        <div><div class="t">MongoDB audit substrate</div><div class="d">The original runtime stored cases, evidence, events, candidates, approvals, and verification. The hosted replay keeps the same projected event sequence in-browser.</div><div class="req">verified · projected here</div></div>
+        <div><div class="t">MongoDB audit substrate</div><div class="d">Cases, evidence, decisions, approvals, actions, and verification receipts form one run-scoped audit record.</div><div class="req">tamper-evident record</div></div>
       </div>
       <div class="stk">
         <div class="ic">◇</div>
@@ -678,19 +678,19 @@ footer .mono{font-size:11px}
       </div>
       <div class="stk">
         <div class="ic">≡</div>
-        <div><div class="t">FastAPI + Pydantic + static JS</div><div class="d">Minimal-bias core. No Redis, Postgres, Celery, Kubernetes, vector DB, or cloud calls.</div><div class="req">core · minimal</div></div>
+        <div><div class="t">FastAPI + Pydantic</div><div class="d">A deliberately small typed core keeps policy evaluation inspectable, testable, and reproducible.</div><div class="req">minimal control plane</div></div>
       </div>
     </div>
 
     <div class="win" style="margin-top:16px">
-      <div class="wh"><div><h3>OpenShell containment receipt</h3><div class="sub">verified trial result · replayed in-browser</div></div><span class="tag" id="egressTag">idle</span></div>
+      <div class="wh"><div><h3>OpenShell containment check</h3><div class="sub">public egress denied · approved local tools allowed</div></div><span class="tag" id="egressTag">idle</span></div>
       <div class="wb">
         <div class="egress">
           <div class="eg blocked" id="eg1"><div class="call">external HTTP →</div><div class="res">— </div></div>
           <div class="eg pass" id="eg2"><div class="call">local Qwen →</div><div class="res">— </div></div>
           <div class="eg pass" id="eg3"><div class="call">local Resolve tool →</div><div class="res">— </div></div>
         </div>
-        <button class="btn ghost" id="egressBtn" style="margin-top:14px">Replay egress receipt</button>
+        <button class="btn ghost" id="egressBtn" style="margin-top:14px">Run containment check</button>
       </div>
     </div>
   </section>
@@ -729,14 +729,14 @@ footer .mono{font-size:11px}
 
 <footer>
   <div class="wrap">
-    <span>Resolve · deterministic permission around nondeterministic cognition · synthetic local demo, not a production payment system</span>
+    <span>Resolve · deterministic permission around nondeterministic cognition · interactive demo using a synthetic payment scenario</span>
     <span class="mono" id="clock"></span>
   </div>
 </footer>
 
 <script src="showcase-adapter.js"></script>
 <script>
-/* Original Resolve UI driven by the static showcase adapter on this hosted build. */
+/* Resolve interactive product demo. */
 const $=id=>document.getElementById(id);
 const q=s=>document.querySelector(s);
 const G=['intent','evidence','constraints','consequence','reversibility','rehearsal','authority','verification'];
@@ -757,19 +757,51 @@ function addAnom(sev,title,detail,evidence){const c=$('anoms');c.querySelector('
 async function api(method,path,body){const options={method,headers:{}};if(body!==undefined){options.headers['Content-Type']='application/json';options.body=JSON.stringify(body)}const response=await fetch(path,options);let payload;try{payload=await response.json()}catch{payload={detail:'non-JSON backend response'}}if(!response.ok)throw new Error(payload.detail||`${method} ${path} failed (${response.status})`);return payload}
 async function guarded(label,fn){if(actionBusy)return;actionBusy=true;try{$('runHint').innerHTML='<span class="live"></span>'+label;await fn()}catch(error){disp('UNKNOWN','bad');$('runHint').textContent='FAILED CLOSED: '+error.message;log('system','FAILED CLOSED: '+error.message);throw error}finally{actionBusy=false}}
 async function refreshJournal(){if(!runId)return;const replay=await api('GET',`/runs/${runId}/replay`);lastReplay=replay;const j=$('journal');j.innerHTML='';for(const event of replay.events){const row=document.createElement('div');row.className='jev';const jt=document.createElement('span');jt.className='jt';jt.textContent=String(event.sequence);const mid=document.createElement('span');const typ=document.createElement('span');typ.className='je';typ.textContent=event.event_type;const det=document.createElement('div');det.className='jd';det.textContent=JSON.stringify(event.payload);mid.append(typ,det);const hash=document.createElement('span');hash.className='jh';hash.textContent=event.event_hash_or_mac.slice(0,12);row.append(jt,mid,hash);j.appendChild(row)}return replay}
-async function run(){reset(false);$('runBtn').disabled=true;await guarded('Starting staged diagnostic replay…',async()=>{setWorkflow(1);hotWin('winAgents');flow(['nCase','nReason'],['e1']);current=await api('POST','/run');runId=current.run_id;for(let i=0;i<current.roles.length;i++){const role=current.roles[i];setStep(i+1);$('runBtn').textContent=`Running ${i+1}/7`;$('runHint').innerHTML=`<span class="live"></span>Step ${i+1}/7 · ${role.role.toUpperCase()} is producing a bounded finding`;agent(role.role,'ACTIVE','Analyzing recorded evidence…');await sleep(520);agent(role.role,'DONE','Structured response validated');log(role.role,role.summary)}setStep(6);$('runBtn').textContent='Running 6/7';$('runHint').innerHTML='<span class="live"></span>Step 6/7 · Challenger proposal enters the deterministic contract';flow(['nCand','nContract'],['e2','e3']);hotWin('winContract');cand({parameters:{country:'GLOBAL',networks:['ALL'],maximum_transaction_value_usd:Infinity,traffic_share:1}},'C1 · Global failover');await sleep(620);renderContract(current.blocked_evaluation);log('contract','GLOBAL / 100% blocked: '+current.blocked_evaluation.contract_result.policy_reason_codes.join(', '));addAnom('crit','Global candidate blocked',current.blocked_evaluation.contract_result.policy_reason_codes.join(', '),'deterministic contract');setStep(7);$('runBtn').textContent='Running 7/7';$('runHint').innerHTML='<span class="live"></span>Step 7/7 · Bounded candidate evaluated against current evidence';await sleep(620);cand(current.current_candidate);renderContract(current.current_evaluation);log('contract','Bounded 17.4% candidate paused: '+current.phase);addAnom('warn','Capacity evidence stale','Current evidence is insufficient for admission.','EVIDENCE=UNKNOWN');$('evidenceBtn').disabled=false;$('runBtn').textContent='Diagnostics complete ✓';setWorkflow(2);$('runHint').textContent=`Run ${runId} paused at MORE_EVIDENCE_REQUIRED`;hotWin('winContract')})}
-async function fetchEvidence(){await guarded('Fetching canonical stage-2 evidence…',async()=>{current=await api('POST',`/runs/${runId}/evidence`);renderContract(current.current_evaluation);log('scout','Current local Processor B capacity evidence added.');log('contract','Deterministic contract stopped at '+current.phase);$('evidenceBtn').disabled=true;$('approveBtn').disabled=false;setWorkflow(3);flow(['nContract','nAuth'],['e4']);hotWin('winApproval');$('runHint').textContent='WAITING_HUMAN — operator approval required'})}
+async function run(){reset(false);$('runBtn').disabled=true;await guarded('Starting staged incident analysis…',async()=>{setWorkflow(1);hotWin('winAgents');flow(['nCase','nReason'],['e1']);current=await api('POST','/run');runId=current.run_id;for(let i=0;i<current.roles.length;i++){const role=current.roles[i];setStep(i+1);$('runBtn').textContent=`Running ${i+1}/7`;$('runHint').innerHTML=`<span class="live"></span>Step ${i+1}/7 · ${role.role.toUpperCase()} is producing a bounded finding`;agent(role.role,'ACTIVE','Analyzing incident evidence…');await sleep(520);agent(role.role,'DONE','Structured response validated');log(role.role,role.summary)}setStep(6);$('runBtn').textContent='Running 6/7';$('runHint').innerHTML='<span class="live"></span>Step 6/7 · Challenger proposal enters the deterministic contract';flow(['nCand','nContract'],['e2','e3']);hotWin('winContract');cand({parameters:{country:'GLOBAL',networks:['ALL'],maximum_transaction_value_usd:Infinity,traffic_share:1}},'C1 · Global failover');await sleep(620);renderContract(current.blocked_evaluation);log('contract','GLOBAL / 100% blocked: '+current.blocked_evaluation.contract_result.policy_reason_codes.join(', '));addAnom('crit','Global candidate blocked',current.blocked_evaluation.contract_result.policy_reason_codes.join(', '),'deterministic contract');setStep(7);$('runBtn').textContent='Running 7/7';$('runHint').innerHTML='<span class="live"></span>Step 7/7 · Bounded candidate evaluated against current evidence';await sleep(620);cand(current.current_candidate);renderContract(current.current_evaluation);log('contract','Bounded 17.4% candidate paused: '+current.phase);addAnom('warn','Capacity evidence stale','Current evidence is insufficient for admission.','EVIDENCE=UNKNOWN');$('evidenceBtn').disabled=false;$('runBtn').textContent='Diagnostics complete ✓';setWorkflow(2);$('runHint').textContent=`Run ${runId} paused at MORE_EVIDENCE_REQUIRED`;hotWin('winContract')})}
+async function fetchEvidence(){await guarded('Fetching current processor capacity evidence…',async()=>{current=await api('POST',`/runs/${runId}/evidence`);renderContract(current.current_evaluation);log('scout','Current local Processor B capacity evidence added.');log('contract','Deterministic contract stopped at '+current.phase);$('evidenceBtn').disabled=true;$('approveBtn').disabled=false;setWorkflow(3);flow(['nContract','nAuth'],['e4']);hotWin('winApproval');$('runHint').textContent='WAITING_HUMAN — operator approval required'})}
 async function approve(){await guarded('Submitting exact human approval…',async()=>{approvalNonce='ui-'+crypto.randomUUID();current=await api('POST',`/runs/${runId}/approve`,{approver:'payments_operations_lead',nonce:approvalNonce});const approval=current.approval;$('aFp').textContent=approval.candidate_fingerprint;$('aWho').textContent=approval.approver;$('aTtl').textContent='10-minute policy';$('aNonce').textContent=approvalNonce;$('aStatus').textContent=approval.status;$('aStatus').className='astatus valid';$('aNote').textContent='Approval is integrity-bound to this exact candidate.';$('approveBtn').disabled=true;$('mutateBtn').disabled=false;$('executeBtn').disabled=false;disp('APPROVED','good');gate('authority','PASS');setWorkflow(4);$('runHint').textContent='Exact 17.4% candidate approved by human operator'})}
 async function mutate(){await guarded('Validating 50% mutation without Qwen…',async()=>{const before=current.qwen_call_count;current=await api('POST',`/runs/${runId}/mutate`,{traffic_share:0.5});cand(current.current_candidate,'C2 · MUTATED');disp(current.phase,'bad');gate('constraints','FAIL');gate('authority','FAIL');$('aStatus').textContent='INVALID';$('aStatus').className='astatus invalid';$('aNote').textContent=`Deterministic validation rejected the candidate mismatch; Qwen calls ${before} → ${current.qwen_call_count}.`;$('mutateBtn').disabled=true;$('restoreBtn').disabled=false;$('executeBtn').disabled=true;addAnom('crit','Approval invalidated by mutation','17.4% → 50% changed the approved fingerprint.','deterministic approval validation');setWorkflow(3);$('runHint').textContent='Approval invalidated; no LLM call made'})}
 async function restore(){await guarded('Restoring exact approved candidate…',async()=>{current=await api('POST',`/runs/${runId}/restore`);cand(current.current_candidate,'C2 · Approved bounded reroute');renderContract(current.current_evaluation);disp(current.phase,'good');$('aStatus').textContent='VALID';$('aStatus').className='astatus valid';$('aNote').textContent='The exact approved fingerprint was restored.';$('restoreBtn').disabled=true;$('executeBtn').disabled=false;setWorkflow(4);$('runHint').textContent='Exact approved candidate restored'})}
 async function execute(){await guarded('Sending idempotent commit…',async()=>{if(!commitId)commitId='ui-commit-'+crypto.randomUUID();const receipt=await api('POST',`/runs/${runId}/execute`,{commit_id:commitId});commitAttempts++;log('system',`Commit ${commitId}: effect_count=${receipt.effect_count}, idempotent_replay=${receipt.idempotent_replay}`);disp('COMMITTED','good');$('aStatus').textContent='CONSUMED';$('aStatus').className='astatus consumed';$('verifyBtn').disabled=false;flow(['nContract','nAction'],['e5']);setWorkflow(5);if(commitAttempts===1){$('executeBtn').textContent='Repeat same commit';$('runHint').textContent='Commit admitted; repeat once to prove idempotency, then verify'}else{$('executeBtn').disabled=true;$('runHint').textContent='Duplicate commit produced no second effect; verify reality next'}})}
-async function verify(){await guarded('Reading simulator state independently…',async()=>{$('verifyBtn').disabled=true;const receipt=await api('POST',`/runs/${runId}/verify`,{unavailable:false});const o=receipt.observed;requireObserved(o);$('heroVerified').textContent=(o.success_rate*100).toFixed(1)+'%';disp(receipt.status,'good');flow(['nAction','nVerify','nMongo'],['e6','e7']);log('contract',`Separate state read: ${o.successful}/${o.total}; ${o.processor_b_routed} B-routed; ${o.unauthorized_processor_b_routes} unauthorized.`);$('impactBig').textContent='$8.33M';$('impactRecover').textContent='Modeled payment flow returned to normal processing sooner.';$('impactSpark').style.width=(o.success_rate*100)+'%';$('tamperBtn').disabled=false;$('jVerifyBtn').disabled=true;$('journal').innerHTML='<div class="journal-empty">Verification receipt recorded. Select <b>Load audit replay</b> to inspect the run-scoped event chain.</div>';$('jNote').textContent='Verification complete. Audit replay is ready to load.';$('mongoTag').textContent='● REPLAY READY';setWorkflow(6);hotWin('winJournal');$('runHint').textContent=`${receipt.status} from independent backend state read`})}
+async function verify(){await guarded('Reading system state independently…',async()=>{$('verifyBtn').disabled=true;const receipt=await api('POST',`/runs/${runId}/verify`,{unavailable:false});const o=receipt.observed;requireObserved(o);$('heroVerified').textContent=(o.success_rate*100).toFixed(1)+'%';disp(receipt.status,'good');flow(['nAction','nVerify','nMongo'],['e6','e7']);log('contract',`Separate state read: ${o.successful}/${o.total}; ${o.processor_b_routed} B-routed; ${o.unauthorized_processor_b_routes} unauthorized.`);$('impactBig').textContent='$8.33M';$('impactRecover').textContent='Modeled payment flow returned to normal processing sooner.';$('impactSpark').style.width=(o.success_rate*100)+'%';$('tamperBtn').disabled=false;$('jVerifyBtn').disabled=true;$('journal').innerHTML='<div class="journal-empty">Verification receipt recorded. Select <b>Load audit trail</b> to inspect the run-scoped event chain.</div>';$('jNote').textContent='Verification complete. The audit trail is ready to load.';$('mongoTag').textContent='● AUDIT READY';setWorkflow(6);hotWin('winJournal');$('runHint').textContent=`${receipt.status} from independent state read`})}
 function requireObserved(o){if(o.total!==500||o.successful!==482||o.processor_b_routed!==87||o.unauthorized_processor_b_routes!==0||o.policy_violations!==0)throw new Error('verification metrics violate canonical invariants')}
-async function loadReplay(){await guarded('Loading recorded audit replay…',async()=>{const button=$('tamperBtn');button.disabled=true;button.textContent='Loading replay…';$('mongoTag').textContent='● LOADING';const replay=await refreshJournal();$('journal').scrollTop=0;$('jVerifyBtn').disabled=false;button.disabled=false;button.classList.add('success');button.textContent='Replay loaded ✓';$('mongoTag').textContent='● REPLAY LOADED';$('jNote').textContent=`Loaded ${replay.events.length} run-scoped events. Next: verify every hash link in order.`;$('runHint').textContent='Recorded run-scoped audit replay loaded'})}
-async function verifyJournal(){await guarded('Verifying replayed journal chain…',async()=>{const button=$('jVerifyBtn');const journal=$('journal');button.disabled=true;const replay=lastReplay||await refreshJournal();const rows=[...document.querySelectorAll('.jev')];$('mongoTag').textContent='● VERIFYING 0/'+rows.length;for(let i=0;i<rows.length;i++){if(i)rows[i-1].classList.replace('scanning','checked');rows[i].classList.add('scanning');button.textContent=`Verifying ${i+1}/${rows.length}`;$('mongoTag').textContent=`● VERIFYING ${i+1}/${rows.length}`;journal.scrollTop=Math.max(0,rows[i].offsetTop-journal.offsetTop-journal.clientHeight/2);await sleep(42)}if(rows.length)rows.at(-1).classList.replace('scanning','checked');if(!replay.integrity.valid)throw new Error('journal hash chain invalid');log('mongo','Recorded journal hash chain verified end-to-end.');button.classList.add('success');button.textContent='Hash chain valid ✓';$('mongoTag').textContent='● HASH VALID';$('jNote').textContent=`Hash chain VALID — all ${rows.length} events link to the preceding hash; run ${replay.run_id}.`;$('runHint').textContent='Journal hash chain VALID'})}
-async function egress(){await guarded('Loading verified OpenShell containment receipt…',async()=>{const result=await api('GET','/containment');$('eg1').querySelector('.res').textContent=result.public_external_http;$('eg2').querySelector('.res').textContent=result.local_qwen;$('eg3').querySelector('.res').textContent=result.local_resolve;$('egressTag').textContent=result.status;$('egressTag').classList.toggle('local',result.status==='PASS')})}
-function reset(clearBackend=true){runId=null;current=null;approvalNonce=null;commitId=null;commitAttempts=0;lastReplay=null;setStep(0);setWorkflow(0);$('stream').innerHTML='<div class="empty">Awaiting Run diagnostics…</div>';$('anoms').innerHTML='<div class="anom-empty">No anomalies yet.</div>';$('anomCount').textContent='0';$('journal').innerHTML='<div class="journal-empty">Complete the bounded action and independent verification to unlock the audit replay.</div>';['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'IDLE'));G.forEach(name=>{const el=q(`[data-gate="${name}"]`);el.removeAttribute('data-v');el.querySelector('.gv').textContent='—'});disp('—',null);$('contractTag').textContent='NOT EVALUATED';$('cCand').textContent='—';$('cProc').textContent='—';$('cShare').textContent='—';$('cElig').textContent='—';['aFp','aWho','aTtl','aNonce'].forEach(id=>$(id).textContent='—');$('aStatus').textContent='NONE';$('aStatus').className='astatus';$('aNote').textContent='No approval issued. Technical gates can pass on their own; authority cannot.';$('jNote').textContent='Audit replay locked until the independent verification step completes.';$('mongoTag').textContent='● IN-BROWSER';$('mongoTag').style.color='';$('heroVerified').textContent='—';$('impactBig').textContent='$0';$('impactRecover').textContent='Run the diagnostics above to model the recovered flow.';$('impactSpark').style.width='79%';['evidenceBtn','approveBtn','mutateBtn','restoreBtn','executeBtn','verifyBtn','tamperBtn','jVerifyBtn'].forEach(id=>$(id).disabled=true);$('tamperBtn').classList.remove('success');$('jVerifyBtn').classList.remove('success');$('executeBtn').textContent='Execute';$('tamperBtn').textContent='Load audit replay';$('jVerifyBtn').textContent='Verify hash chain';$('runBtn').textContent='▶ Run diagnostics ↵';$('runBtn').disabled=false;$('runHint').textContent=clearBackend?'Reset showcase. Start creates a fresh browser replay.':'Preparing staged workflow replay…';flow([],[]);hotWin(null)}
-$('runBtn').onclick=run;$('resetBtn').onclick=()=>{if(!actionBusy)reset(true)};$('evidenceBtn').onclick=fetchEvidence;$('approveBtn').onclick=approve;$('mutateBtn').onclick=mutate;$('restoreBtn').onclick=restore;$('executeBtn').onclick=execute;$('verifyBtn').onclick=verify;$('tamperBtn').onclick=loadReplay;$('jVerifyBtn').onclick=verifyJournal;$('egressBtn').onclick=egress;document.querySelectorAll('.chip').forEach(c=>{c.style.opacity='.45';c.title='Canonical trial is frozen; alternate prompts are disabled.'});setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);$('clock').textContent=new Date().toLocaleString();reset(true);
+async function loadReplay(){await guarded('Loading the run-scoped audit trail…',async()=>{const button=$('tamperBtn');button.disabled=true;button.textContent='Loading audit trail…';$('mongoTag').textContent='● LOADING';const replay=await refreshJournal();$('journal').scrollTop=0;$('jVerifyBtn').disabled=false;button.disabled=false;button.classList.add('success');button.textContent='Audit trail loaded ✓';$('mongoTag').textContent='● AUDIT LOADED';$('jNote').textContent=`Loaded ${replay.events.length} run-scoped events. Next: verify every hash link in order.`;$('runHint').textContent='Run-scoped audit trail loaded'})}
+async function verifyJournal(){await guarded('Verifying the journal hash chain…',async()=>{const button=$('jVerifyBtn');const journal=$('journal');button.disabled=true;const replay=lastReplay||await refreshJournal();const rows=[...document.querySelectorAll('.jev')];$('mongoTag').textContent='● VERIFYING 0/'+rows.length;for(let i=0;i<rows.length;i++){if(i)rows[i-1].classList.replace('scanning','checked');rows[i].classList.add('scanning');button.textContent=`Verifying ${i+1}/${rows.length}`;$('mongoTag').textContent=`● VERIFYING ${i+1}/${rows.length}`;journal.scrollTop=Math.max(0,rows[i].offsetTop-journal.offsetTop-journal.clientHeight/2);await sleep(42)}if(rows.length)rows.at(-1).classList.replace('scanning','checked');if(!replay.integrity.valid)throw new Error('journal hash chain invalid');log('mongo','Journal hash chain verified end-to-end.');button.classList.add('success');button.textContent='Hash chain valid ✓';$('mongoTag').textContent='● HASH VALID';$('jNote').textContent=`Hash chain VALID — all ${rows.length} events link to the preceding hash; run ${replay.run_id}.`;$('runHint').textContent='Journal hash chain VALID'})}
+async function egress(){await guarded('Running the OpenShell containment check…',async()=>{const result=await api('GET','/containment');$('eg1').querySelector('.res').textContent=result.public_external_http;$('eg2').querySelector('.res').textContent=result.local_qwen;$('eg3').querySelector('.res').textContent=result.local_resolve;$('egressTag').textContent=result.status;$('egressTag').classList.toggle('local',result.status==='PASS')})}
+function reset(clearBackend=true){
+  runId=null;current=null;approvalNonce=null;commitId=null;commitAttempts=0;lastReplay=null;
+  setStep(0);setWorkflow(0);
+  $('stream').innerHTML='<div class="empty">Awaiting Run diagnostics…</div>';
+  $('anoms').innerHTML='<div class="anom-empty">No anomalies yet.</div>';
+  $('anomCount').textContent='0';
+  $('journal').innerHTML='<div class="journal-empty">Complete the bounded action and independent verification to unlock its audit trail.</div>';
+  ['main','scout','investigator','planner','challenger'].forEach(name=>agent(name,'IDLE'));
+  G.forEach(name=>{const el=q(`[data-gate="${name}"]`);el.removeAttribute('data-v');el.querySelector('.gv').textContent='—'});
+  disp('—',null);$('contractTag').textContent='NOT EVALUATED';
+  $('cCand').textContent='—';$('cProc').textContent='—';$('cShare').textContent='—';$('cElig').textContent='—';
+  ['aFp','aWho','aTtl','aNonce'].forEach(id=>$(id).textContent='—');
+  $('aStatus').textContent='NONE';$('aStatus').className='astatus';
+  $('aNote').textContent='No approval issued. Technical gates can pass on their own; authority cannot.';
+  $('jNote').textContent='Audit trail locked until the independent verification step completes.';
+  $('mongoTag').textContent='● LOCKED';$('mongoTag').style.color='';
+  $('heroVerified').textContent='—';$('impactBig').textContent='$0';
+  $('impactRecover').textContent='Run the diagnostics above to model the recovered flow.';$('impactSpark').style.width='79%';
+  ['evidenceBtn','approveBtn','mutateBtn','restoreBtn','executeBtn','verifyBtn','tamperBtn','jVerifyBtn'].forEach(id=>$(id).disabled=true);
+  $('tamperBtn').classList.remove('success');$('jVerifyBtn').classList.remove('success');
+  $('executeBtn').textContent='Execute';$('tamperBtn').textContent='Load audit trail';$('jVerifyBtn').textContent='Verify hash chain';
+  $('runBtn').textContent='▶ Run diagnostics ↵';$('runBtn').disabled=false;
+  $('runHint').textContent=clearBackend?'Reset demo. Start creates a fresh run.':'Preparing staged incident analysis…';
+  flow([],[]);hotWin(null)
+}
+$('runBtn').onclick=run;
+$('resetBtn').onclick=()=>{if(!actionBusy)reset(true)};
+$('evidenceBtn').onclick=fetchEvidence;$('approveBtn').onclick=approve;
+$('mutateBtn').onclick=mutate;$('restoreBtn').onclick=restore;
+$('executeBtn').onclick=execute;$('verifyBtn').onclick=verify;
+$('tamperBtn').onclick=loadReplay;$('jVerifyBtn').onclick=verifyJournal;$('egressBtn').onclick=egress;
+document.querySelectorAll('.chip').forEach(c=>{c.style.opacity='.45';c.title='This demo uses a fixed, verifiable incident scenario.'});
+setInterval(()=>{$('clock').textContent=new Date().toLocaleString()},1000);
+$('clock').textContent=new Date().toLocaleString();reset(true);
 </script>
 </body>
 </html>
